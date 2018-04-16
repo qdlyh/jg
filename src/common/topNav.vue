@@ -381,7 +381,7 @@ export default {
   color: #454545;
   cursor: pointer;
   span {
-    padding: 5px;
+    padding: 0 5px;
     &:hover {
       color: #0374bf;
       transition: 0.3s;

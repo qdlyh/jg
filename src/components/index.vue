@@ -23,16 +23,16 @@
         <div class="box-middle">
           <div class="box-middle-text">
             <h1>新闻资讯</h1>
-            <ul v-for="(item,index) in tabs" :key="index">
+            <ul v-for="(item,index) in tabData" :key="index">
               <li :class="{active:index == num}" @click="tab(index)">{{item.text}}</li>
             </ul>
             <router-link to="/">查看更多&nbsp;></router-link>
           </div>
-          <div class="box-middle-content" v-for="(items, index) in tabData" :key="index" v-show="index===num">
+          <div class="box-middle-content" v-for="(items, index) in tabList" :key="index" v-show="index===num">
             <router-link to="/" v-for="(item,index) in items" :key="index">
               <span>
-                <img :src="item.src" alt=""><br/>
-                <i>{{item.text}}</i>
+                <img :src="item.image" alt="">
+                <p>{{item.text}}</p>
               </span>
             </router-link>
           </div>
@@ -40,21 +40,21 @@
       </div>
       <div class="content-bottom">
         <div class="content-bottom-box">
-          <div class="content-bottom-top" v-for="(item,index) in list" :key="index">
+          <div class="content-bottom-top" v-for="(item,index) in listBox" :key="index">
             <div class="bottom-top-text">
               <h1>{{item.text}}</h1>
               <router-link to="/" class="more">
                 <span>查看更多&nbsp;></span>
               </router-link>
             </div>
-            <router-link to="/">
-              <img :src="item.src" alt="">
+            <router-link to="/" class="more-img">
+              <img :src="item.image" alt="">
             </router-link>
           </div>
         </div>
         <div class="content-bottom-img">
-          <router-link to="/">
-            <img src="../assets/1148181.png" alt="">
+          <router-link to="/" v-for="(item,index) in bottomImg" :key="index">
+            <img :src="item.image" alt="">
           </router-link>
         </div>
       </div>
@@ -70,33 +70,11 @@ export default {
       num: 0,
       banner: [],
       dataTop: [],
-      dataMiddle: [],
-      tabs: [{ text: '政策法规' }, { text: '新闻资讯' }, { text: '夕阳暖计划' }],
-      tabData: [
-        [
-          { src: require('../assets/新闻资讯02.png'), text: '标签1', },
-          { src: require('../assets/新闻资讯02.png'), text: '标签12', },
-          { src: require('../assets/新闻资讯02.png'), text: '好吗好的15', },
-          { src: require('../assets/新闻资讯02.png'), text: '好吗好的15', },
-        ],
-        [
-          { src: require('../assets/新闻资讯02.png'), text: '标签1', },
-          { src: require('../assets/新闻资讯02.png'), text: '标签12', },
-          { src: require('../assets/新闻资讯02.png'), text: '好吗好的15', },
-          { src: require('../assets/新闻资讯02.png'), text: '好吗好的1522', },
-        ],
-        [
-          { src: require('../assets/新闻资讯02.png'), text: '案例一' },
-          { src: require('../assets/新闻资讯02.png'), text: '案例er', },
-          { src: require('../assets/新闻资讯02.png'), text: '案例er', },
-          { src: require('../assets/新闻资讯02.png'), text: '案例erx', },
-        ],
-      ],
-      list: [
-        { text: '产品技术', src: require('../assets/新闻资讯02.png'), },
-        { text: '产品技术2', src: require('../assets/新闻资讯02.png'), },
-        { text: '产品技术3', src: require('../assets/新闻资讯02.png'), },
-      ],
+      tabData: [],
+      tabList: [],
+      // tabs: [{ text: '政策法规' }, { text: '新闻资讯' }, { text: '夕阳暖计划' }],
+      listBox: [],
+      bottomImg: [],
     }
   },
   mounted() {
@@ -108,8 +86,18 @@ export default {
         //console.log(response)
         this.banner = response.data.PcHome[0].childList[0].childList;
         this.dataTop = response.data.PcHome[0].childList[1].childList;
-        this.dataMiddle = response.data.PcHome[0].childList[2].childList;
-        console.log(this.dataMiddle)
+        this.tabData = response.data.PcHome[0].childList[2].childList;
+        let list0 = response.data.PcHome[0].childList[3];
+        let list1 = response.data.PcHome[0].childList[4];
+        let list2 = response.data.PcHome[0].childList[5];
+        this.bottomImg = response.data.PcHome[0].childList[6];
+        /* 把tabData下的数组push到tabList方便做按钮切换 */
+        for (let i = 0; i < this.tabData.length; i++) {
+          this.tabList.push(this.tabData[i].childList)
+          //console.log(this.tabList)
+        }
+        /*不想做三次重复循环,所以干脆push到同一个数组  */
+        this.listBox.push(list0, list1, list2);
       })
       .catch(error => {
         console.log(error);
@@ -221,7 +209,7 @@ export default {
           }
           img:hover {
             transform: scale(1.1);
-            transition: all .5s ease;
+            transition: all 0.5s ease;
           }
         }
       }
@@ -252,9 +240,19 @@ export default {
             margin-bottom: 20px;
           }
         }
-        img {
-          width: 380px;
+        .more-img {
+          display: inline-block;
+          height: 380px;
           height: 208px;
+          overflow: hidden;
+          img {
+            width: 380px;
+            height: 208px;
+          }
+          img:hover {
+            transform: scale(1.1);
+            transition: all 0.5s ease;
+          }
         }
       }
     }

@@ -18,6 +18,8 @@ export default {
   list-style-type: none;
   text-decoration: none;
   letter-spacing: 1px;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 i {
   font-style: normal;
@@ -30,7 +32,6 @@ i {
   color: #2c3e50;
   margin-top: 60px;
 } */
-
 /* 按钮 */
 .btn-blue {
   width: 60%;
@@ -70,10 +71,40 @@ i {
 .popper__arrow {
   display: none !important;
 }
+/* 头部导航高外边距 */
 .el-popover {
   margin-top: 0 !important;
 }
+/* 头部导航 */
 .el-dropdown-menu {
   left: 0 !important;
 }
+
+/* input选中radio颜色 */
+.el-radio__input.is-checked .el-radio__inner {
+  border-color: #16b3ac;
+  background: #16b3ac;
+}
+/* input选中radio字体颜色 */
+.el-radio__input.is-checked + .el-radio__label {
+  color: #606266;
+}
+/* input文字超出换行 */
+.el-radio {
+  white-space: inherit;
+  line-height: 20px;
+}
+/* input外边距高 */
+.el-radio__inner {
+  margin-top: 3px;
+}
+
+/* 表单输入错误提示文字 */
+.el-form-item__error{
+    font-size: 14px;
+}
+
+// .el-input__inner{
+//   width: 380px;
+// }
 </style>
