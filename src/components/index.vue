@@ -5,7 +5,7 @@
       <div class="banner">
         <div class="block">
           <el-carousel trigger="click" height="640px">
-            <el-carousel-item v-for="(item,index) in banner" :key="item">
+            <el-carousel-item v-for="(item,index) in banner" :key="index">
               <img :src="item.image" alt="" style="width:100%;heigh:640px;">
             </el-carousel-item>
           </el-carousel>

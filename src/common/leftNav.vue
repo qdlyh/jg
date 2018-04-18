@@ -2,15 +2,15 @@
     <div>
         <div class="leftNav">
             <ul>
-                <li v-for="(item,index) in list" :key="index">
-                    <router-link to="/">{{item.text}}</router-link>
+                <li v-for="(item,index) in leftNav" :key="index">
+                    <a href="javascript:;" @click="go(item)">{{item.title}}</a>
                 </li>
             </ul>
-            <!-- <div class="wx">
+            <div class="wx">
                 <p>订阅微信公众号</p>
                 <hr/>
-                <img v-for="(item,index) in list[0].scopes" :key="index" :src="item.src" alt="">
-            </div> -->
+                <img src="../assets/二维码.png">
+            </div>
         </div>
     </div>
 </template>
@@ -18,20 +18,7 @@
 export default {
     data() {
         return {
-            list: [
-                // {
-                //     data: [
-                //         { name: '文章1文章1文章1文章1文章1文章1文章1文章1' }, { name: '文章2' },
-                //         { name: '文章3' }, { name: '文章4' },
-                //         { name: '文章5' }, { name: '文章1' },
-                //         { name: '文章1' }, { name: '文章1' },
-                //         { name: '文章1' }, { name: '文章1' },
-                //     ],
-                //     scopes: [
-                //         { src: require('../assets/二维码.png') }
-                //     ]
-                // },
-            ]
+            leftNav: [],
         }
     },
     mounted() {
@@ -41,13 +28,29 @@ export default {
         })
             .then(response => {
                 //console.log(response)
-                this.list = response.data.PcHealthAssessmentList;
-                console.log(this.list)
+                this.leftNav = response.data.PcHealthAssessmentList;
+                console.log(this.leftNav)
             })
             .catch(error => {
                 console.log(error);
                 //alert('网络错误，不能访问');
             });
+    },
+    methods: {
+        go(item) {
+            sessionStorage.setItem('typeId', item.typeId)
+            this.$ajax({
+                method: 'get',
+                url: this.psta + '/rest/pc/getPcHealthAssessment?' + 'typeId=' + item.typeId + '&uuid=' + item.uuid,
+            })
+                .then(response => {
+                    console.log(response)
+                })
+                .catch(error => {
+                    console.log(error);
+                    //alert('网络错误，不能访问');
+                });
+        }
     },
 }
 </script>

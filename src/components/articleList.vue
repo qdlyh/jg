@@ -2,28 +2,29 @@
     <div>
         <div class="content">
             <topNav></topNav>
+            <!-- <el-table :data="list.slice((currentPage-1)*pagesize,currentPage*pagesize)" border style="width: 100%">
+                <span class="article-text">{{list}}</span>
+            </el-table> -->
             <div class="content-box">
                 <div class="leftNav">
-                    <router-link to="/">全部文章</router-link>
-                    <router-link to="/">公司动态</router-link>
                     <el-tree :data="nav" :props="defaultProps" @node-click="handleNodeClick" id="el-nav"></el-tree>
                 </div>
                 <div class="article-list">
                     <h1>
-                        <img src="../assets/文章.png" alt=""> 新闻资讯
+                        <img src="../assets/文章.png" alt=""> {{labelText}}
                     </h1>
                     <div class="article" v-for="(item,index) in list" :key="index">
                         <div class="article-box">
-                            <router-link to="/">
+                            <span class="hot">[{{item.hot}}]</span>
+                            <a href="javascript:;" @click="go(item)">
                                 <div class="text">
-                                    <span class="hot">[{{item.hot}}]</span>
-                                    <span class="article-text">{{item.txt}}</span>
+                                    <span class="article-text">{{item.title}}</span>
                                 </div>
                                 <div class="time">
-                                    <i style="padding-left:5px;">{{item.date}}</i>
-                                    <i>{{item.time}}</i>
+                                    <i style="padding-left:5px;">{{item.updateDate}}</i>
+                                    <!-- <i>{{item.time}}</i> -->
                                 </div>
-                            </router-link>
+                            </a>
                             <hr/>
                         </div>
                     </div>
@@ -43,25 +44,55 @@ export default {
         return {
             nav: [
                 {
-                    label: '一级 1',
+                    label: '全部文章',
+                },
+                {
+                    label: '公司动态',
+                },
+                {
+                    label: '项目服务',
+                    children: [
+                        { label: '老年委：肠道保健' },
+                        { label: '老年委：医养结合' },
+                        { label: '老年委：健康饮水' },
+                        { label: '方案：养生养老' },
+                        { label: '方案：护理照料' },
+                    ]
+                },
+                {
+                    label: '新闻资讯',
                     children: [{
-                        label: '二级 1-1',
+                        label: '政策法规', titleId: 5
+                    }, {
+                        label: '新闻资讯', titleId: 6
+                    }, {
+                        label: '夕阳暖专刊', titleId: 7
                     }]
                 },
                 {
-                    label: '一级 2',
+                    label: '健康云',
                     children: [{
-                        label: '二级 2-1',
+                        label: '健康关怀',
                     }, {
-                        label: '二级 2-2',
+                        label: '健康评估',
                     }]
                 },
                 {
-                    label: '一级 3',
+                    label: '技术产品',
                     children: [{
-                        label: '二级 3-1',
+                        label: '技术成果',
                     }, {
-                        label: '二级 3-2',
+                        label: '产品发布',
+                    }, {
+                        label: '产品维护',
+                    }]
+                },
+                {
+                    label: '关于我们',
+                    children: [{
+                        label: '公司简介',
+                    }, {
+                        label: '合作伙伴',
                     }]
                 }
             ],
@@ -69,28 +100,55 @@ export default {
                 children: 'children',
                 label: 'label'
             },
-            list: [
-                { text: '新闻资讯', hot: '最热新闻', txt: '唉大家阿斯顿哈睡得好爱仕达哈斯', date: '2017-3-3', time: '11:10' },
-                { text: '新闻资讯', hot: '最热新闻', txt: '唉大家阿斯顿哈睡得好爱仕达哈斯', date: '2017-3-3', time: '11:10' },
-                { text: '新闻资讯', hot: '最热新闻', txt: '唉大家阿斯顿哈睡得好爱仕达哈斯', date: '2017-3-3', time: '11:10' },
-                { text: '新闻资讯', hot: '最热新闻', txt: '唉大家阿斯顿哈睡得好爱仕达哈斯', date: '2017-3-3', time: '11:10' },
-                { text: '新闻资讯', hot: '最热新闻', txt: '唉大家阿斯顿哈睡得好爱仕达哈斯', date: '2017-3-3', time: '11:10' },
-                { text: '新闻资讯', hot: '最热新闻', txt: '唉大家阿斯顿哈睡得好爱仕达哈斯', date: '2017-3-3', time: '11:10' },
-            ],
-            currentPage: 1
+            list: [],
+            currentPage: 1,
+            labelText: '',
+            navNum: '',
         };
     },
     mounted() {
+        this.getPage();
     },
     methods: {
+        /* 侧边栏 */
         handleNodeClick(data) {
-            console.log(data);
+            //console.log(data.label);
+            this.labelText = data.label;
+            if (data.titleId != undefined) {
+                localStorage.setItem('titleId', data.titleId);    /* 存储左侧导航标签id */
+                this.currentPage = 1;
+                this.getPage();
+            }
         },
+        /* 每页多少条 */
         handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
         },
         handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+            this.currentPage = val;
+            this.getPage();
+        },
+        /* 分页数据 */
+        getPage() {
+            this.navNum = localStorage.getItem('titleId');  /* 获取左侧导航标签id */
+            this.$ajax({
+                method: 'get',
+                url: this.psta + '/rest/pc/getPcPageNews?' + 'page=' + this.currentPage + '&size=' + 10 + '&type=' + this.navNum,
+            })
+                .then(response => {
+                    //console.log(response)
+                    this.list = response.data.PcPageNews;
+                    //console.log(this.list)
+                })
+                .catch(error => {
+                    console.log(error);
+                    //alert('网络错误，不能访问');
+                });
+        },
+        go(item) {
+            localStorage.setItem('articleId', item.uuid);   /* 存储分页内容标签id */
+            this.$router.push('/article')
         }
     },
 }
@@ -114,7 +172,7 @@ export default {
         line-height: 45px;
       }
       a:hover {
-        background: #F6F7FB;
+        background: #f6f7fb;
         transition: 0.2s;
       }
       #el-nav {
@@ -127,9 +185,8 @@ export default {
       background: #fff;
       padding: 30px;
       h1 {
-        font-size: 32px;
+        font-size: 24px;
         color: #454545;
-        font: outline;
         font-weight: normal;
         margin-bottom: 20px;
         img {
@@ -140,36 +197,40 @@ export default {
         }
       }
       .article {
-        a {
-          display: inline-block;
-          height: 80px;
-          .text {
-            padding: 24px 16px 0 16px;
-            .hot {
-              font-size: 16px;
-              color: #367ccc;
-              margin-right: 24px;
-              padding-top: 24px;
-            }
-            .article-text {
-              color: #454545;
-              font-size: 16px;
-              padding-top: 24px;
-              &:hover {
-                color: #2ad0ff;
-                transition: 0.3s;
+        .article-box {
+          display: flex;
+          align-items: center;
+          .hot {
+            font-size: 16px;
+            color: #367ccc;
+            margin-right: 24px;
+            padding-top: 24px;
+          }
+          a {
+            display: inline-block;
+            height: 80px;
+            .text {
+              padding: 24px 16px 0 16px;
+              .article-text {
+                color: #454545;
+                font-size: 16px;
+                padding-top: 24px;
+                &:hover {
+                  color: #2ad0ff;
+                  transition: 0.3s;
+                }
               }
             }
-          }
-          .time {
-            font-size: 14px;
-            color: #9c9c9c;
-            padding: 10px 0 0 10px;
-          }
-          hr {
-            background: #ccc;
-            border: none;
-            height: 1px;
+            .time {
+              font-size: 14px;
+              color: #9c9c9c;
+              padding: 10px 0 0 10px;
+            }
+            hr {
+              background: #ccc;
+              border: none;
+              height: 1px;
+            }
           }
         }
       }

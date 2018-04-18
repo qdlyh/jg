@@ -41,15 +41,15 @@ export default new Router({
       name: 'serveForm',
       component: serveForm
     },
-    // {
-    //   path: '/articleList',
-    //   name: 'articleList',
-    //   component: articleList
-    // },
-    // {
-    //   path: '/article',
-    //   name: 'article',
-    //   component: article
-    // }
+    {
+      path: '/articleList',
+      name: 'articleList',
+      component: articleList
+    },
+    {
+      path: '/article',
+      name: 'article',
+      component: article
+    }
   ]
 })

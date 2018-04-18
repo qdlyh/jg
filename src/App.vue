@@ -103,8 +103,8 @@ i {
 .el-form-item__error{
     font-size: 14px;
 }
-
-// .el-input__inner{
-//   width: 380px;
-// }
+/* 分页每页显示多少条 */
+.el-pagination__sizes{
+    display: none !important;
+}
 </style>
