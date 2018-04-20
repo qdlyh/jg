@@ -11,11 +11,13 @@
             <div class="box">
                 <div class="content-text">
                     <ul>
-                        <li v-for="(item,index) in nav" :key="index" :class="{active:index==num}" @click="num = index">{{item.text}}</li>
+                        <li v-for="(item,index) in nav" :key="index">
+                            <a href="javascript:;" @click="goAnchor('#anchor-'+index,index)" :class="{active:index==num}">{{item.text}}</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="content-txt">
-                    <div class="txt" v-for="(item,index) in list" :key="index">
+                    <div class="txt" v-for="(item,index) in list" :key="index" :id="'anchor-'+index">
                         <i></i>
                         <h1>{{item.title}}</h1>
                         <div class="txt-content">
@@ -47,7 +49,7 @@ export default {
             banner: [],
             nav: [],
             nav: [{ text: '五谷轮回简介' }, { text: '特色功能' }, { text: '版本更新' }, { text: '实用功能' }, { text: '相关产品' }],
-            list:[],
+            list: [],
             // list: [
             //     { text: '五谷轮回介绍1', txt: '到静安到静安到静安到静安到静安到静安到静安到静安到静安到静安到静安到静安到静安', src: require('../assets/403401878767614614.png'), },
             //     { text: '五谷轮回介绍2', title: '独立系统', txt: '到静安寺哦对哈水的哈到静安寺哦对哈水的哈到静安寺哦对哈水的哈到静安寺哦对哈水的哈到静安寺哦对哈水的哈2', title2: '独立系统', txt2: '到静安寺哦对哈水的哈到静安寺哦对哈水的哈到静安寺哦对哈水的哈到静安寺哦对哈水的哈到静安寺哦对哈水的哈2', src: require('../assets/403401878767614614.png'), },
@@ -75,11 +77,12 @@ export default {
             });
     },
     methods: {
-        // tab(index) {
-        //     this.num = index;
-        //     // document.documentElement.scrollTop = 0;
-        //     console.log(window.scrollY)
-        // }
+        goAnchor(selector,index) {
+            this.num = index;
+            console.log(index)
+            var anchor = this.$el.querySelector(selector)
+            document.documentElement.scrollTop = anchor.offsetTop
+        },
     }
 }
 </script>
@@ -116,12 +119,15 @@ export default {
       height: 65px;
       margin-top: 10px;
       ul {
-        li {
+        li,a {
           float: left;
           font-size: 18px;
           line-height: 64px;
-          margin-right: 88px;
+          margin-right: 70px;
           cursor: pointer;
+        }
+        a{
+            color: #464646;
         }
       }
     }
@@ -176,7 +182,7 @@ export default {
   }
 }
 .active {
-  color: #00a3ee;
+  color: #00a3ee !important;
 }
 </style>
 

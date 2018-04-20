@@ -13,12 +13,24 @@
                 <!-- v-if="items.children.length" -->
                 <el-dropdown v-for="(items,index) in nav" :key="index">
                     <span class="el-dropdown-link">
-                        <a href="javascript:;">{{items.label}}</a>
+                        <a href="javascript:;" @click="btns(items)">{{items.label}}</a>
                     </span>
-                    <el-dropdown-menu slot="dropdown" class="el-box">
+                    <el-dropdown-menu slot="dropdown" class="el-box" v-if="items.children.length" style="width: 100%;">
                         <div class="el-div">
                             <ul>
-                                <li v-for="(item,index) in items.children" :key="index" @click="btn(item)">{{item.label}}</li>
+                                <li v-for="(item,index) in items.children[0].scoper1" :key="index" @click="btn(item,items)">
+                                    {{item.label}}
+                                </li>
+                            </ul>
+                            <ul>
+                                <li v-for="(item,index) in items.children[0].scoper2" :key="index" @click="btn(item,items)">
+                                    {{item.label}}
+                                </li>
+                            </ul>
+                            <ul>
+                                <li v-for="(item,index) in items.children[0].scoper3" :key="index" @click="btn(item,items)">
+                                    {{item.label}}
+                                </li>
                             </ul>
                         </div>
                     </el-dropdown-menu>
@@ -34,63 +46,107 @@ export default {
             nav: [
                 // {
                 //     label: '首页',
+                //     url: '/',
                 //     children: []
                 // },
                 {
                     label: '项目服务',
+                    url: '/articleList',
+                    uuid: 52,
                     children: [
                         {
-                            label: '华夏：健康饮水', num: 1,
-                        }, {
-                            label: '华夏：医养结合', num: 2
-                        }, {
-                            label: '华夏：健康饮水', num: 3
-                        },
-                        {
-                            label: '申请：技术服务', num: 4,
-                        }, {
-                            label: '申请：护理培训', num: 5
-                        }, {
-                            label: '方案：养生养老', num: 6
-                        },
-                        {
-                            label: '方案：护理照料', num: 7
+                            scoper1: [
+                                {
+                                    label: '华夏：健康饮水',
+                                    url: '/articleList',
+                                    uuid: 66,
+                                }, {
+                                    label: '华夏：医养结合',
+                                    url: '/articleList',
+                                    uuid: 51,
+                                }, {
+                                    label: '华夏：肠道保健',
+                                    url: '/articleList',
+                                    uuid: 21,
+                                },
+                            ],
+                            scoper2: [
+                                {
+                                    label: '申请：技术服务',
+                                    url: '/serveForm',
+                                }, {
+                                    label: '申请：护理培训',
+                                    url: '/nurseForm',
+                                },
+                            ],
+                            scoper3: [
+                                {
+                                    label: '方案：养生养老',
+                                    url: '/articleList',
+                                    uuid: 67,
+                                },
+                                {
+                                    label: '方案：护理照料',
+                                    url: '/articleList',
+                                    uuid: 72,
+                                }
+                            ]
                         }
                     ],
                 },
                 {
                     label: '技术产品',
+                    url: '/articleList',
+                    uuid: 8,
                     children: [
-                        { label: '技术成果' }, { label: '产品发布' }, { label: '产品维护' }
+                        {
+                            scoper1: [
+                                { label: '技术成果', url: '/articleList', uuid: 16 }, { label: '产品发布', url: '/articleList', uuid: 69 }, { label: '产品维护', url: '/articleList', uuid: 69 }
+                            ]
+                        }
                     ],
                 },
                 {
                     label: '健康云',
+                    url: '/articleList',
+                    uuid: 9,
                     children: [
-                        { label: '健康关怀' }, { label: '健康评估' }
+                        {
+                            scoper1: [
+                                { label: '健康关怀', url: '/articleList', uuid: 56 }, { label: '健康评估', url: '/articleList', uuid: 57 }
+                            ]
+                        }
                     ],
                 },
                 {
                     label: '新闻资讯',
+                    url: '/articleList',
+                    uuid: 4,
                     children: [{
-                        label: '政策法规', num: 5,
-                    }, {
-                        label: '新闻资讯', num: 6
-                    }, {
-                        label: '夕阳暖专刊', num: 7
+                        scoper1: [
+                            { label: '政策法规', url: '/articleList', uuid: 5 }, { label: '新闻资讯', url: '/articleList', uuid: 6 }, { label: '夕阳暖专刊', url: '/articleList', uuid: 7 }
+                        ]
                     }],
                 },
                 {
                     label: '下载中心',
-                    children: [
-                        { label: 'PC应用', num: 8, }, { label: 'APP应用', num: 9, }
-                    ],
+                    url: '/introduce',
+                    uuid: 10,
+                    children: [{
+                        scoper1: [
+                            { label: 'PC应用', url: '/introduce', uuid: 58 }, { label: 'APP应用', url: '/introduce', uuid: 59 }
+                        ]
+                    }],
                 },
                 {
                     label: '关于我们',
-                    children: [
-                        { label: '公司简介' }, { label1: '合作伙伴' }
-                    ],
+                    url: '/cooperation',
+                    uuid: 68,
+                    children: [{
+                        scoper1: [
+                            { label: '公司简介', url: '/cooperation', uuid: 69 }, { label: '合作伙伴', url: '', uuid: 16 }
+                        ]
+                    }],
                 }
             ],
         }
@@ -101,22 +157,19 @@ export default {
         // document.querySelectorAll('.el-div').style.width = document.documentElement.clientWidth + 'px'
     },
     methods: {
-        btn(item) {
-            console.log(item)
+        btns(items) {
+            sessionStorage.setItem('navExpanded', items.uuid);  /* 展开的父ID */
+            localStorage.setItem('titleId', items.uuid);       /* 分页请求id */
+            localStorage.setItem('labelTitle', items.label);   /* 分页标题 */
+            this.$router.push(items.url);
         },
-        go() {
-            this.$ajax({
-                method: 'get',
-                url: this.psta + '/rest/pc/getPcPageNews?' + 'page=' + 10 + '&size=' + 1 + '&type=' + this.labelText,
-            })
-                .then(response => {
-                    console.log(response)
-                })
-                .catch(error => {
-                    console.log(error);
-                    //alert('网络错误，不能访问');
-                });
-        }
+        btn(item,items) {
+            sessionStorage.setItem('navExpanded', items.uuid);  /* 展开的父ID */
+            sessionStorage.setItem('navChecked', item.uuid);  /* 展开的子ID */
+            localStorage.setItem('titleId', item.uuid);/* 分页请求id */
+            localStorage.setItem('labelTitle', item.label);   /* 分页标题 */
+            this.$router.push(item.url)
+        },
     }
 }
 </script>
@@ -158,7 +211,6 @@ export default {
 }
 .el-div {
   display: flex;
-  width: 100vw;
   padding-left: 25%;
   ul {
     padding: 10px;
@@ -212,7 +264,7 @@ export default {
   display: none !important;
 }
 .el-popper[x-placement^='bottom'] {
-  margin-top: 1px;
+  margin-top: 0px;
 }
 </style>
 

@@ -17,8 +17,8 @@
             <div class="box">
                 <div class="box-form">
                     <div class="form-nav">
-                        <router-link to="/" class="active-text">护理培训</router-link>
-                        <router-link to="/">技术服务</router-link>
+                        <router-link to="/serveForm" class="active-text">护理培训</router-link>
+                        <router-link to="/serveForm">技术服务</router-link>
                         <h1>护理培训报名</h1>
                     </div>
                     <div class="icon">
@@ -66,11 +66,11 @@
                                 <el-input type="age" v-model.number="ruleForm.age" auto-complete="off" style="width:380px;"></el-input>
                             </el-form-item>
                             <el-form-item label="联系方式" prop="phone">
-                                <el-input type="phone" v-model.number="ruleForm.phone" auto-complete="off" style="width:380px;"></el-input>
+                                <el-input type="phone" v-model.number="ruleForm.phone" auto-complete="off" maxlength="11" style="width:380px;"></el-input>
                             </el-form-item>
-                            <!-- <el-form-item label="所在地区">
-                            <el-cascader :options="options" v-model="selectedOptions3"></el-cascader>
-                            </el-form-item> -->
+                            <el-form-item label="所在地区">
+                                <el-cascader :options="options" v-model="selectedOptions" style="width:380px;"></el-cascader>
+                            </el-form-item>
                             <el-form-item prop="email" label="邮箱">
                                 <el-input v-model="ruleForm.email" style="width:380px;"></el-input>
                             </el-form-item>
@@ -104,11 +104,11 @@
                             <p>
                                 <i>联系方式</i>：{{ruleForm.phone}}
                             </p>
-                            <!-- <p>
-                                <i>所在地区</i>：{{selectedOptions}}
-                            </p> -->
                             <p>
                                 <i>邮箱地址</i>：{{ruleForm.email}}
+                            </p>
+                            <p>
+                                <i>所在地区</i>：{{OptionsText}}
                             </p>
                         </div>
                         <div class="table-btn">
@@ -125,7 +125,7 @@
                             </div>
                         </div>
                         <div class="step-three-btn">
-                            <el-button @click="complete()">返回</el-button>
+                            <el-button @click="resetForm('ruleForm')">返回</el-button>
                         </div>
                     </div>
                 </div>
@@ -160,7 +160,7 @@ export default {
                 ],
                 name: [
                     { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+                    { min: 2, max: 5, message: '长度在 2 到 5 个字符', trigger: 'blur' }
                 ],
                 sex: [
                     { required: true, message: '请选择性别', trigger: 'change' }
@@ -179,10 +179,26 @@ export default {
                     { required: true, message: '手机号不能为空' }, { pattern: /^1[345789][0-9]{9}$/, message: '手机号格式错误' }
                 ],
             },
+            options: [],
+            selectedOptions: ['北京市', '市辖区', '东城区'],
+            OptionsText:'', //步骤二把选中城市显示字符串
         };
     },
     mounted() {
-        //console.log(this.selectedOptions3)  
+        /* 城市 */
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/rest/pc/getPcRegion',
+        })
+            .then(response => {
+                //console.log(response)
+                this.options = response.data;
+                //console.log(this.options)
+            })
+            .catch(error => {
+                console.log(error);
+                //alert('网络错误，不能访问');
+            });
     },
     methods: {
         submitForm(formName) {
@@ -194,6 +210,7 @@ export default {
                         this.stepTwo = true;
                         this.stepOne = false;
                         this.title = '确认服务资料'
+                        this.OptionsText = this.selectedOptions[0]+'/'+this.selectedOptions[1]+'/'+this.selectedOptions[2];
                         //alert('submit!');
                     } else {
                         console.log('error submit!!');
@@ -207,23 +224,40 @@ export default {
                 }
             });
         },
+        /* 条款取消 */
         cancel() {
             this.centerDialogVisible = false;
             this.checked = false;
         },
+        /* 条款同意 */
         ifChecked() {
             this.centerDialogVisible = false;
             this.checked = true;
         },
+        /* 步骤二返回修改 */
         info() {
             this.isActive = false;
             this.stepTwo = false;
             this.stepOne = true;
         },
+        /* 步骤二提交 */
         success() {
+            let formData = new FormData();
+            formData.append('type', this.ruleForm.project);
+            formData.append('name', this.ruleForm.name);
+            formData.append('sex', this.ruleForm.sex);
+            formData.append('age', this.ruleForm.age);
+            formData.append('email', this.ruleForm.email);
+            formData.append('schooling', this.ruleForm.education);
+            formData.append('contactPhone', this.ruleForm.phone);
+            formData.append('province', this.selectedOptions[0]);
+            formData.append('city', this.selectedOptions[1]);
+            formData.append('county', this.selectedOptions[2]);
+
             this.$ajax({
                 method: 'post',
-                //url: this.psta + '/rest/pc/getPcHealthAssessment?uuid=68',
+                url: this.psta + '/rest/pc/sendEmpTraining',
+                data: formData
             })
                 .then(response => {
                     this.stepTwo = false;
@@ -231,43 +265,20 @@ export default {
                     this.stepThree = true;
                     this.title = '完成'
                     //console.log(response)
-                    //this.list = response.data.getPcHealthAssessment[0].childList;
-                    //console.log(this.list)
                 })
                 .catch(error => {
                     console.log(error);
                     //alert('网络错误，不能访问');
                 });
         },
-        info() {
-            this.isActive = false;
-            this.stepOne = true;
-            this.stepTwo = false;
-        },
-        success() {
-            this.$ajax({
-                method: 'post',
-                //url: this.psta + '/rest/pc/getPcHealthAssessment?uuid=68',
-            })
-                .then(response => {
-                    this.stepOne = false;
-                    this.stepTwo = false;
-                    this.stepThree = true;
-                    this.title = '完成'
-                    //console.log(response)
-                    //this.list = response.data.getPcHealthAssessment[0].childList;
-                    //console.log(this.list)
-                })
-                .catch(error => {
-                    console.log(error);
-                    //alert('网络错误，不能访问');
-                });
-        },
-        complete() {
+
+        /* 第三步骤完成页面返回重置表单 */
+        resetForm(formName) {
             this.stepOne = true;
             this.stepTwo = false;
             this.stepThree = false;
-        }
+            this.$refs[formName].resetFields();
+        },
     }
 }
 </script>

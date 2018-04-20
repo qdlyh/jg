@@ -6,7 +6,7 @@
         <div class="block">
           <el-carousel trigger="click" height="640px">
             <el-carousel-item v-for="(item,index) in banner" :key="index">
-              <img :src="item.image" alt="" style="width:100%;heigh:640px;">
+              <img v-lazy="item.image" alt="" style="width:100%;heigh:640px;">
             </el-carousel-item>
           </el-carousel>
         </div>
@@ -14,47 +14,49 @@
       <div class="content-box">
         <div class="box-top">
           <span v-for="(item,index) in dataTop" :key="index">
-            <img :src="item.image" alt="">
+            <img v-lazy="item.image" alt="">
             <div>
-              <i>{{item.text}}</i>
+              <i>{{item.title}}</i>
             </div>
           </span>
         </div>
         <div class="box-middle">
-          <div class="box-middle-text">
-            <h1>新闻资讯</h1>
-            <ul v-for="(item,index) in tabData" :key="index">
-              <li :class="{active:index == num}" @click="tab(index)">{{item.text}}</li>
+          <div class="box-middle-text" v-for="(items,index) in tabData" :key="index">
+
+            <h1>{{items.title}}</h1>
+
+            <ul v-for="(items,index) in tabData[0].childList">
+              <li :class="{active:index == num}" @click="num = index">{{items.title}}</li>
             </ul>
-            <router-link to="/">查看更多&nbsp;></router-link>
-          </div>
-          <div class="box-middle-content" v-for="(items, index) in tabList" :key="index" v-show="index===num">
-            <router-link to="/" v-for="(item,index) in items" :key="index">
-              <span>
-                <img :src="item.image" alt="">
-                <p>{{item.text}}</p>
-              </span>
-            </router-link>
+
+            <a href="javascript:;" @click="tabGo()">查看更多&nbsp;></a>
+
+            <div class="box-middle-content" v-for="(item, index) in items.childList" v-show="index==num">
+              <a href="javascript:;" v-for="(tab,index) in item.childList" :key="index" @click="tabBtn(tab,item)">
+                <span>
+                  <img v-lazy="tab.image" alt="">
+                  <p>{{tab.title}}</p>
+                </span>
+              </a>
+            </div>
           </div>
         </div>
       </div>
       <div class="content-bottom">
         <div class="content-bottom-box">
-          <div class="content-bottom-top" v-for="(item,index) in listBox" :key="index">
+          <div class="content-bottom-top" v-for="(item,index) in bottomBox" :key="index">
             <div class="bottom-top-text">
-              <h1>{{item.text}}</h1>
-              <router-link to="/" class="more">
-                <span>查看更多&nbsp;></span>
-              </router-link>
+              <h1>{{item.title}}</h1>
             </div>
-            <router-link to="/" class="more-img">
-              <img :src="item.image" alt="">
-            </router-link>
+            <a href="javascript:;" class="more-img" @click="bottomBoxGo(item,index)">
+              <img v-lazy="item.image" alt="">
+            </a>
           </div>
         </div>
+
         <div class="content-bottom-img">
           <router-link to="/" v-for="(item,index) in bottomImg" :key="index">
-            <img :src="item.image" alt="">
+            <img v-lazy="item.image" alt="">
           </router-link>
         </div>
       </div>
@@ -71,33 +73,55 @@ export default {
       banner: [],
       dataTop: [],
       tabData: [],
-      tabList: [],
-      // tabs: [{ text: '政策法规' }, { text: '新闻资讯' }, { text: '夕阳暖计划' }],
-      listBox: [],
+      bottomBox: [],
       bottomImg: [],
     }
   },
   mounted() {
+    /* 轮播图 */
     this.$ajax({
       method: 'get',
-      url: this.psta + '/rest/pc/getPcHome',
+      url: this.psta + '/rest/pc/getPcHomeImage',
     })
       .then(response => {
         //console.log(response)
-        this.banner = response.data.PcHome[0].childList[0].childList;
-        this.dataTop = response.data.PcHome[0].childList[1].childList;
-        this.tabData = response.data.PcHome[0].childList[2].childList;
-        let list0 = response.data.PcHome[0].childList[3];
-        let list1 = response.data.PcHome[0].childList[4];
-        let list2 = response.data.PcHome[0].childList[5];
-        this.bottomImg = response.data.PcHome[0].childList[6];
-        /* 把tabData下的数组push到tabList方便做按钮切换 */
-        for (let i = 0; i < this.tabData.length; i++) {
-          this.tabList.push(this.tabData[i].childList)
-          //console.log(this.tabList)
-        }
-        /*不想做三次重复循环,所以干脆push到同一个数组  */
-        this.listBox.push(list0, list1, list2);
+        this.banner = response.data.PcHomeImage[0].childList[0].childList;
+        this.bottomImg = response.data.PcHomeImage[0].childList[1].childList;
+        // console.log(this.bottomImg)
+      })
+      .catch(error => {
+        //console.log(error);
+        //alert('网络错误，不能访问');
+      });
+
+    /* 项目展示*/
+    this.$ajax({
+      method: 'get',
+      url: this.psta + '/rest/pc/getPcHomeProject',
+    })
+      .then(response => {
+        //console.log(response)
+        this.dataTop = response.data.PcHomeProject;
+        //console.log(this.dataTop)
+      })
+      .catch(error => {
+        //console.log(error);
+        //alert('网络错误，不能访问');
+      });
+
+    /* tab新闻分类和底部内容*/
+    this.$ajax({
+      method: 'get',
+      url: this.psta + '/rest/pc/getPcHomeOther',
+    })
+      .then(response => {
+        //console.log(response)
+        this.tabData = response.data.PcHomeNews;
+        let bottomBox1 = response.data.PcHomeTech;
+        let bottomBox2 = response.data.PcHomeHealth;
+        let bottomBox3 = response.data.PcHomeDownload;
+        this.bottomBox.push(bottomBox1, bottomBox2, bottomBox3)
+        //console.log(this.bottomBox)
       })
       .catch(error => {
         console.log(error);
@@ -105,8 +129,35 @@ export default {
       });
   },
   methods: {
-    tab(index) {
-      this.num = index;
+    tabBtn(tab, item) {
+      localStorage.setItem('labelTitle', item.title);    /*article 侧边栏文章列表标题 */
+      localStorage.setItem('titleId', item.uuid);   /*article 侧边栏文章列表请求其id */
+      localStorage.setItem('articleId', tab.uuid);   /*article 请求文章内容id  */
+      this.$router.push('/article');
+    },
+    /* 新闻查看全部转跳 */
+    tabGo() {
+      localStorage.setItem('titleId', 4);       /* 请求tab新闻所有内容的uuid为4 */
+      this.$router.push('/articleList')
+    },
+    bottomBoxGo(item, index) {
+      console.log(item)
+      if (index == 0) {
+        /* 产品技术 */
+        localStorage.setItem('titleId', 8);              /* 转跳分页请求文章id */
+        localStorage.setItem('labelTitle', item.title);  /* 转跳分页标题 */
+        this.$router.push('/articleList');
+      }
+      if (index == 1) {
+        /* 健康云 */
+        localStorage.setItem('titleId', 9);             /* 转跳分页请求文章id */
+        localStorage.setItem('labelTitle', item.title);  /* 转跳分页标题 */
+        this.$router.push('/articleList');
+      }
+      if (index == 2) {
+        /* 下载中心*/
+        this.$router.push('/cooperation')
+      }
     }
   }
 }
@@ -131,28 +182,41 @@ export default {
     max-width: 1200px;
     margin: 0 auto;
     .box-top {
+      width: 580px;
+      height: 230px;
       margin-top: 32px;
       min-width: 1200px;
       overflow: hidden;
+      /* 显示隐藏div层 */
+      :hover div {
+        transform: translate3d(0, 0, 0);
+      }
       span {
-        height: 230px;
-        width: 580px;
         display: inline-block;
         position: relative;
+        cursor: pointer;
         &:first-child {
           margin-right: 28px;
         }
+        /* 隐藏div层 */
         div {
           position: absolute;
           bottom: 0px;
           left: 0px;
-          background: rgba(44, 44, 44, 0.5);
+          background: rgba(44, 44, 44, 0.6);
           width: 586px;
           height: 64px;
+          color: #3c4a50;
+          transition: transform 0.35s;
+          transform: translate3d(0, 100%, 0);
           i {
             color: #fff;
             padding-left: 44px;
             line-height: 64px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
           }
         }
         img {
@@ -162,7 +226,7 @@ export default {
       }
     }
     .box-middle {
-      margin-top: 54px;
+      margin-top: 60px;
       .box-middle-text {
         h1 {
           float: left;
@@ -200,16 +264,35 @@ export default {
           display: inline-block;
           width: 280px;
           height: 180px;
+          background: #000;
           overflow: hidden;
         }
         span {
+          display: inline-block;
+          width: 280px;
+          height: 180px;
+          position: relative;
+          &:hover p {
+            opacity: 1;
+          }
+          &:hover img {
+            transform: scale(1.1);
+            opacity: 0.7;
+            transition: all 0.5s ease;
+          }
           img {
             width: 280px;
             height: 180px;
           }
-          img:hover {
-            transform: scale(1.1);
-            transition: all 0.5s ease;
+          p {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.35s;
+            color: #fff;
+            font-size: 18px;
           }
         }
       }
@@ -229,11 +312,13 @@ export default {
         .bottom-top-text {
           display: flex;
           justify-content: space-between;
-          .more {
-            color: #646464;
-            line-height: 32px;
-          }
           h1 {
+            width: 200px;
+            height: 35px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            overflow: hidden;
             font-weight: normal;
             font-size: 24px;
             color: #454545;
@@ -245,13 +330,15 @@ export default {
           height: 380px;
           height: 208px;
           overflow: hidden;
+          background: #000;
+          &:hover img {
+            transform: scale(1.1);
+            transition: all 0.5s ease;
+            opacity: 0.7;
+          }
           img {
             width: 380px;
             height: 208px;
-          }
-          img:hover {
-            transform: scale(1.1);
-            transition: all 0.5s ease;
           }
         }
       }

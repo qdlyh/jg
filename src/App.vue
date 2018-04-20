@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view/>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
   </div>
 </template>
 
@@ -54,6 +57,39 @@ i {
     }
   }
 }
+
+/* 懒加载图片过渡效果 */
+img[lazy='loaded'] {
+  animation: fade 0.5s;
+}
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+img[lazy='loading'] {
+   background: #f3f3f3;
+  /*width: 100px;
+  background-position: center center !important;
+  background: url('./assets/loading.gif');
+  background-size: 100px 100px;
+  background-repeat: no-repeat;
+  background-size: cover;*/
+}
+img[lazy='error'] {
+   background: #f3f3f3;
+  /*width: 100px;
+  background-position: center center !important;
+  background: url('./assets/error.jpg');
+  background-size: 100px 100px;
+  background-repeat: no-repeat;
+  background-size: cover;*/
+}
+
 /* element设置 */
 /* 树形菜单栏 */
 .el-tree-node__label {
@@ -100,11 +136,19 @@ i {
 }
 
 /* 表单输入错误提示文字 */
-.el-form-item__error{
-    font-size: 14px;
+.el-form-item__error {
+  font-size: 14px;
 }
 /* 分页每页显示多少条 */
-.el-pagination__sizes{
-    display: none !important;
+.el-pagination__sizes {
+  display: none !important;
+}
+/* select光标 */
+.el-select .el-input__inner {
+  cursor: default !important;
+}
+/* 侧边导航多选选中隐藏 */
+.el-checkbox {
+  display: none !important;
 }
 </style>

@@ -10,7 +10,7 @@ import nurseForm from '@/components/nurseForm'
 import serveForm from '@/components/serveForm'
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [{
       path: '/',
       name: 'index',
@@ -44,12 +44,25 @@ export default new Router({
     {
       path: '/articleList',
       name: 'articleList',
-      component: articleList
+      component: articleList,
+      // meta: {
+      //   title: '滴啊送到',
+      //   keepAlive: true
+      // }
     },
     {
       path: '/article',
       name: 'article',
-      component: article
+      component: article,
+      meta: {
+        title: '文章x',
+        keepAlive: true
+      }
     }
   ]
 })
+export default router;
+/* 页面不在最顶部时转跳页面，新页面的滚动条自动跳到最底层 */
+router.afterEach((to, from, next) => {
+  window.scrollTo(0, 0);
+});

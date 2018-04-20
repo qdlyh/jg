@@ -5,7 +5,7 @@
             <div class="content-box">
                 <div class="leftNav">
                     <ul>
-                        <li>健康评估</li>
+                        <li>{{labelText}}</li>
                         <li v-for="(item,index) in leftNav" :key="index">
                             <a href="javascript:;" @click="go(item)">{{item.title}}</a>
                         </li>
@@ -40,12 +40,17 @@ export default {
             leftNav: [],
             articleId: null,
             navNum: null,
-            // list: [{ text: '文章标题啊啊啊啊', date: '2017-1-01', date: '11:10', src: require('../assets/500441656.png'), txt: '大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是大神的哈苏等哈说对话速度哈岁的哈岁的哈是的话时代是' }]
         }
     },
-    mounted() {
-        this.navNum = localStorage.getItem('titleId'); //获取articleList页面的左侧导航标签id
-        this.articleId = localStorage.getItem('articleId');  //获取article左侧导航标签id
+    activated() {
+        this.navNum = localStorage.getItem('titleId'); //获取articleList页面的左侧导航标签id用作请求左侧菜单栏
+        this.articleId = localStorage.getItem('articleId');  //根据左侧导航标签id用作请求文章内容
+        
+        /* 左边导航栏标题 */
+        if (localStorage.getItem('labelTitle')) {
+            this.labelText = localStorage.getItem('labelTitle')
+        }
+
         /* 左侧菜单栏 */
         this.$ajax({
             method: 'get',
@@ -60,7 +65,7 @@ export default {
                 console.log(error);
                 //alert('网络错误，不能访问');
             });
-        
+
         /* 主页内容 */
         this.$ajax({
             method: 'get',

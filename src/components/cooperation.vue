@@ -3,7 +3,7 @@
     <div class="content">
       <topNav></topNav>
       <div class="banner">
-        <img v-for="(item,index) in banner" v-lazy="item.image" alt="">
+        <img v-for="(item,index) in banner" :key="index" v-lazy="item.image" alt="">
       </div>
       <div class="box-top" v-for="(item,index) in boxTop" :key="index">
         <h1>{{item.text}}</h1>
@@ -15,9 +15,9 @@
       </div>
       <div class="box-middle" v-for="(item,index) in boxMiddle">
         <div class="box-middle-content">
-          <h1 v-for="(item,index) in boxMiddle[0].childList[0]">{{item.text}}</h1>
+          <h1>{{item.title}}</h1>
           <i class="active"></i>
-          <p class="text">{{item.content}}</p>
+          <p class="text" v-html="item.content"></p>
           <div class="box-middle-box">
             <ul>
               <li v-for="(item,index) in boxMiddle[0].childList"><img v-lazy="item.image" alt=""></li>
@@ -61,12 +61,12 @@ export default {
       url: this.psta + '/rest/pc/getPcPartners',
     })
       .then(response => {
-        //console.log(response)
-        this.banner = [response.data.PcPartners[1].childList[0]];
-        this.boxTop = [response.data.PcPartners[1].childList[1]];
-        this.boxMiddle = [response.data.PcPartners[1].childList[2]];
-        this.boxBottom = [response.data.PcPartners[1].childList[3]];
-        // console.log(this.boxBottom);
+        console.log(response)
+        this.banner = [response.data.PcPartners[0].childList[0]];
+        this.boxTop = [response.data.PcPartners[0].childList[1]];
+        this.boxMiddle = [response.data.PcPartners[0].childList[2]];
+        this.boxBottom = [response.data.PcPartners[0].childList[3]];
+        console.log(this.boxMiddle);
       })
       .catch(error => {
         console.log(error);
@@ -133,6 +133,7 @@ export default {
       }
       .box-middle-box {
         overflow: hidden;
+        min-width: 1200px;
         ul {
           margin-top: 30px;
           li {
@@ -176,7 +177,7 @@ export default {
     }
     .box-bottom-box {
       .btn-blue {
-        margin-top: 60px;
+        margin-top: 150px;
         a {
           width: 200px;
           height: 60px;
