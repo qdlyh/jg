@@ -9,51 +9,64 @@
             <div class="form">
                 <div class="input-box">
                     <group>
-                        <popup-picker :title="title" :data="list" show-name v-model="value" :columns="1" @on-change="onChange" :placeholder="('选择产品')"></popup-picker>
+                        <popup-radio title="options" :options="list" v-model="option" @on-change="onChange" placeholder="placeholder"></popup-radio>
                     </group>
                 </div>
                 <div class="input-box">
                     <span>联系人</span>
-                    <input type="text" name="" placeholder="联系人姓名">
+                    <input type="text" name="" placeholder="姓名">
                 </div>
                 <div class="input-box">
                     <span>联系电话</span>
-                    <input type="text" name="" placeholder="联系人姓名">
+                    <input type="text" name="" placeholder="联系电话">
                 </div>
                 <div class="input-box">
                     <span>安装地址</span>
-                    <input type="text" name="" placeholder="联系人姓名">
+                    <input type="text" name="" placeholder="安装地址">
                 </div>
                 <div class="input-box">
                     <group>
-                        <calendar @calendar-each-date-item-size="36" @on-change="onChange" v-model="date" :title="('安装日期')" show-popup-header disable-past :popup-header-title="('选择安装日期')"></calendar>
+                        <calendar @on-change="onChange" v-model="date" :title="('安装日期')" :placeholder="('安装日期')" show-popup-header disable-past :popup-header-title="('选择安装日期')"></calendar>
                     </group>
                 </div>
                 <div class="input-box">
                     <span>留言</span>
-                    <input type="text" name="" placeholder="联系人姓名">
+                    <input type="text" name="" placeholder="想说的话">
                 </div>
+            </div>
+            <div class="btn-blue">
+                <a href="javascript:;">提交</a>
             </div>
         </div>
     </div>
 </template>
 <script>
-import { PopupPicker, Group, Calendar } from 'vux'
+import { PopupPicker, Group, Calendar, PopupRadio } from 'vux'
 export default {
     components: {
         Group,
         PopupPicker,
-        Calendar
+        Calendar,
+        PopupRadio
     },
     data() {
         return {
             title: '洁肠仪',
-            list: [{ text: '小米' }, { text: 'iPhone' }, { text: '华为' }],
-            value: [],
+            list: [{
+                key: 1,
+                value: '洁肠仪A'
+            }, {
+                key: 2,
+                value: '洁肠仪B'
+            }],
+            option: '',
             //时间
             readonly: false,
             date: '',
         }
+    },
+    mounted() {
+
     },
     methods: {
         //产品
@@ -90,19 +103,28 @@ export default {
   }
   .form {
     .input-box {
+      height: 6.25rem;
+      line-height: 6.25rem;
       margin-top: 0.625rem;
       background: #fff;
       span {
         display: inline-block;
-        width: 5rem;
+        width: 8.125rem;
         height: 3.125rem;
         line-height: 3.125rem;
-        margin-left: 30px;
+        margin-left: 0.9375rem;
+        font-size: 1.5rem;
       }
       input {
-        width: 80%;
+        width: 75%;
+        height: 80%;
         border: 0;
-        border-bottom: 0.5px solid #2683f5;
+        font-size: 1.5rem;
+        color: #454545;
+        &::-webkit-input-placeholder {
+          color: #999;
+          font-size: 1.5rem;
+        }
       }
     }
   }

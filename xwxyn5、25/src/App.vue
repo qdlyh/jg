@@ -59,20 +59,19 @@ body {
   }
 }
 
-
 /* 按钮 */
 .btn-blue {
   width: 60%;
   text-align: center;
-  margin: 30px auto;
+  margin: 1.875rem auto;
   a {
     display: inline-block;
-    line-height: 45px;
     width: 100%;
-    height: 45px;
+    height: 4.5rem;
+    line-height: 4.5rem;
     background: #3873cd;
     border-radius: 10px;
-    font-size: 18px;
+    font-size: 1.75rem;
     color: #fff;
     text-overflow: ellipsis;
     border: none;
@@ -82,8 +81,6 @@ body {
     }
   }
 }
-
-
 //vux底部时期选择器
 .vux-calendar-each-date {
   font-size: 1.75rem;
