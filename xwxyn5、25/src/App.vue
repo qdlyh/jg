@@ -84,7 +84,76 @@ body {
 }
 
 
-.weui-cells{
-    margin-top: 0 !important;
+//vux底部时期选择器
+.vux-calendar-each-date {
+  font-size: 1.75rem;
+  margin-top: 0.9375rem;
+}
+
+//底部日期选择器顶部高度
+.vux-popup-header {
+  height: 60px !important;
+  line-height: 60px !important;
+}
+
+//底部日期选择器选中样式
+.vux-calendar-each-date {
+  width: 45px !important;
+  height: 45px !important;
+  line-height: 45px !important;
+}
+
+//底部日期选择器文字
+.calendar-year,
+.calendar-month,
+.vux-popup-header-left,
+.vux-popup-header-right,
+.vux-popup-header-title {
+  font-size: 1.75rem;
+}
+//底部日期选择器顶部星期一二三...文字
+.week {
+  margin: 0.625rem 0;
+  font-size: 1.75rem;
+}
+
+//底部选择器高度
+.weui-cells,
+.weui-cell {
+  height: 6.25rem !important;
+  line-height: 6.25rem !important;
+}
+
+//底部选择器左侧标题文字大小
+.vux-label,
+.weui-label {
+  width: 8.5rem !important;
+  font-size: 1.5rem;
+  color: #454545;
+}
+
+//底部选择器文字
+.vux-popup-picker-select,
+.weui-cell__ft {
+  text-align: left !important;
+}
+
+//底部选择器选中文字，input placeholder提示文字
+.vux-popup-picker-value,
+.vux-popup-picker-placeholder,
+.vux-cell-value,
+.vux-cell-placeholder {
+  font-size: 1.5rem;
+}
+//底部选择器 > 箭头
+.weui-cell__ft::after {
+  height: 15px !important;
+  width: 15px !important;
+  right: 20px !important;
+  margin-top: -12px !important;
+}
+//底部选择器
+.weui-cells {
+  margin-top: 0 !important;
 }
 </style>
