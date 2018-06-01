@@ -132,10 +132,10 @@ export default {
         border: 0;
         font-size: 1.5rem;
         color: #454545;
+        color: #454545;
         &::-webkit-input-placeholder {
           color: #999;
           font-size: 1.5rem;
-          resize: none;
         }
       }
       textarea {
@@ -145,11 +145,11 @@ export default {
         font-size: 1.5rem;
         margin-top: 0.625rem;
         resize: none;
+        color: #454545;
         &::-webkit-input-placeholder {
           color: #999;
           font-size: 1.5rem;
           padding-top: 1.25rem;
-          padding-left: 5px;
         }
       }
     }

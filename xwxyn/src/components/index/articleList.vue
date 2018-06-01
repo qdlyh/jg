@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="articleList">
+        <div class="article-list">
             <tab>
                 <tab-item selected>推荐</tab-item>
                 <tab-item>全部</tab-item>
@@ -21,9 +21,11 @@
             </div> -->
             <div class="article-box">
                 <h1>单调好似东京阿斯顿就爱搜到极爱哦</h1>
-                <img src="../../assets/logo.png" alt="">
-                <img src="../../assets/logo.png" alt="">
-                <img src="../../assets/logo.png" alt="">
+                <div class="article-img">
+                    <img src="../../assets/logo.png" alt="">
+                    <img src="../../assets/logo.png" alt="">
+                    <img src="../../assets/logo.png" alt="">
+                </div>
                 <div class="article-box-bottom">
                     <div class="article-msg">
                         <span>1586浏览</span>
@@ -36,9 +38,11 @@
             </div>
             <div class="article-box">
                 <h1>单调好似东京阿斯顿就爱搜到极爱哦</h1>
-                <img src="../../assets/logo.png" alt="">
-                <img src="../../assets/logo.png" alt="">
-                <img src="../../assets/logo.png" alt="">
+                <div class="article-img">
+                    <img src="../../assets/logo.png" alt="">
+                    <img src="../../assets/logo.png" alt="">
+                    <img src="../../assets/logo.png" alt="">
+                </div>
                 <div class="article-box-bottom">
                     <div>
                         <span>1586浏览</span>
@@ -62,7 +66,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.articleList {
+.article-list {
   .article-box {
     padding: 1.25rem 1.875rem;
     background: #fff;
@@ -79,10 +83,15 @@ export default {
       -webkit-line-clamp: 3;
       overflow: hidden;
     }
-    img {
-      width: 13.75rem;
-      height: 8.75rem;
-      font-size: 8.75rem;
+    .article-img {
+      display: flex;
+      justify-content: space-between;
+      img {
+        width: 13.75rem;
+        height: 8.75rem;
+        font-size: 8.75rem;
+        margin: 0 5px;
+      }
     }
     .article-box-bottom {
       display: flex;

@@ -59,8 +59,8 @@ export default {
     }
     img {
       margin-top: 1.25rem;
-      width: 43.125rem;
-      height: 17.5rem;
+      width: 100%;
+      max-height: 17.5rem;
     }
     p {
       margin-top: 1.875rem;

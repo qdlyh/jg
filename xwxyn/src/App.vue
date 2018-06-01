@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
@@ -11,8 +11,8 @@ export default {
   mounted() {
     let htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
     let htmlDom = document.getElementsByTagName('html')[0];
-    htmlDom.style.fontSize = htmlWidth / 47 + 'px';
-    if (htmlWidth > 750) { htmlWidth = 750; htmlDom.style.fontSize = htmlWidth / 47 + 'px'; }
+    htmlDom.style.fontSize = htmlWidth / 40 + 'px';
+    if (htmlWidth > 750) { htmlWidth = 750; htmlDom.style.fontSize = htmlWidth / 40 + 'px'; }
     //console.log(htmlWidth)
   }
 }
@@ -38,7 +38,7 @@ body {
 }
 #app {
   margin: 0 auto;
-  max-width: 750px;
+  // max-width: 750px;
   letter-spacing: 1px;
   -webkit-overflow-scrolling: touch; //在ios上滑动不流畅样式设置处理
 }
@@ -65,12 +65,12 @@ body {
   text-align: center;
   margin: 1.875rem auto;
   background: #3873cd;
+  border-radius: 10px;
   a {
     display: inline-block;
     width: 100%;
     height: 4.5rem;
     line-height: 4.5rem;
-    border-radius: 10px;
     font-size: 1.75rem;
     color: #fff;
     text-overflow: ellipsis;
@@ -81,47 +81,14 @@ body {
     }
   }
 }
-//vux底部时期选择器
-.vux-calendar-each-date {
-  font-size: 1.75rem;
-  margin-top: 0.9375rem;
-}
-
-//底部日期选择器顶部高度
-.vux-popup-header {
-  height: 60px !important;
-  line-height: 60px !important;
-}
-
-.vux-calendar-each-date {
-  width: 45px !important;
-  height: 45px !important;
-  line-height: 45px !important;
-}
-
-//底部日期选择器文字
-.calendar-year,
-.calendar-month,
-.vux-popup-header-left,
-.vux-popup-header-right,
-.vux-popup-header-title {
-  font-size: 1.75rem;
-}
-//底部日期选择器顶部星期一二三...文字
-.week {
-  margin: 0.625rem 0;
-  font-size: 1.75rem;
-}
-
-//底部选择器高度
-.input-box .weui-cells,
-.input-box .weui-cell {
-  height: 6.25rem !important;
-  line-height: 6.25rem !important;
-}
 
 //申请安装页面
 .input-box {
+  .weui-cells,
+  .weui-cell {
+    height: 6.25rem !important;
+    line-height: 6.25rem !important;
+  }
   //底部选择器选中文字，input placeholder提示文字
   .vux-popup-picker-value,
   .vux-popup-picker-placeholder,
@@ -135,6 +102,7 @@ body {
     width: 8.5rem !important;
     font-size: 1.5rem;
     color: #454545;
+    margin-left: -7px;
   }
 
   //底部选择器文字
@@ -144,13 +112,6 @@ body {
   }
   .vux-cell-placeholder {
     color: #999;
-  }
-  //底部选择器 > 箭头
-  .weui-cell__ft::after {
-    height: 15px !important;
-    width: 15px !important;
-    right: 20px !important;
-    margin-top: -12px !important;
   }
   //底部选择器
   .weui-cells {
@@ -169,41 +130,54 @@ body {
   }
 }
 
-//产品框的高度
+//弹出洁肠仪高度
 .weui-cell__bd {
   font-size: 1.75rem;
   height: 5rem;
   line-height: 5rem;
 }
-//产品钩
+//弹出洁肠仪产品钩
 .weui-icon-checked {
   &::before {
     font-size: 1.75rem !important;
   }
 }
 
-//提问
-.questions-btn {
-  .vux-x-switch.weui-cell_switch {
-    position: fixed;
-    bottom: 4rem;
-    right: 20px;
-    z-index: 9999;
-    opacity: 0;
-    .weui-switch {
-      width: 6.25rem !important;
-      height: 6.25rem !important;
-    }
+// vux框margin
+.weui-cells {
+  margin: 0 !important;
+}
+.redact-msg {
+  .weui-cell__ft {
+    // padding-right: 1.125rem !important;
+    font-size: 1.5rem;
   }
 }
 
-/* userType页面 */
-.userType-link {
-  .weui-cells {
-    margin: 0 !important;
+//收货地址
+.address-list {
+  .vux-label-desc {
+    display: -webkit-box;
+    /*! autoprefixer: off */
+    -webkit-box-orient: vertical;
+    /* autoprefixer: on */
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: 1.5rem !important;
   }
-  .weui-cell__ft {
-    padding-right: 30px !important;
+}
+
+//勾选设为默认地址
+.check-input {
+  margin: 1.875rem 0 3.125rem 0;
+  text-align: center;
+  .weui-icon-circle:before,
+  .weui-icon-success:before {
+    font-size: 2.1875rem;
+  }
+  .vux-check-icon > span {
+    color: #9c9c9c !important;
+    font-size: 1.5rem !important;
   }
 }
 </style>

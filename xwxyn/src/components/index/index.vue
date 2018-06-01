@@ -22,7 +22,7 @@
                         <img src="../../assets/logo.png" alt="">
                         <p>文化篇</p>
                     </span>
-                    <span  @click="$router.push('/userType')">
+                    <span @click="$router.push('/userType')">
                         <img src="../../assets/logo.png" alt="">
                         <p>文化篇</p>
                     </span>
@@ -111,6 +111,7 @@ export default {
     padding: 1.25rem 1.875rem;
     background: #fff;
     .swiper {
+      width: 100%;
       height: 17.5rem;
       .swiper-slide {
         height: 17.5rem;
@@ -128,8 +129,8 @@ export default {
         border-radius: 0.625rem;
         display: inline-block;
         img {
-          width: 8.125rem;
-          height: 8.125rem;
+          width: 6rem;
+          height: 6rem;
         }
         p {
           text-align: center;
@@ -155,11 +156,11 @@ export default {
       display: inline-block;
       border-radius: 10px;
       img {
-        width: 21.25rem;
+        width: 18.125rem;
         height: 12.5rem;
       }
       p {
-        font-size: 24px;
+        font-size: 1.5rem;
         color: #454545;
       }
     }

@@ -20,46 +20,52 @@
                 </div>
             </div>
 
-            <div class="article-list">
-                <div>
-                    <h1>咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区</h1>
-                    <div class="article-box-bottom">
-                        <div>
-                            2018-03-12 09:32
-                        </div>
-                        <div class="article-msg">
-                            <span>126回答</span>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <h1>咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区</h1>
-                    <div class="article-box-bottom">
-                        <div>
-                            2018-03-12 09:32
-                        </div>
-                        <div class="article-msg">
-                            <span>126回答</span>
+            <div class="article-box">
+                <div class="article-list">
+                    <div>
+                        <h1>咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区</h1>
+                        <div class="article-box-bottom">
+                            <div>
+                                2018-03-12 09:32
+                            </div>
+                            <div class="article-msg">
+                                <span>126回答</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div>
-                    <h1>咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区</h1>
-                    <div class="article-box-bottom">
-                        <div>
-                            2018-03-12 09:32
-                        </div>
-                        <div class="article-msg">
-                            <span>126回答</span>
+                <div class="article-list">
+                    <div>
+                        <h1>咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区</h1>
+                        <div class="article-box-bottom">
+                            <div>
+                                2018-03-12 09:32
+                            </div>
+                            <div class="article-msg">
+                                <span>126回答</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="questions-btn">
-                    <x-switch title="提问" v-model="questions"></x-switch>
+                <div class="article-list">
+                    <div>
+                        <h1>咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区</h1>
+                        <div class="article-box-bottom">
+                            <div>
+                                2018-03-12 09:32
+                            </div>
+                            <div class="article-msg">
+                                <span>126回答</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="questions-btn" @click="questions= true">
                     提问
                 </div>
                 <div>
-                    <popup v-model="questions" height="60%" :hide-on-blur="true">
+                    <popup v-model="questions" height="70%" :hide-on-blur="true">
                         <div class="questions-box">
                             <div class="questions-title">填写问题</div>
                             <div class="input">
@@ -88,6 +94,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 </template>
 <script>
@@ -168,11 +175,11 @@ export default {
           font-weight: 600;
         }
         i {
-          font-size: 1.25rem;
+          font-size: 1.125rem;
           color: #454545;
         }
         p {
-          font-size: 1.5rem;
+          font-size: 1.25rem;
           color: #9c9c9c;
           display: -webkit-box;
           /*! autoprefixer: off */
@@ -190,7 +197,6 @@ export default {
     margin-top: 0.625rem;
     padding: 1.25rem 1.875rem;
     background: #fff;
-    border-bottom: 1px solid #bdbdbd;
     h1 {
       font-size: 1.5rem;
       color: #3c3c3c;
@@ -202,19 +208,6 @@ export default {
       /* autoprefixer: on */
       -webkit-line-clamp: 3;
       overflow: hidden;
-    }
-    .questions-btn {
-      color: #fff;
-      position: fixed;
-      bottom: 7.5rem;
-      right: 20px;
-      width: 6.25rem;
-      height: 6.25rem;
-      line-height: 6.25rem;
-      text-align: center;
-      border-radius: 100%;
-      background: rgba(4, 142, 255, 0.5);
-      font-size: 1.75rem;
     }
     .article-box-bottom {
       display: flex;
@@ -233,6 +226,21 @@ export default {
       }
     }
   }
+}
+
+//提问按钮
+.questions-btn {
+  color: #fff;
+  position: fixed;
+  bottom: 7.5rem;
+  right: 20px;
+  width: 6.25rem;
+  height: 6.25rem;
+  line-height: 6.25rem;
+  text-align: center;
+  border-radius: 100%;
+  background: rgba(4, 142, 255, 0.5);
+  font-size: 1.75rem;
 }
 </style>
 

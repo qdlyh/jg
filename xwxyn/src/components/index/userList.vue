@@ -151,11 +151,11 @@ export default {
         font-weight: 600;
       }
       i {
-        font-size: 1.25rem;
+        font-size: 1.125rem;
         color: #454545;
       }
       p {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         color: #9c9c9c;
         display: -webkit-box;
         /*! autoprefixer: off */
