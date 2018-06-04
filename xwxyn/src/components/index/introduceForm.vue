@@ -1,11 +1,11 @@
 <template>
     <div>
         <div class="introduceForm">
-            <div class="headerMsg">
-                <x-icon class="x-icon" type="ios-arrow-left" size="60" @click="$router.go(-1)"></x-icon>
+            <div class="user-header">
+                <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
                 <h1>安装申请</h1>
+                <i></i>
             </div>
-            <br/>
             <div class="form">
                 <div class="input-box">
                     <group>
@@ -13,7 +13,6 @@
                             <p slot="popup-header" class="vux-1px-b demo3-slot">选择产品</p>
                         </popup-radio>
                     </group>
-
                 </div>
                 <div class="input-box">
                     <span>联系人</span>
@@ -28,17 +27,15 @@
                     <input type="text" name="" placeholder="安装地址">
                 </div>
                 <div class="input-box">
-                    <group>
-                        <calendar @on-change="onChange" v-model="date" :title="('安装日期')" :placeholder="('安装日期')" show-popup-header disable-past :popup-header-title="('选择安装日期')"></calendar>
-                    </group>
+                    <calendar @on-change="onChange" v-model="date" :title="('安装日期')" :placeholder="('安装日期')" show-popup-header disable-past :popup-header-title="('选择安装日期')"></calendar>
                 </div>
-                <div class="input-box" style="height: 10rem;">
+                <div class="input-box" style="height:15rem">
                     <span style="position: relative;top: -50px;">留言</span>
-                    <textarea type="text" name="" placeholder="想说的话"></textarea>
+                    <textarea type="text" name="" placeholder="想说的话" maxlength="100"></textarea>
                 </div>
             </div>
             <div class="btn-blue">
-                <a href="javascript:;">提交</a>
+                提交
             </div>
         </div>
     </div>
@@ -92,23 +89,23 @@ export default {
   color: #454545;
 }
 .introduceForm {
-  .headerMsg {
+  .user-header {
     height: 5rem;
     line-height: 5rem;
     background: #fff;
-    border-bottom: 0.5px solid #dbdbdb;
-    position: relative;
-    .x-icon {
-      position: absolute;
-      height: 5rem;
-      line-height: 5rem;
-      display: inline-block;
-      margin-left: 1.25rem;
-    }
+    padding: 0 1.25rem;
+    display: flex;
+    justify-content: space-between;
     h1 {
-      text-align: center;
       font-size: 2rem;
+      text-align: center;
       color: #454545;
+      font-weight: 400;
+      margin-left: -1.875rem;
+    }
+    i {
+      font-size: 2rem;
+      color: #0aa6ff;
     }
   }
   .form {
@@ -120,18 +117,16 @@ export default {
       span {
         display: inline-block;
         width: 8.125rem;
-        height: 3.125rem;
-        line-height: 3.125rem;
+        height: 6.25rem;
+        line-height: 6.25rem;
         margin-left: 0.9375rem;
         font-size: 1.5rem;
         color: #454545;
       }
       input {
         width: 75%;
-        height: 80%;
         border: 0;
         font-size: 1.5rem;
-        color: #454545;
         color: #454545;
         &::-webkit-input-placeholder {
           color: #999;
@@ -149,7 +144,7 @@ export default {
         &::-webkit-input-placeholder {
           color: #999;
           font-size: 1.5rem;
-          padding-top: 1.25rem;
+          padding-top: 0.7rem;
         }
       }
     }

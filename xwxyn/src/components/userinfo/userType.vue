@@ -21,10 +21,10 @@
                     <div class="typeBtn active2">
                         <a href="javascript:;">我是专家</a>
                     </div>
-                    <div class="typeBtn active3">
+                    <div class="typeBtn active3" @click="$router.push('/volunteer')">
                         <a href="javascript:;">我是志愿者</a>
                     </div>
-                    <div class="typeBtn active4">
+                    <div class="typeBtn active4" @click="$router.push('/enterprise')">
                         <a href="javascript:;">我是企业家</a>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                 </div> -->
             </div>
             <div class="userType-link-box">
-                <div class="userType-link">
+                <div class="userType-link" @click="$router.push('/myWallet')">
                     <group>
                         <cell title="钱包" value="10" is-link></cell>
                     </group>
@@ -57,18 +57,18 @@
             </div>
 
             <!-- 企业 -->
-            <!-- <div class="userType-link-box">
+            <div class="userType-link-box">
                 <div class="userType-link">
                     <group>
                         <cell title="钱包" value="10" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link">
+                <div class="userType-link" @click="$router.push('/enterText')">
                     <group>
                         <cell title="入驻" is-link></cell>
                     </group>
                 </div>
-            </div> -->
+            </div>
 
             <div class="userType-link-box">
                 <div class="userType-link" @click="$router.push('/myAttention')">
@@ -195,7 +195,7 @@ export default {
         width: 9.375rem;
         height: 3.125rem;
         line-height: 3.125rem;
-        border-radius: 10px;
+        border-radius: 0.9375rem;
         a {
           display: inline-block;
           width: 100%;
@@ -234,9 +234,10 @@ export default {
       background: #fff;
       .weui-cell {
         height: 5rem;
-        font-size: 1.75rem;
+        font-size: 1.5rem;
         color: #454545;
         ::after {
+          margin-top: -5px !important;
           right: 0px !important;
         }
       }
@@ -265,7 +266,7 @@ export default {
     border-radius: 10px;
     color: #454545;
     background: #fff;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     color: #454545;
   }
 }

@@ -44,7 +44,6 @@ export default {
       text-align: center;
       color: #454545;
       font-weight: 400;
-      margin-left: -1.875rem;
     }
     i {
       font-size: 2rem;
@@ -63,9 +62,9 @@ export default {
     font-size: 1.75rem;
     color: #454545;
     ::after {
-      height: 15px !important;
-      width: 15px !important;
-      margin-top: -9px !important;
+      height: 9px !important;
+      width: 9px !important;
+      margin-top: -5px !important;
       right: 0px !important;
     }
   }

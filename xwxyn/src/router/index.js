@@ -1,84 +1,178 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import user from '@/components/user'
-import userType from '@/components/userinfo/userType' //用户类型信息       
-import userTypeForm from '@/components/userinfo/userTypeForm' //用户类型信息编辑
-import myIssue from '@/components/userinfo/myIssue' //我的提问和回答
-import myAttention from '@/components/userinfo/myAttention' //我的关注
-import mySchistory from '@/components/userinfo/mySchistory' //收藏和历史记录
-import myMessage from '@/components/userinfo/myMessage' //我的消息
-import myAddress from '@/components/userinfo/myAddress' //收货地址
-import myAddressForm from '@/components/userinfo/myAddressForm' //收货地址编辑
 import message from '@/components/message'
 import dialogue from '@/components/dialogue'
-import expertUser from '@/components/expertUser'
-import index from '@/components/index/index'
-import introduce from '@/components/index/introduce'
-import userList from '@/components/index/userList'
-import articleList from '@/components/index/articleList'
 import article from '@/components/index/article'
-import introduceForm from '@/components/index/introduceForm'
-import yzList from '@/components/yizhen/yzList'
-import yzArticle from '@/components/yizhen/yzArticle'
-import expertAll from '@/components/expert/expertAll'
-import expertList from '@/components/expert/expertList'
 Vue.use(Router)
 
 export default new Router({
   routes: [{
       path: '/',
       name: 'index',
-      component: index
+      component: () =>
+        import ('@/components/index/index')
     },
     {
-      path: '/userType',
-      name: 'userType',
-      component: userType
+      //产品介绍
+      path: '/introduce',
+      name: 'introduce',
+      component: () =>
+        import ('@/components/index/introduce')
     },
     {
-      path: '/userTypeForm',
-      name: 'userTypeForm',
-      component: userTypeForm
+      //产品安装表
+      path: '/introduceForm',
+      name: 'introduceForm',
+      component: () =>
+        import ('@/components/index/introduceForm')
     },
     {
-      path: '/myIssue',
-      name: 'myIssue',
-      component: myIssue
-    },
-    {
-      path: '/myAttention',
-      name: 'myAttention',
-      component: myAttention
-    },
-    {
-      path: '/mySchistory',
-      name: 'mySchistory',
-      component: mySchistory
-    },
-    {
-      path: '/myMessage',
-      name: 'myMessage',
-      component: myMessage
-    },
-    {
-      path: '/myAddress',
-      name: 'myAddress',
-      component: myAddress
-    },
-    {
-      path: '/myAddressForm',
-      name: 'myAddressForm',
-      component: myAddressForm
-    },
-    {
+      //用户列表
       path: '/userList',
       name: 'userList',
-      component: userList
+      component: () =>
+        import ('@/components/index/userList')
     },
     {
+      //文章列表
       path: '/articleList',
       name: 'articleList',
-      component: articleList
+      component: () =>
+        import ('@/components/index/articleList')
+    },
+    {
+      //用户类型信息    
+      path: '/userType',
+      name: 'userType',
+      component: () =>
+        import ('@/components/userinfo/userType')
+    },
+    {
+      //用户类型信息编辑
+      path: '/userTypeForm',
+      name: 'userTypeForm',
+      component: () =>
+        import ('@/components/userinfo/userTypeForm')
+    },
+    {
+      //我的提问和回答
+      path: '/myIssue',
+      name: 'myIssue',
+      component: () =>
+        import ('@/components/userinfo/myIssue')
+    },
+    {
+      //我的关注
+      path: '/myAttention',
+      name: 'myAttention',
+      component: () =>
+        import ('@/components/userinfo/myAttention')
+    },
+    {
+      //收藏和历史记录
+      path: '/mySchistory',
+      name: 'mySchistory',
+      component: () =>
+        import ('@/components/userinfo/mySchistory')
+    },
+    {
+      //我的消息
+      path: '/myMessage',
+      name: 'myMessage',
+      component: () =>
+        import ('@/components/userinfo/myMessage')
+    },
+    {
+      //收货地址
+      path: '/myAddress',
+      name: 'myAddress',
+      component: () =>
+        import ('@/components/userinfo/myAddress')
+    },
+    {
+      //收货地址编辑
+      path: '/myAddressForm',
+      name: 'myAddressForm',
+      component: () =>
+        import ('@/components/userinfo/myAddressForm')
+    },
+    {
+      //手机验证
+      path: '/myPhone',
+      name: 'myPhone',
+      component: () =>
+        import ('@/components/userinfo/myPhone')
+    },
+    {
+      //我的钱包
+      path: '/myWallet',
+      name: 'myWallet',
+      component: () =>
+        import ('@/components/money/myWallet')
+    },
+    {
+      //充钱
+      path: '/addition',
+      name: 'addition',
+      component: () =>
+        import ('@/components/money/addition')
+    },
+    {
+      //明细
+      path: '/detail',
+      name: 'detail',
+      component: () =>
+        import ('@/components/money/detail')
+    },
+    {
+      //安全设置
+      path: '/safety',
+      name: 'safety',
+      component: () =>
+        import ('@/components/money/safety')
+    },
+    {
+      //修改密码
+      path: '/password',
+      name: 'password',
+      component: () =>
+        import ('@/components/money/password')
+    },
+    {
+      //入驻
+      path: '/enterText',
+      name: 'enterText',
+      component: () =>
+        import ('@/components/enter/enterText')
+    },
+    {
+      //入驻申请表
+      path: '/enterForm',
+      name: 'enterForm',
+      component: () =>
+        import ('@/components/enter/enterForm')
+    },
+    {
+      //入驻资料上传
+      path: '/uploadFile',
+      name: 'uploadFile',
+      component: () =>
+        import ('@/components/enter/uploadFile')
+    },
+    {
+      //志愿者认证
+      path: '/volunteer',
+      name: 'volunteer',
+      component: () =>
+        import ('@/components/ac/volunteer')
+    },
+    {
+      //企业认证
+      path: '/enterprise',
+      name: 'enterprise',
+      component: () =>
+        import ('@/components/ac/enterprise')
     },
     {
       path: '/article',
@@ -94,44 +188,44 @@ export default new Router({
       }, ]
     },
     {
-      path: '/introduce',
-      name: 'introduce',
-      component: introduce
-    },
-    {
-      path: '/introduceForm',
-      name: 'introduceForm',
-      component: introduceForm
-    },
-    {
       path: '/user',
       name: 'user',
       component: user
     },
     {
+      //义诊列表
       path: '/yzList',
       name: 'yzList',
-      component: yzList
+      component: () =>
+        import ('@/components/yizhen/yzList')
     },
     {
+      //义诊文章
       path: '/yzArticle',
       name: 'yzArticle',
-      component: yzArticle
+      component: () =>
+        import ('@/components/yizhen/yzArticle')
     },
     {
+      //专家信息
       path: '/expertUser',
       name: 'expertUser',
-      component: expertUser
+      component: () =>
+        import ('@/components/expertUser')
     },
     {
+      //专家大众天地
       path: '/expertAll',
       name: 'expertAll',
-      component: expertAll
+      component: () =>
+        import ('@/components/expert/expertAll')
     },
     {
+      //专家列表
       path: '/expertList',
       name: 'expertList',
-      component: expertList
+      component: () =>
+        import ('@/components/expert/expertList')
     }
   ]
 })

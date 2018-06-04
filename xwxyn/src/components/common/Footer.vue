@@ -3,28 +3,23 @@
         <div class="footer">
             <ul class="footer-tab">
                 <li @click="homepage">
-                    <!-- <img src="../../assets/logo.png"> -->
                     <i class="iconfont icon-shouye"></i>
                     <p>首页</p>
                 </li>
                 <li @click="flashsale">
-                    <!-- <img src="../../assets/logo.png"> -->
                     <i class="iconfont icon-yiliaojiankang"></i>
                     <p>义诊</p>
                 </li>
                 <li @click="classify" class="tab-active">
                     <div></div>
-                    <!-- <img src="../../assets/logo.png"> -->
                     <i class="iconfont icon-yimai"></i>
                     <p>爱心谷</p>
                 </li>
                 <li @click="my">
-                    <!-- <img src="../../assets/logo.png"> -->
                     <i class="iconfont icon-zhuanjia"></i>
                     <p>专家天地</p>
                 </li>
                 <li @click="my">
-                    <!-- <img src="../../assets/logo.png"> -->
                     <i class="iconfont icon-gerenzhongxin-xuanzhongxin"></i>
                     <p>个人中心</p>
                 </li>
@@ -56,8 +51,8 @@ export default {
   margin-top: 6.25rem;
   position: relative;
   .footer-tab {
+    width: 100%;
     border-top: 1px solid #d7d7d7;
-    width: 750px;
     height: 6.125rem;
     background: #fff;
     position: fixed;
@@ -66,27 +61,25 @@ export default {
       margin: 0.625rem 0;
       display: inline-block;
       text-align: center;
-      margin-right: 4rem;
-      min-width: 4rem;
+      width: 20%;
+      margin-left: -2.6px;
       i {
-        font-size: 1.75rem;
+        font-size: 2.125rem;
         color: #454545;
-      }
-      img {
-        width: 2.8125rem;
-        height: 2.8125rem;
       }
       p {
-        font-size: 1.5rem;
+        font-size: 1rem;
         color: #454545;
       }
     }
-    li:nth-child(1) {
-      margin-left: 2rem;
-    }
-    li:last-child {
-      margin-right: 2rem;
-    }
+    // li:nth-child(1) {
+    //   margin-left: 2rem;
+    //   margin-right:5.8rem;
+    //   //   margin-right: 2rem;
+    // }
+    // li:last-child {
+    //   margin-right: 0rem;
+    // }
   }
 }
 // .tab-active {

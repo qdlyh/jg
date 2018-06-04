@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <!-- <Footer></Footer> -->
+    <Footer></Footer>
   </div>
 </template>
 
@@ -62,23 +62,17 @@ body {
 /* 按钮 */
 .btn-blue {
   width: 60%;
+  height: 5rem;
+  line-height: 5rem;
   text-align: center;
-  margin: 1.875rem auto;
-  background: #3873cd;
-  border-radius: 10px;
-  a {
-    display: inline-block;
-    width: 100%;
-    height: 4.5rem;
-    line-height: 4.5rem;
-    font-size: 1.75rem;
-    color: #fff;
-    text-overflow: ellipsis;
-    border: none;
-    outline: none;
-    &:active {
-      background: #0e7ad3;
-    }
+  margin: 3.125rem auto;
+  background: #3eb0ff;
+  border-radius: 0.625rem;
+  font-size: 1.75rem;
+  color: #fff;
+  &:active {
+    border-radius: 0.625rem;
+    background: #3e90ff;
   }
 }
 
@@ -118,9 +112,6 @@ body {
     margin-top: 0 !important;
   }
   //申请安装产品
-  .vux-cell-primary {
-    flex: none;
-  }
   .weui-cell__ft {
     width: 100%;
   }
@@ -154,6 +145,52 @@ body {
   }
 }
 
+//城市选择器
+.redact-msg-input {
+  .weui-cell {
+    height: 5rem;
+    line-height: 5rem;
+    ::after {
+      margin-top: -5px !important;
+      right: 0px !important;
+    }
+  }
+  .weui-label {
+    font-size: 1.5rem;
+    color: #454545;
+    margin-left: -5px;
+  }
+  .vux-cell-placeholder {
+    font-size: 1.5rem;
+  }
+  .vux-cell-value {
+    color: #454545 !important;
+    font-size: 1.5rem;
+  }
+}
+
+//入驻表单
+.enter-input {
+  .vux-cell-box {
+    height: 5rem;
+    line-height: 5rem;
+    font-size: 1.5rem;
+    color: #454545;
+    padding-left: 1.25rem;
+  }
+  .weui-cell {
+    padding: 0 15px 0 0 !important;
+  }
+  .vux-popup-picker-select {
+    // text-align: left !important;
+    padding: 0 0 0 1.875rem !important;
+  }
+  .vux-cell-value {
+    color: #454545 !important;
+    font-size: 1.5rem;
+  }
+}
+
 //收货地址
 .address-list {
   .vux-label-desc {
@@ -163,7 +200,9 @@ body {
     /* autoprefixer: on */
     -webkit-line-clamp: 2;
     overflow: hidden;
-    font-size: 1.5rem !important;
+    font-size: 1.25rem !important;
+    color: #9c9c9c;
+    padding-top: 0.3125rem;
   }
 }
 
@@ -171,10 +210,6 @@ body {
 .check-input {
   margin: 1.875rem 0 3.125rem 0;
   text-align: center;
-  .weui-icon-circle:before,
-  .weui-icon-success:before {
-    font-size: 2.1875rem;
-  }
   .vux-check-icon > span {
     color: #9c9c9c !important;
     font-size: 1.5rem !important;

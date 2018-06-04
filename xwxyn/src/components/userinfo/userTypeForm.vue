@@ -37,25 +37,10 @@
                 </span>
                 <input placeholder="游客" disabled="disabled">
             </div>
-            <div class="redact-msg-input" @click="signature=true">
-                <span>
-                    个人签名
-                </span>
-                <input type="text" placeholder="未设置">
-            </div>
-            <div class="redact-msg-input" @click="signature=true">
-                <span>
-                    企业简介
-                </span>
-                <input type="text" placeholder="未设置">
-            </div>
             <div class="redact-msg-input">
-                <span>
-                    选择地区
-                </span>
-                <input placeholder="未设置">
+                <x-address title="选择城市" v-model="value" :list="addressData" @on-shadow-change="onShadowChange" placeholder="未设置" :show.sync="showAddress"></x-address>
             </div>
-            <div class="redact-msg">
+            <div class="redact-msg" @click="$router.push('/myPhone')">
                 <group>
                     <cell title="绑定手机" value="未绑定" is-link></cell>
                 </group>
@@ -84,31 +69,30 @@
                 </span>
                 <input placeholder="未设置">
             </div>
+
+            <div class="redact-msg-input" style="height:15rem">
+                <span style="position: relative;top: -80px;">
+                    个人签名
+                </span>
+                <!-- <span style="position: relative;top: -80px;">
+                    企业简介
+                </span> -->
+                <textarea placeholder="请做一个简单的描述" maxlength="100"></textarea>
+            </div>
         </div>
-        <div>
-            <popup v-model="signature" height="70%" :hide-on-blur="true">
-                <div class="signature-box">
-                    <div class="signature-title">描述简介</div>
-                    <div class="textarea">
-                        <textarea name="" cols="30" rows="10" placeholder="填写内容" maxlength="150"></textarea>
-                    </div>
-                    <div class="btn-blue">
-                        <a href="javascript:;">保存</a>
-                    </div>
-                </div>
-            </popup>
+        <div class="btn-blue">
+            提交
         </div>
     </div>
 </template>
 <script>
 import Cropper from 'cropperjs';
 import CropperCss from '../../../static/cropicrec.css';
-import { Group, Cell, Popup, XAddress } from 'vux'
+import { Group, Cell, XAddress, ChinaAddressV4Data } from 'vux'
 export default {
     components: {
         Group,
         Cell,
-        Popup,
         XAddress
     },
     data() {
@@ -119,7 +103,8 @@ export default {
             cropper: '',
             url: '',
             ifImage: false, //判断图片是否为同一张
-            signature: false,
+            addressData: ChinaAddressV4Data,
+            value: [],
         }
     },
     mounted() {
@@ -239,7 +224,7 @@ export default {
   .my-picture {
     position: relative;
     height: 12.5rem;
-    background: #0aa6ff;
+    background: #3FB0FF;
     .top-img {
       width: 100%;
       .show {
@@ -315,14 +300,13 @@ export default {
     span {
       display: inline-block;
       width: 9.375rem;
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       color: #454545;
-      padding-left: 12px;
+      padding-left: 1.25rem;
     }
     input {
       width: 70%;
       border: 0;
-      height: 4.375rem;
       font-size: 1.5rem;
       color: #454545;
       &::-webkit-input-placeholder {
@@ -332,29 +316,31 @@ export default {
         padding-right: 0.625rem;
       }
     }
-  }
-}
-
-//签名弹出框
-.signature-box {
-  .signature-title {
-    font-size: 1.75rem;
-    text-align: center;
-    height: 5rem;
-    line-height: 5rem;
-  }
-  .textarea {
-    margin-top: 1.25rem;
-    textarea {
-      padding: 1.25rem 0 0 1.25rem;
-      font-size: 1.5rem;
-      width: 100%;
-      height: 22.5rem;
+    input {
+      width: 70%;
       border: 0;
-      resize: none;
+      font-size: 1.5rem;
+      color: #454545;
       &::-webkit-input-placeholder {
-        color: #9c9c9c;
+        color: #999;
         font-size: 1.5rem;
+        text-align: right;
+        padding-right: 0.625rem;
+      }
+    }
+    textarea {
+      width: 75%;
+      border: 0;
+      height: 12.5rem;
+      font-size: 1.5rem;
+      color: #454545;
+      resize: none;
+      padding: 0.625rem;
+      &::-webkit-input-placeholder {
+        color: #999;
+        font-size: 1.5rem;
+        text-align: left;
+        padding: 1.25rem 0 0 0.9375rem;
       }
     }
   }
@@ -366,9 +352,9 @@ export default {
   background: #fff;
   .weui-cell {
     height: 5rem;
-    font-size: 1.75rem;
+    font-size: 1.5rem;
     color: #454545;
-    margin-left: -3px;
+    margin-left: -5px;
     ::after {
       margin-top: -5px !important;
       right: 0px !important;

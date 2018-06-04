@@ -114,7 +114,7 @@ export default {
       display: flex;
       justify-content: space-between;
       img {
-        width: 13.75rem;
+        width: 10rem;
         height: 8.75rem;
         font-size: 8.75rem;
         margin: 0 5px;
@@ -179,12 +179,13 @@ export default {
         }
         span {
           text-align: center;
-          margin-right: 3.75rem;
+          margin-right: 1.25rem;
         }
         img {
           width: 6.25rem;
           height: 6.25rem;
           border-radius: 100%;
+          background: #ccc;
         }
         i {
           float: left;

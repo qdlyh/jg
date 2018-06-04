@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="header margin-header">
-                <span>健康讲堂</span>
+                <span @click="$router.push('/userList')">健康讲堂</span>
                 <span>阳光连接</span>
             </div>
             <div class="item-2">
@@ -49,7 +49,7 @@
                     <img src="../../assets/logo.png" alt="">
                     <p>慈善家</p>
                 </span>
-                <span>
+                <span @click="$router.push('/articleList')">
                     <img src="../../assets/logo.png" alt="">
                     <p>慈善家</p>
                 </span>

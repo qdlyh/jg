@@ -75,7 +75,7 @@
                                 <textarea name="" cols="30" rows="10" placeholder="填写内容"></textarea>
                             </div>
                             <div class="btn-blue">
-                                <a href="javascript:;">提交</a>
+                                提交
                             </div>
                         </div>
                     </popup>
@@ -98,11 +98,10 @@
     </div>
 </template>
 <script>
-import { Popup, XSwitch, } from 'vux'
+import { Popup } from 'vux'
 export default {
     components: {
         Popup,
-        XSwitch,
     },
     data() {
         return {

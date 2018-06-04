@@ -19,7 +19,7 @@
                 <span>保健</span>
                 <span>养生</span>
             </div> -->
-            <div class="article-box">
+            <div class="article-box" @click="$router.push('/article')">
                 <h1>单调好似东京阿斯顿就爱搜到极爱哦</h1>
                 <div class="article-img">
                     <img src="../../assets/logo.png" alt="">
@@ -87,7 +87,7 @@ export default {
       display: flex;
       justify-content: space-between;
       img {
-        width: 13.75rem;
+        width: 10rem;
         height: 8.75rem;
         font-size: 8.75rem;
         margin: 0 5px;

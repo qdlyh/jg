@@ -6,11 +6,8 @@
                 <h1>编辑地址</h1>
                 <i></i>
             </div>
-            <div class="address-input">
-                <span>
-                    城市地址
-                </span>
-                <input placeholder="未设置">
+            <div class="redact-msg-input address-input">
+                <x-address title="选择城市" v-model="value" :list="addressData" @on-shadow-change="onShadowChange" placeholder="未设置" :show.sync="showAddress"></x-address>
             </div>
             <div class="address-input">
                 <span>
@@ -31,23 +28,28 @@
                 <check-icon :value.sync="ischeck"> {{ ('设为默认地址') }}</check-icon>
             </div>
             <div class="btn-blue">
-                <a href="javascript:;">保存</a>
+                保存
             </div>
         </div>
     </div>
 </template>
 <script>
-import { CheckIcon } from 'vux'
+import { CheckIcon, Group, Cell, XAddress, ChinaAddressV4Data } from 'vux'
 export default {
     components: {
-        CheckIcon
+        CheckIcon,
+        Group,
+        Cell,
+        XAddress
     },
     data() {
         return {
-            ischeck:false,
+            ischeck: false,
+            addressData: ChinaAddressV4Data,
+            value: [],
         }
     },
-    mounted(){
+    mounted() {
 
     }
 }
@@ -74,7 +76,6 @@ export default {
     }
   }
   .address-input {
-    padding: 0 10px;
     background: #fff;
     height: 5rem;
     line-height: 5rem;
@@ -83,21 +84,20 @@ export default {
     span {
       display: inline-block;
       width: 9.375rem;
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       color: #454545;
-      padding-left: 12px;
+      padding-left: 1.25rem;
     }
     input {
       width: 70%;
       border: 0;
-      height: 4.375rem;
       font-size: 1.5rem;
       color: #454545;
       &::-webkit-input-placeholder {
         color: #999;
         font-size: 1.5rem;
-        text-align: left;
-        padding-left: 15px;
+        text-align: right;
+        padding-right: 0.9375rem;
       }
     }
     textarea {
@@ -107,14 +107,14 @@ export default {
       font-size: 1.5rem;
       color: #454545;
       resize: none;
+      padding: 0.625rem;
       &::-webkit-input-placeholder {
         color: #999;
         font-size: 1.5rem;
         text-align: left;
-        padding: 30px 0 0 15px;
+        padding: 1.25rem 0 0 0.9375rem;
       }
     }
   }
 }
-
 </style>

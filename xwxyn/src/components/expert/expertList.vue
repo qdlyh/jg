@@ -125,7 +125,7 @@ export default {
     }
   }
   .expert-article {
-            margin-top: 0.625rem;
+    margin-top: 0.625rem;
     padding: 1.25rem 1.875rem;
     background: #fff;
     border-bottom: 1px solid #bdbdbd;

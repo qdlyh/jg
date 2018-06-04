@@ -27,7 +27,7 @@
         <img src="../../assets/logo.png" alt="">
         <p>内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地</p>
         <div class="btn-blue" @click="$router.push('/introduceForm')">
-          <a href="javascript:;">安装申请</a>
+          安装申请
         </div>
       </div>
     </div>
