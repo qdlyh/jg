@@ -177,15 +177,18 @@ export default new Router({
     {
       path: '/article',
       name: 'article',
-      component: article,
-      children: [{
-        path: '/article/message',
-        component: message,
-        children: [{
-          path: '/article/message/dialogue',
-          component: dialogue,
-        }]
-      }, ]
+      component: () =>
+        import ('@/components/index/article')
+    },
+    {
+      path: '/dialogue',
+      name: 'dialogue',
+      component: dialogue
+    },
+    {
+      path: '/message',
+      name: 'message',
+      component: message
     },
     {
       path: '/user',

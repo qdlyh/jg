@@ -6,6 +6,7 @@ import router from './router'
 import App from './App'
 import { XImg } from 'vux'
 import Footer from '@/components/common/Footer'
+import articleFooter from '@/components/common/articleFooter'
 import '../static/swiper.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import axios from 'axios'
@@ -18,6 +19,7 @@ Vue.component('tab', Tab)
 Vue.component('tab-item', TabItem)
 Vue.component('x-img', XImg)
 Vue.component('Footer', Footer)
+Vue.component('articleFooter', articleFooter)
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

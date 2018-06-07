@@ -2,8 +2,7 @@
     <div>
         <div class="index">
             <div class="header">
-                <span>健康讲堂</span>
-                <span>阳光连接</span>
+                <span @click="$router.push('/article')">健康讲堂</span>
             </div>
             <!--swiper-->
             <div class="item-1">
@@ -42,7 +41,6 @@
             </div>
             <div class="header margin-header">
                 <span @click="$router.push('/userList')">健康讲堂</span>
-                <span>阳光连接</span>
             </div>
             <div class="item-2">
                 <span @click="$router.push('/userList')">
@@ -55,8 +53,7 @@
                 </span>
             </div>
             <div class="header margin-header">
-                <span>健康讲堂</span>
-                <span>阳光连接</span>
+                <span @click="$router.push('/articleList')">健康讲堂</span>
             </div>
             <div class="item-3">
                 <div @click="$router.push('/introduce')">

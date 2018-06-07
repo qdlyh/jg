@@ -64,7 +64,7 @@ export default {
     },
     methods: {
         submit(){
-            alert('1')
+            //alert('1')
         }
     }
 }

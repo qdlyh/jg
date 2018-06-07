@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view></router-view>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 </template>
 
@@ -214,5 +214,11 @@ body {
     color: #9c9c9c !important;
     font-size: 1.5rem !important;
   }
+}
+
+//错误提示框
+.weui-toast{
+  padding: 10px  !important;
+  min-width: 15.625rem !important;
 }
 </style>

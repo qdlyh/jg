@@ -1,26 +1,22 @@
 <template>
     <div>
-        <div class="article" v-show="ifArticle">
-            <h1 @click="goArticle()">呦呦呦厉害哟</h1>
+        <div class="article">
+            <h1>呦呦呦厉害哟</h1>
             <i class="time">2018-01-02 09:50</i>
             <div class="article-html">
                 啊啊啊啊啊啊啊啊啊啊
             </div>
             <i class="browse">16515人浏览</i>
         </div>
-        <transition name="fade">
-            <router-view class="content" v-show="ifMessage"></router-view>
-        </transition>
-        <button @click="goArticle()">home</button>
-        <button @click="go()">go</button>
+        <!-- <button @click="goArticle()">home</button>
+        <button @click="go()">go</button> -->
+        <articleFooter></articleFooter>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            ifArticle: true,
-            ifMessage: false,
         }
     },
     mounted() {
@@ -39,24 +35,15 @@ export default {
     },
     methods: {
         goArticle() {
-            this.ifArticle = true;
-            this.ifMessage = false;
             this.$router.push('/article');
         },
         go() {
-            this.ifMessage = true;
-            this.ifArticle = false;
-            this.$router.push('/article/message');
+            this.$router.push('/message');
         }
     },
     watch: {
         '$route'(to, from) {
             console.log(to.path)
-            if (to.path == '/article') {
-                this.ifArticle = true;
-                this.ifMessage = false;
-                //window.history.go(-1);
-            }
         }
     }
 }
