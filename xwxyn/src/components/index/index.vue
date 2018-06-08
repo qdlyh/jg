@@ -5,59 +5,35 @@
                 <span @click="$router.push('/article')">健康讲堂</span>
             </div>
             <!--swiper-->
-            <div class="item-1">
-                <swiper :options="swiperOption" ref="mySwiper">
+            <div class="banner">
+                <swiper :options="swiperOption" ref="mySwiper" v-if='banner.length>0'>
                     <swiper-slide v-for="(img,index) in banner" :key="index">
-                        <router-link to="/">
-                            <img :src="img.src" alt="">
-                        </router-link>
+                        <img :src="img.image" alt="">
                     </swiper-slide>
                     <div class="swiper-pagination" slot="pagination"></div>
-                    <!-- <div class="swiper-button-prev" slot="button-prev"></div>
-                    <div class="swiper-button-next" slot="button-next"></div> -->
                 </swiper>
                 <div class="item-img">
-                    <span @click="$router.push('/expertAll')">
-                        <img src="../../assets/logo.png" alt="">
-                        <p>文化篇</p>
-                    </span>
-                    <span @click="$router.push('/userType')">
-                        <img src="../../assets/logo.png" alt="">
-                        <p>文化篇</p>
-                    </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <p>文化篇</p>
-                    </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <p>文化篇</p>
-                    </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <p>文化篇</p>
+                    <span v-for="(item,index) in listItem" :key="index" @click="goItem(index)">
+                        <img v-lazy="item.icon" alt="">
+                        <p>{{item.setting}}</p>
                     </span>
                 </div>
             </div>
             <div class="header margin-header">
-                <span @click="$router.push('/userList')">健康讲堂</span>
+                <span>慈善你我他</span>
             </div>
-            <div class="item-2">
-                <span @click="$router.push('/userList')">
-                    <img src="../../assets/logo.png" alt="">
-                    <p>慈善家</p>
-                </span>
-                <span @click="$router.push('/articleList')">
-                    <img src="../../assets/logo.png" alt="">
-                    <p>慈善家</p>
+            <div class="item-1">
+                <span v-for="(item,index) in item1" :key="index" @click="goItem1(index)">
+                    <img v-lazy="item.image" alt="">
+                    <p>{{item.setting}}</p>
                 </span>
             </div>
             <div class="header margin-header">
-                <span @click="$router.push('/articleList')">健康讲堂</span>
+                <span @click="$router.push('/articleList')">肠道保健</span>
             </div>
-            <div class="item-3">
+            <div class="item-2">
                 <div @click="$router.push('/introduce')">
-                    <img src="../../assets/logo.png" alt="">
+                    <img v-lazy="item2" alt="">
                 </div>
             </div>
         </div>
@@ -78,34 +54,80 @@ export default {
                     el: ".swiper-pagination",
                     clickable: true
                 },
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev',
-                },
             },
-            banner: [
-                {
-                    href: "http://www.baidu.com",
-                    src: require("../../assets/logo.png")
-                },
-                {
-                    href: "http://www.hao123.com",
-                    src: require("../../assets/logo.png")
-                },
-                {
-                    href: "http://www.baidu.com",
-                    src: require("../../assets/logo.png")
-                }
-            ],
+            banner: [],
+            listItem: [],
+            item1: [],
+            item2: '',
+        }
+    },
+    mounted() {
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxHomeHealthLectureHall',
+        })
+            .then(response => {
+                //console.log(response)
+                this.banner = response.data.data.images;
+                this.listItem = response.data.data.wxs
+            })
+            .catch(error => {
+                console.log(error);
+                //alert('网络错误，不能访问');
+            });
+
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxHomeCharityYouAndMe',
+        })
+            .then(response => {
+                //console.log(response)
+                this.item1 = response.data.data;
+            })
+            .catch(error => {
+                console.log(error);
+                //alert('网络错误，不能访问');
+            });
+
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxHomeIntestinalHealth',
+        })
+            .then(response => {
+                //console.log(response)
+                this.item2 = response.data.data.image;
+            })
+            .catch(error => {
+                console.log(error);
+                //alert('网络错误，不能访问');
+            });
+    },
+    methods: {
+        goItem(i) {
+            if (i == 0) {
+                this.$router.push('/expertAll')
+            }
+            if (i == 1) {
+                this.$router.push('/userType')
+            }
+            if(i==2){
+                this.$router.push('/articleList')
+            }
+        },
+        goItem1(i) {
+            if (i == 0) {
+                this.$router.push('/userList')
+            }
+            if (i == 1) {
+                this.$router.push('/userList')
+            }
         }
     }
 }
 </script>
 <style lang="less" scoped>
 .index {
-  margin: 0 auto;
-  .item-1 {
-    padding: 1.25rem 1.875rem;
+  .banner {
     background: #fff;
     .swiper {
       width: 100%;
@@ -122,6 +144,7 @@ export default {
       display: flex;
       justify-content: space-between;
       margin-top: 0.625rem;
+      padding: 0 1.875rem;
       span {
         border-radius: 0.625rem;
         display: inline-block;
@@ -143,7 +166,7 @@ export default {
   .margin-header {
     margin-top: 1.25rem;
   }
-  .item-2 {
+  .item-1 {
     display: flex;
     justify-content: space-between;
     background: #fff;
@@ -168,7 +191,7 @@ export default {
     //   margin-right: 1.875rem;
     // }
   }
-  .item-3 {
+  .item-2 {
     background: #fff;
     padding: 1.875rem;
     div {

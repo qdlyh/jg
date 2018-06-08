@@ -6,12 +6,16 @@ import dialogue from '@/components/dialogue'
 import article from '@/components/index/article'
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [{
       path: '/',
       name: 'index',
       component: () =>
-        import ('@/components/index/index')
+        import ('@/components/index/index'),
+      meta: {
+        title: '首页',
+        keepAlive: true
+      }
     },
     {
       //产品介绍
@@ -53,7 +57,11 @@ export default new Router({
       path: '/userTypeForm',
       name: 'userTypeForm',
       component: () =>
-        import ('@/components/userinfo/userTypeForm')
+        import ('@/components/userinfo/userTypeForm'),
+      meta: {
+        title: '',
+        keepAlive: true
+      }
     },
     {
       //我的提问和回答
@@ -96,6 +104,13 @@ export default new Router({
       name: 'myAddressForm',
       component: () =>
         import ('@/components/userinfo/myAddressForm')
+    },
+    {
+      //设置
+      path: '/safety',
+      name: 'safety',
+      component: () =>
+        import ('@/components/userinfo/safety')
     },
     {
       //手机验证
@@ -232,3 +247,11 @@ export default new Router({
     }
   ]
 })
+export default router;
+router.beforeEach((to, from, next) => {
+  if (to.meta.title) {
+    /* 路由发生变化修改页面title */
+    document.title = to.meta.title;
+  }
+  next();
+});

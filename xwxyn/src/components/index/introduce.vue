@@ -1,35 +1,19 @@
 <template>
   <div>
     <div class="introduce">
-      <div class="header">
-        <span>健康讲堂</span>
-        <span>阳光连接</span>
-        <span>阳光连接</span>
-        <span>阳光连接</span>
+      <div class="user-header">
+        <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
+        <h1>产品介绍</h1>
+        <i></i>
       </div>
-      <div class="introduce-box">
-        <h1>洁肠仪</h1>
-        <img src="../../assets/logo.png" alt="">
-        <p>内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地</p>
+      <div class="introduce-box" v-for="(item,index) in list" :key="index">
+        <h1>{{item.title}}</h1>
+        <img :src="item.image" alt="">
+        <p v-html="item.content" class="v-html"></p>
       </div>
-      <div class="introduce-box">
-        <h1>洁肠仪</h1>
-        <img src="../../assets/logo.png" alt="">
-        <p>内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地</p>
-      </div>
-      <div class="introduce-box">
-        <h1>洁肠仪</h1>
-        <img src="../../assets/logo.png" alt="">
-        <p>内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地</p>
-      </div>
-      <div class="introduce-box">
-        <h1>安装</h1>
-        <img src="../../assets/logo.png" alt="">
-        <p>内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地内容大姐大可视对讲阿萨德还是大海搜到哈撒大声地</p>
-        <div class="btn-blue" @click="$router.push('/introduceForm')">
-          安装申请
-        </div>
-      </div>
+    </div>
+    <div class="btn-blue" @click="$router.push('/introduceForm')">
+      安装申请
     </div>
   </div>
 </template>
@@ -38,15 +22,48 @@
 export default {
   data() {
     return {
-
+      list: [],
     }
+  },
+  mounted() {
+    this.$ajax({
+      method: 'get',
+      url: this.psta + '/getWxIntestinalHealth',
+    })
+      .then(response => {
+        //console.log(response)
+        this.list = response.data.data;
+      })
+      .catch(error => {
+        console.log(error);
+        //alert('网络错误，不能访问');
+      });
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 .introduce {
+  .user-header {
+    height: 5rem;
+    line-height: 5rem;
+    background: #fff;
+    padding: 0 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 0.5px solid #dbdbdb;
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      color: #454545;
+      font-weight: 400;
+      margin-left: -1.875rem;
+    }
+    i {
+      font-size: 2rem;
+      color: #0aa6ff;
+    }
+  }
   .introduce-box {
     margin-top: 0.625rem;
     background: #fff;

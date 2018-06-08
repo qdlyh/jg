@@ -4,22 +4,26 @@ import Vue from 'vue'
 import FastClick from 'fastclick'
 import router from './router'
 import App from './App'
-import { XImg } from 'vux'
+import VueLazyload from 'vue-lazyload'
 import Footer from '@/components/common/Footer'
 import articleFooter from '@/components/common/articleFooter'
 import '../static/swiper.css'
 import VueAwesomeSwiper from 'vue-awesome-swiper'
 import axios from 'axios'
-Vue.prototype.$http = axios
+Vue.prototype.$ajax = axios;
 Vue.prototype.psta = process.env.NODE_ENV == 'production' ? '' : '/proxyapi';
 FastClick.attach(document.body)
 Vue.use(VueAwesomeSwiper)
-import { Tab, TabItem } from 'vux'
-Vue.component('tab', Tab)
-Vue.component('tab-item', TabItem)
-Vue.component('x-img', XImg)
 Vue.component('Footer', Footer)
 Vue.component('articleFooter', articleFooter)
+Vue.use(VueLazyload)
+Vue.use(VueLazyload, {
+  preLoad: 1.3,
+  error: '加载失败',
+  loading: '正在加载',
+  attempt: 1,
+
+})
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

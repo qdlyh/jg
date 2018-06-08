@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
     <!-- <Footer></Footer> -->
   </div>
 </template>
@@ -42,6 +45,20 @@ body {
   letter-spacing: 1px;
   -webkit-overflow-scrolling: touch; //在ios上滑动不流畅样式设置处理
 }
+
+/* 懒加载图片过渡效果 */
+img[lazy='loaded'] {
+  animation: fade 0.5s;
+}
+@keyframes fade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -76,6 +93,13 @@ body {
   }
 }
 
+//安装产品介绍
+.introduce {
+  .v-html {
+    width: 100%;
+  }
+}
+
 //申请安装页面
 .input-box {
   .weui-cells,
@@ -84,15 +108,13 @@ body {
     line-height: 6.25rem !important;
   }
   //底部选择器选中文字，input placeholder提示文字
-  .vux-popup-picker-value,
   .vux-popup-picker-placeholder,
-  .vux-cell-value,
   .vux-cell-placeholder {
     font-size: 1.5rem;
   }
   //底部选择器左侧标题文字大小
   .vux-label,
-  .input-box .weui-label {
+  .weui-label {
     width: 8.5rem !important;
     font-size: 1.5rem;
     color: #454545;
@@ -100,7 +122,6 @@ body {
   }
 
   //底部选择器文字
-  .vux-popup-picker-select,
   .weui-cell__ft {
     text-align: left !important;
   }
@@ -111,12 +132,9 @@ body {
   .weui-cells {
     margin-top: 0 !important;
   }
-  //申请安装产品
-  .weui-cell__ft {
-    width: 100%;
-  }
   //选中颜色
   .vux-cell-value {
+    font-size: 1.5rem;
     color: #454545 !important;
   }
 }
@@ -217,8 +235,8 @@ body {
 }
 
 //错误提示框
-.weui-toast{
-  padding: 10px  !important;
+.weui-toast {
+  padding: 10px !important;
   min-width: 15.625rem !important;
 }
 </style>

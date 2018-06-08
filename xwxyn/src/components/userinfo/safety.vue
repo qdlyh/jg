@@ -1,29 +1,20 @@
 <template>
     <div>
-        <div class="myPhone">
+        <div class="safety">
             <div class="user-header">
                 <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-                <h1>手机验证</h1>
+                <h1>设置</h1>
                 <i></i>
             </div>
-            <div class="Phone-input">
-                <span>
-                    手机号:
-                </span>
-                <input type="number" placeholder="请输入手机号">
+            <div class="input-box">
+                <span>绑定手机</span>
+                <input type="text" v-model="phone" placeholder="未绑定" disabled="disabled" style="background:#fff">
+                <i @click="$router.push('/myPhone')">{{isText}}</i>
             </div>
-            <div class="Phone-input">
-                <span>
-                    验证码:
-                </span>
-                <input type="number" placeholder="请输入验证码" style="width:40%">
-                <div class="btn-blue verify-btn">
-                    获取验证码
-                </div>
+            <div class="input-box">
+                <span>绑定邮箱</span>
+                <input type="text" v-model="email" placeholder="未绑定" disabled="disabled" style="background:#fff">
             </div>
-        </div>
-        <div class="btn-blue" style="margin-top:7rem;" @click="$router.push('/userTypeForm')">
-            保存
         </div>
     </div>
 </template>
@@ -31,13 +22,15 @@
 export default {
     data() {
         return {
-
+            phone: '',
+            email: '',
+            isText:'绑定手机',
         }
     }
 }
 </script>
 <style lang="less" scoped>
-.myPhone {
+.safety {
   .user-header {
     height: 5rem;
     line-height: 5rem;
@@ -50,25 +43,40 @@ export default {
       text-align: center;
       color: #454545;
       font-weight: 400;
-      margin-left: -1.875rem;
     }
     i {
       font-size: 2rem;
       color: #0aa6ff;
     }
   }
-  .Phone-input {
+  .input-box {
     background: #fff;
     height: 5rem;
     line-height: 5rem;
     width: 100%;
     margin-top: 0.625rem;
+    position: relative;
     span {
       display: inline-block;
       width: 9.375rem;
       font-size: 1.5rem;
       color: #454545;
       padding-left: 1.25rem;
+    }
+    i{
+        position: absolute;
+        right: 3.125rem;
+        top: .9375rem;
+        min-width: 6.25rem;
+        height: 3.125rem;
+        line-height: 3.125rem;
+        display: inline-block;
+        font-size: 1.2rem;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        text-align: center;
+        padding:0 .625rem;
+        color: #454545;
     }
     input {
       width: 70%;
@@ -79,22 +87,9 @@ export default {
         color: #999;
         font-size: 1.5rem;
         text-align: left;
-        padding-left: 0.9375rem;
+        padding-left: 0.625rem;
       }
     }
   }
 }
-
-.verify-btn {
-  width: 30%;
-  height: 100%;
-  font-size: 1.5rem;
-  border-radius: 0;
-  float: right;
-  margin-top: 0;
-  &:active {
-    border-radius: 0;
-  }
-}
 </style>
-

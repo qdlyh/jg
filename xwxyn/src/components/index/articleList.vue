@@ -10,15 +10,6 @@
                 <tab-item>保健</tab-item>
                 <tab-item>养生</tab-item>
             </tab>
-            <!-- <div class="header">
-                <span class="headerActive">推荐</span>
-                <span>全部</span>
-                <span>文化</span>
-                <span>常识</span>
-                <span>医疗</span>
-                <span>保健</span>
-                <span>养生</span>
-            </div> -->
             <div class="article-box" @click="$router.push('/article')">
                 <h1>单调好似东京阿斯顿就爱搜到极爱哦</h1>
                 <div class="article-img">
@@ -57,7 +48,13 @@
     </div>
 </template>
 <script>
+import { Tab, TabItem } from 'vux'
+
 export default {
+    components: {
+        Tab,
+        TabItem
+    },
     data() {
         return {
 

@@ -4,7 +4,7 @@
             <div class="user-header">
                 <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
                 <h1>编辑</h1>
-                <i class="iconfont icon-icon"></i>
+                <i class="iconfont icon-icon" @click="submit"></i>
             </div>
             <div class="my-picture">
                 <div class="top-img">
@@ -29,7 +29,7 @@
                 <span>
                     昵称
                 </span>
-                <input placeholder="未设置" maxlength="5">
+                <input placeholder="未设置" v-model.trim="name" maxlength="5">
             </div>
             <div class="redact-msg-input" style="background:#EBEBE4;">
                 <span>
@@ -38,49 +38,40 @@
                 <input placeholder="游客" disabled="disabled">
             </div>
             <div class="redact-msg-input">
-                <x-address title="选择城市" v-model="value" :list="addressData" @on-shadow-change="onShadowChange" placeholder="未设置" :show.sync="showAddress"></x-address>
-            </div>
-            <div class="redact-msg" @click="$router.push('/myPhone')">
                 <group>
-                    <cell title="绑定手机" value="未绑定" is-link></cell>
+                    <x-address title="选择城市" :list="addressData" placeholder="未设置" :show.sync="showAddress"></x-address>
                 </group>
-            </div>
-            <div class="redact-msg-input">
-                <span>
-                    绑定邮箱
-                </span>
-                <input placeholder="未设置">
             </div>
             <div class="redact-msg-input">
                 <span>
                     企业地址
                 </span>
-                <input placeholder="未设置">
+                <input placeholder="未设置" v-model.trim="address" maxlength="40">
             </div>
             <div class="redact-msg-input">
                 <span>
                     职位
                 </span>
-                <input placeholder="未设置">
+                <input placeholder="未设置" v-model.trim="zhiwei" maxlength="15">
             </div>
             <div class="redact-msg-input">
                 <span>
                     就职机构
                 </span>
-                <input placeholder="未设置">
+                <input placeholder="未设置" v-model.trim="jigou" maxlength="20">
             </div>
-
             <div class="redact-msg-input" style="height:15rem">
-                <span style="position: relative;top: -80px;">
+                <span style="position: relative;top: -9.375rem;">
                     个人签名
                 </span>
-                <!-- <span style="position: relative;top: -80px;">
+                <!-- <span style="position: relative;top: -9.375rem;">  
                     企业简介
                 </span> -->
-                <textarea placeholder="请做一个简单的描述" maxlength="100"></textarea>
+                <textarea placeholder="请做一个简单的描述" v-model.trim="msg" maxlength="100"></textarea>
             </div>
         </div>
-        <div class="btn-blue">
+        <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
+        <div class="btn-blue" @click="submit">
             提交
         </div>
     </div>
@@ -88,9 +79,10 @@
 <script>
 import Cropper from 'cropperjs';
 import CropperCss from '../../../static/cropicrec.css';
-import { Group, Cell, XAddress, ChinaAddressV4Data } from 'vux'
+import { Toast, Group, Cell, XAddress, ChinaAddressV4Data } from 'vux'
 export default {
     components: {
+        Toast,
         Group,
         Cell,
         XAddress
@@ -98,13 +90,21 @@ export default {
     data() {
         return {
             headerImage: require('../../assets/logo.png'),
+            ifImage: false, //判断图片是否为同一张
             panel: false,
             croppable: false,
             cropper: '',
             url: '',
-            ifImage: false, //判断图片是否为同一张
             addressData: ChinaAddressV4Data,
+            showAddress: false,
+            cancel: false,
+            name: '',
             value: [],
+            address: '',
+            zhiwei: '',
+            jigou: '',
+            msg: '',
+            cancelText: '',
         }
     },
     mounted() {
@@ -136,8 +136,8 @@ export default {
         },
         change(e) {
             if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
-                this.popup = true;
-                this.text = '请选择图片格式类型';
+                this.cancel = true;
+                this.cancelText = '请选择图片格式类型'
                 return false
             }
             let files = e.target.files || e.dataTransfer.files;
@@ -197,6 +197,38 @@ export default {
 
             return canvas;
         },
+        doShowAddress() {
+            this.showAddress = true
+            setTimeout(() => {
+                this.showAddress = false
+            }, 2000)
+        },
+        submit() {
+            let have = true;
+            let city = document.querySelectorAll('.vux-cell-value')[0];
+            // let city = document.querySelectorAll('.vux-cell-value')[0].innerText;
+            console.log(city)
+            if (this.name.length == 0 || city == undefined || this.address.length == 0 || this.zhiwei.length == 0 || this.jigou == '') {
+                this.cancel = true;
+                this.cancelText = '请填写完整的基本信息'
+                return false;
+            }
+            // if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.email))) {
+            //     this.cancel = true;
+            //     this.cancelText = '邮箱格式错误'
+            //     have = false;
+            //     return false;
+            // }
+            if (have) {
+                this.cancel = true;
+                this.cancelText = '已提交'
+                let formData = new FormData();
+                //formData.append('userId', this.$parent.userId);
+                // if (this.ifImage) {
+                //     formData.append('file', this.headerImage);
+                // }
+            }
+        }
     }
 }
 </script>
@@ -223,8 +255,12 @@ export default {
   }
   .my-picture {
     position: relative;
-    height: 12.5rem;
-    background: #3FB0FF;
+    height: 18.75rem;
+    background: linear-gradient(
+      to bottom,
+      rgb(97, 144, 232),
+      rgb(167, 191, 232)
+    );
     .top-img {
       width: 100%;
       .show {
@@ -303,18 +339,6 @@ export default {
       font-size: 1.5rem;
       color: #454545;
       padding-left: 1.25rem;
-    }
-    input {
-      width: 70%;
-      border: 0;
-      font-size: 1.5rem;
-      color: #454545;
-      &::-webkit-input-placeholder {
-        color: #999;
-        font-size: 1.5rem;
-        text-align: right;
-        padding-right: 0.625rem;
-      }
     }
     input {
       width: 70%;

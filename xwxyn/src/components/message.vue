@@ -58,7 +58,7 @@ export default {
                 item.num += 1;
             } else {
                 item.num -= 1;
-            }
+            } 
             //console.log(Number(item.dianzan))
         },
         go() {

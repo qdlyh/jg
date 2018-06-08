@@ -109,6 +109,11 @@
                         <cell title="历史记录" is-link></cell>
                     </group>
                 </div>
+                <div class="userType-link" @click="$router.push('/safety')">
+                    <group>
+                        <cell title="设置" is-link></cell>
+                    </group>
+                </div>
             </div>
             <br/> <br/>
         </div>
