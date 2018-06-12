@@ -10,7 +10,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/proxyapi': {
+        target: 'http://192.168.2.133/rest/wx',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/proxyapi': '' //这里理解成用‘/api'代替target里面的地址，后面组件中我们掉接口时直接用api代替 
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: '192.168.2.109', // can be overwritten by process.env.HOST

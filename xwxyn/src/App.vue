@@ -96,7 +96,18 @@ img[lazy='loaded'] {
 //安装产品介绍
 .introduce {
   .v-html {
-    width: 100%;
+    img {
+      width: 100%;
+    }
+  }
+}
+.article {
+  .article-html {
+    font-size: 1.5rem;
+    color: #454545;
+    img {
+      width: 100%;
+    }
   }
 }
 

@@ -40,7 +40,13 @@
     </div>
 </template>
 <script>
+import '../../../static/swiper.css'
+import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
+    components: {
+        swiper,
+        swiperSlide
+    },
     data() {
         return {
             swiperOption: {
@@ -110,7 +116,7 @@ export default {
             if (i == 1) {
                 this.$router.push('/userType')
             }
-            if(i==2){
+            if (i == 2) {
                 this.$router.push('/articleList')
             }
         },

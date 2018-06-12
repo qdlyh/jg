@@ -190,7 +190,7 @@ const router = new Router({
         import ('@/components/ac/enterprise')
     },
     {
-      path: '/article',
+      path: '/article:id',
       name: 'article',
       component: () =>
         import ('@/components/index/article')
@@ -201,7 +201,7 @@ const router = new Router({
       component: dialogue
     },
     {
-      path: '/message',
+      path: '/message:id',
       name: 'message',
       component: message
     },

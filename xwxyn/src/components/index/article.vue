@@ -1,44 +1,60 @@
 <template>
     <div>
-        <div class="article">
-            <h1>呦呦呦厉害哟</h1>
-            <i class="time">2018-01-02 09:50</i>
-            <div class="article-html">
-                啊啊啊啊啊啊啊啊啊啊
+        <!-- <h2>{{ $route.params.id }}</h2> -->
+        <div class="article" v-for="(item,index) in list" :key="index">
+            <div class="article-box">
+                <h1>{{item.title}}</h1>
+                <div>
+                    <i>作者：{{item.author}}</i>
+                    <i class="time">{{item.modifyDate}}</i>
+                </div>
+                <img v-for="src in item.images" v-lazy="src.image" alt="">
+                <div class="article-html" v-html="item.content"></div>
             </div>
-            <i class="browse">16515人浏览</i>
+            <div class="articleFooter">
+                <div class="footer">
+                    <div>
+                        <i class="num">{{item.count}}浏览</i>
+                    </div>
+                    <div class="message-box">
+                        <span class="message" @click="go(item)">
+                            <i class="iconfont icon-liuyan" @click="$router.push('/message')"></i>
+                            <span>{{item.messageCount}}</span>
+                        </span>
+                        <i class="iconfont icon-shoucang" :class="{ active: isActive==1}" @click="toggle()"></i>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- <button @click="goArticle()">home</button>
-        <button @click="go()">go</button> -->
-        <articleFooter></articleFooter>
     </div>
 </template>
 <script>
 export default {
     data() {
         return {
+            uuid: '',
+            isActive: 0,
+            list: [],
         }
     },
     mounted() {
-        // pushHistory();
-        // window.addEventListener("popstate", function (e) {
-        //     //document.querySelectorAll('.message')[0].style.display = 'none'
-        //     window.message = false;
-        // }, false);
-        // function pushHistory() {
-        //     var state = {
-        //         title: "title",
-        //         url: "www.baidu.com"
-        //     };
-        //     window.history.pushState(state, "title", "www.baidu.com");
-        // }
+        this.uuid = this.$route.params.id
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxHealthLectureHallByUuid?uuid=' + this.uuid,
+        })
+            .then(response => {
+                // console.log(response)
+                this.list = [response.data.data];
+            })  
     },
     methods: {
-        goArticle() {
-            this.$router.push('/article');
+        toggle() {
+            this.isActive = !this.isActive;
+            console.log(Number(this.isActive))
         },
-        go() {
-            this.$router.push('/message');
+        go(item) {
+            this.$router.push({ name: 'message', params: { id: item.uuid } });
         }
     },
     watch: {
@@ -50,17 +66,89 @@ export default {
 </script>
 <style lang="less" scoped>
 .article {
-  padding: 1.875rem;
-  h1 {
-    font-size: 2rem;
-    font-weight: 500;
-    color: #3c3c3c;
+  .article-box {
+    padding: 1.875rem;
+    div {
+      display: flex;
+      justify-content: space-between;
+      margin: 1.875rem 0;
+      i {
+        color: #3c3c3c;
+        font-size: 1.5rem;
+      }
+      .time {
+        color: #9a9a9a;
+        font-size: 1.25rem;
+      }
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 400;
+      color: #3c3c3c;
+    }
+    img {
+      width: 100%;
+      height: auto;
+    }
   }
-  i {
-    color: #9a9a9a;
-    font-size: 20px;
+
+  .articleFooter {
+    width: 100%;
+    margin-top: 6.25rem;
+    position: relative;
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      border-top: 1px solid #d7d7d7;
+      padding: 0 3.125rem;
+      height: 6.125rem;
+      line-height: 6.125rem;
+      background: #fff;
+      position: fixed;
+      bottom: 0;
+      .num {
+        background: #f3f3f3;
+        min-width: 7.5rem;
+        min-height: 2.5rem;
+        line-height: 2.5rem;
+        border-radius: 10px;
+        padding: 0.3125rem 1.25rem;
+        color: #9c9c9c;
+        display: inline-block;
+        font-size: 1.25rem;
+        text-align: center;
+      }
+      .message-box {
+        i {
+          font-size: 3.4375rem;
+        }
+        .message {
+          margin-right: 1.875rem;
+          span {
+            position: relative;
+            top: -25px;
+            left: -10px;
+            color: #fff;
+            background: #e01414;
+            min-width: 2.5rem;
+            min-height: 0.5rem;
+            line-height: 0.5rem;
+            display: inline-block;
+            text-align: center;
+            padding: 0.625rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+          }
+        }
+      }
+    }
+    .active {
+      color: #ff9d46;
+    }
   }
 }
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.5s;
