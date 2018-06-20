@@ -8,7 +8,7 @@
       </div>
       <div class="introduce-box" v-for="(item,index) in list" :key="index">
         <h1>{{item.title}}</h1>
-        <img :src="item.image" alt="">
+        <img v-lazy="item.image" alt="">
         <p v-html="item.content" class="v-html"></p>
       </div>
     </div>
@@ -38,7 +38,7 @@ export default {
         console.log(error);
         //alert('网络错误，不能访问');
       });
-  }
+  },
 }
 </script>
 

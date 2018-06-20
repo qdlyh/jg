@@ -29,13 +29,11 @@
     </div>
 </template>
 <script>
-import { Tab, TabItem, Swiper, SwiperItem } from 'vux'
+import { Tab, TabItem } from 'vux'
 export default {
     components: {
         Tab,
         TabItem,
-        Swiper,
-        SwiperItem
     },
     data() {
         return {
@@ -46,17 +44,15 @@ export default {
             total: '',
             type: 1,
             page: 1,
+            scrollTop: 0,
         }
     },
-    mounted() {
-        this.$ajax({
-            method: 'get',
-            url: this.psta + '/getWxHealthLectureHall?type=' + this.type + '&page=' + this.page + '&size=' + 10,
-        })
-            .then(response => {
-                //console.log(response)
-                this.list = response.data.data;
-            })
+    activated() {
+        if (sessionStorage.getItem('scrollTop') != null) {
+            // let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+        }
+
 
         this.mescroll = new MeScroll("mescroll", {
             up: {
@@ -79,14 +75,19 @@ export default {
             }
         });
     },
+    deactivated() {
+        this.mescroll.destroy();
+    },
     methods: {
         go(item) {
-            //localStorage.getItem('articleIndex', item.uuid);
             this.$router.push({ name: 'article', params: { id: item.uuid } });
+            sessionStorage.setItem('scrollTop', this.mescroll.getScrollTop())
+            // var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            // //scrollTop = 800
+            // console.log(scrollTop.scrollHeight)
         },
         onItemClick(item) {
             this.type = item.typeNum;
-            //console.log(this.type)
             this.list = [];
             this.mescroll.resetUpScroll();
         },
@@ -105,7 +106,6 @@ export default {
         },
 
         getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
-            //console.log(this.type)
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',

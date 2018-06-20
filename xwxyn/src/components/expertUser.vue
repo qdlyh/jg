@@ -1,49 +1,33 @@
 <template>
     <div>
-        <div class="specialistUser">
+        <div class="specialistUser" v-for="(item,index) in list" :key="item.uuid">
             <div class="specialist-top">
                 <div class="user-message">
-                    <img src="../assets/logo.png" alt="">
+                    <img v-lazy="item.image" alt="">
                     <div class="user">
-                        <h1>倪友尚</h1>
-                        <i>志愿者</i>
-                        <p>2013年参加志愿2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作工作</p>
-                        <span class="attention">关注</span>
+                        <h1>{{item.nickName}}</h1>
+                        <i>{{item.label}}</i>
+                        <p>{{item.signature}}</p>
+                        <span class="attention" v-if="item.uuid!=$parent.wxUserId" @click="toggle(item)" :class="{active:item.isFocus==1}">{{isText}}</span>
                     </div>
                 </div>
                 <div class="number">
                     <span>
                         <p>帮助</p>
-                        <i>1235</i>
+                        <i>{{item.helpCount}}</i>
                     </span>
                     <span>
                         <p>关注</p>
-                        <i>1235</i>
+                        <i>{{item.focusCount}}</i>
                     </span>
                 </div>
             </div>
-            <div class="issue">我要提问</div>
-            <div class="specialist-article">
-                <p>2013年参加志愿2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作工作</p>
+            <div class="issue" v-if="item.uuid!=$parent.wxUserId" @click="$router.push({name:'questions',params:{id:item.uuid}})">我要提问</div>
+            <div class="specialist-article" v-for="text in item.questions">
+                <p>{{text.title}}</p>
                 <div class="specialist-box-bottom">
                     <div>
-                        <span>1586浏览</span>
-                        <span>126评论</span>
-                    </div>
-                    <div>
-                        2018-03-12 09:32
-                    </div>
-                </div>
-            </div>
-            <div class="specialist-article">
-                <p>2013年参加志愿2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作工作</p>
-                <div class="specialist-box-bottom">
-                    <div>
-                        <span>1586浏览</span>
-                        <span>126评论</span>
-                    </div>
-                    <div>
-                        2018-03-12 09:32
+                        {{text.createDate}}
                     </div>
                 </div>
             </div>
@@ -54,8 +38,53 @@
 export default {
     data() {
         return {
-
+            uuid: '',
+            list: [],
+            isText: '关注'
         }
+    },
+    activated() {
+        this.uuid = this.$route.params.id;
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxExpertsByUuid?uuid=' + this.uuid + '&wxUserId=' + this.$parent.wxUserId,
+        })
+            .then(response => {
+                //console.log(response)
+                this.list = [response.data.data];
+                if (this.list[0].isFocus == 1) {
+                    this.isText = '已关注'
+                }
+            })
+    },
+    methods: {
+        toggle(item) {
+            item.isFocus = !item.isFocus;
+            let formData = new FormData();
+            formData.append('expertsUserId', item.uuid);
+            formData.append('wxUserId', this.$parent.wxUserId);
+            if (item.isFocus == 1) {
+                this.$ajax({
+                    method: 'post',
+                    url: this.psta + '/getWxFocusOnExperts',
+                    data: formData,
+                })
+                    .then(response => {
+                        this.isText = '已关注'
+                        //console.log(response)
+                    })
+            } else {
+                this.$ajax({
+                    method: 'post',
+                    url: this.psta + '/getWxFocusOnExperts',
+                    data: formData,
+                })
+                    .then(response => {
+                        this.isText = '关注'
+                        //console.log(response)
+                    })
+            }
+        },
     }
 }
 </script>
@@ -64,7 +93,7 @@ export default {
   .specialist-top {
     min-height: 22.5rem;
     width: 100%;
-    background: #23C3FF;
+    background: linear-gradient(to top, rgb(97, 144, 232), rgb(167, 191, 232));
     padding: 1.875rem;
     img {
       width: 9.75rem;
@@ -76,15 +105,15 @@ export default {
     }
     .user-message {
       display: flex;
+      position: relative;
       .user {
         margin-top: 3.125rem;
         color: #fff;
         margin-left: 1.875rem;
-        position: relative;
         .attention {
           position: absolute;
           right: 0;
-          top: 0;
+          top: 3.125rem;
           width: 6.25rem;
           height: 3rem;
           border-radius: 15px;
@@ -169,6 +198,9 @@ export default {
       }
     }
   }
+}
+.active {
+  background: #9c9c9c;
 }
 </style>
 

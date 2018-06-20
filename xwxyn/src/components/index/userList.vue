@@ -1,79 +1,154 @@
 <template>
   <div>
     <div class="userList">
-      <div class="header">
+      <!-- <div class="header">
         <span @click="headerTab(index)" :class="{ headerActive: active == index }" v-for="(item,index) in header">{{item.text}}</span>
-      </div>
-      <div class="personnel" v-show="active==0">
-        <div class="personnel-box">
-          <div class="user-text">
-            <span>
-              <img src="../../assets/logo.png" alt="">
-            </span>
-            <span class="right">
-              <h1>某某某公司</h1>
-              <p>简介：阿打算大所大所大所大所多</p>
-            </span>
-          </div>
-          <div class="user-theme">
-            <span class="left-theme">
-              参与活动主题参与活动主题参与活动主题参与活动主题参与活动主题参与活动主题
-            </span>
-            <span class="right-time">
-              2018-4-05
-            </span>
-          </div>
-          <div class="user-theme">
-            <span class="left-theme">
-              参与活动主题
-            </span>
-            <span class="right-time">
-              2018-4-05
-            </span>
+      </div> -->
+      <tab>
+        <tab-item @on-item-click="onItemClick(item)" :selected="item.type==63" v-for="(item,index) in tab" :key="index">{{item.name}}</tab-item>
+      </tab>
+
+      <div id="mescroll" class="mescroll">
+        <div id="dataList" class="data-list" v-cloak>
+          <div class="personnel" v-for="(item,index) in list" :key="index">
+            <div class="personnel-box">
+              <div class="user-text">
+                <span>
+                  <img v-lazy="item.image" alt="">
+                </span>
+                <span class="right">
+                  <h1>某某某公司</h1>
+                  <p>简介：阿打算大所大所大所大所多</p>
+                </span>
+              </div>
+              <div class="user-theme">
+                <span class="left-theme">
+                  参与活动主题参与活动主题参与活动主题参与活动主题参与活动主题参与活动主题
+                </span>
+                <span class="right-time">
+                  2018-4-05
+                </span>
+              </div>
+              <div class="user-theme">
+                <span class="left-theme">
+                  参与活动主题
+                </span>
+                <span class="right-time">
+                  2018-4-05
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="volunteer" v-show="active==1">
-        <div class="volunteer-box" @click="$router.push('/user')">
-          <img src="../../assets/logo.png" alt="">
-          <span>
-            <h1>倪友尚</h1>
-            <i>志愿者</i>
-            <p>2013年参加志愿2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作工作</p>
-          </span>
+      <!-- <div id="mescroll" class="mescroll">
+        <div id="dataList" class="data-list" v-cloak>
+          <div class="volunteer" v-for="(item,index) in list" :key="item.uuid">
+            <div class="volunteer-box" @click="$router.push('/user')">
+              <img v-lazy="item.image" alt="">
+              <span>
+                <h1>{{item.nickName}}</h1>
+                <i>志愿者</i>
+                <p>2013年参加志愿2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作工作</p>
+              </span>
+            </div>
+          </div>
         </div>
-        <div class="volunteer-box">
-          <img src="../../assets/logo.png" alt="">
-          <span>
-            <h1>倪友尚</h1>
-            <i>志愿者</i>
-            <p>2013年参加志愿2013年参加志愿工作2013年参加志</p>
-          </span>
-        </div>
-      </div>
+      </div> -->
+
     </div>
   </div>
 </template>
 
 <script>
+import { Tab, TabItem } from 'vux'
 export default {
+  components: {
+    Tab,
+    TabItem,
+  },
   data() {
     return {
-      header: [{ text: '慈善家' }, { text: '志愿者' }],
-      active: 0,
+      tab: [{ name: '慈善企业', type: 63 }, { name: '志愿者', type: 64 }],
+      list: [],
+      type: 63,
     }
   },
+  mounted() {
+    this.mescroll = new MeScroll("mescroll", {
+      up: {
+        auto: true,//初始化完毕,是否自动触发上拉加载的回调
+        isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+        callback: this.upCallback, //上拉加载的回调
+        offset: 100,
+        noMoreSize: 5,
+        //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
+        htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+        toTop: { //配置回到顶部按钮
+          src: "../../static/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+          //offset: 1000
+        },
+        empty: { //配置列表无任何数据的提示
+          warpId: "dataList",
+          icon: "../../static/mescroll-empty.png",
+          tip: "亲,暂无相关数据哦~",
+        },
+      }
+    });
+  },
   methods: {
-    headerTab(index) {
-      this.active = index;
+    onItemClick(item) {
+      this.type = item.type;
+      this.list = [];
+      this.mescroll.resetUpScroll();
+    },
+
+    upCallback(page) {
+      this.getListDataFromNet(page.num, page.size, (curPageData) => {
+        //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
+        if (page.num == 1); this.list1 = [];
+        let totalPage = this.total;
+        //更新列表数据
+        this.list = this.list.concat(curPageData);
+        this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+      }, function () {
+        this.mescroll.endErr();
+      });
+    },
+
+
+    getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+      setTimeout(() => {
+        this.$ajax({
+          method: 'get',
+          url: this.psta + '/getWxCharityYouAndMe?type=' + this.type + '&page=' + pageNum + '&size=' + pageSize,
+        })
+          .then(response => {
+            //console.log(response)
+            let listData = [];
+            let listPage = response.data.data;
+            this.total = response.data.total;
+            for (let i = 0; i < listPage.length; i++) {
+              listData.push(listPage[i])
+            }
+            successCallback && successCallback(listData);//成功回调
+          });
+      }, 500)
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
-// 慈善家
+.mescroll {
+  position: fixed;
+  top: 1.8rem;
+  bottom: 6rem;
+  height: auto;
+}
+
+// 慈善企业
 .personnel {
   .personnel-box {
     background: #fff;

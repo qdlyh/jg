@@ -1,9 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import user from '@/components/user'
-import message from '@/components/message'
-import dialogue from '@/components/dialogue'
-import article from '@/components/index/article'
 Vue.use(Router)
 
 const router = new Router({
@@ -43,7 +39,11 @@ const router = new Router({
       path: '/articleList',
       name: 'articleList',
       component: () =>
-        import ('@/components/index/articleList')
+        import ('@/components/index/articleList'),
+      meta: {
+        title: '',
+        keepAlive: true
+      }
     },
     {
       //用户类型信息    
@@ -140,13 +140,13 @@ const router = new Router({
       component: () =>
         import ('@/components/money/detail')
     },
-    {
-      //安全设置
-      path: '/safety',
-      name: 'safety',
-      component: () =>
-        import ('@/components/money/safety')
-    },
+    // {
+    //   //安全设置
+    //   path: '/safety',
+    //   name: 'safety',
+    //   component: () =>
+    //     import ('@/components/money/safety')
+    // },
     {
       //修改密码
       path: '/password',
@@ -190,25 +190,46 @@ const router = new Router({
         import ('@/components/ac/enterprise')
     },
     {
-      path: '/article:id',
+      path: '/article/:id',
       name: 'article',
       component: () =>
-        import ('@/components/index/article')
+        import ('@/components/index/article'),
+      meta: {
+        title: '',
+        keepAlive: true
+      }
     },
     {
-      path: '/dialogue',
+      path: '/dialogue/:id',
       name: 'dialogue',
-      component: dialogue
+      component: () =>
+        import ('@/components/dialogue'),
+      meta: {
+        title: '',
+        keepAlive: true
+      }
     },
     {
-      path: '/message:id',
+      path: '/message/:id',
       name: 'message',
-      component: message
+      component: () =>
+        import ('@/components/message'),
+      meta: {
+        title: '',
+        keepAlive: true
+      }
     },
     {
       path: '/user',
       name: 'user',
-      component: user
+      component: () =>
+        import ('@/components/user')
+    },
+    {
+      path: '/questions',
+      name: 'questions',
+      component: () =>
+        import ('@/components/questions')
     },
     {
       //义诊列表
@@ -226,17 +247,47 @@ const router = new Router({
     },
     {
       //专家信息
-      path: '/expertUser',
+      path: '/expertUser/:id',
       name: 'expertUser',
       component: () =>
-        import ('@/components/expertUser')
+        import ('@/components/expertUser'),
+      meta: {
+        title: '专家信息',
+        keepAlive: true
+      }
     },
     {
       //专家大众天地
-      path: '/expertAll',
-      name: 'expertAll',
+      path: '/expertAll0',
+      name: 'expertAll0',
       component: () =>
-        import ('@/components/expert/expertAll')
+        import ('@/components/expert/expertAll0'),
+      meta: {
+        title: '专家列表',
+        keepAlive: true
+      }
+    },
+    {
+      //专家大众天地
+      path: '/expertAll1',
+      name: 'expertAll1',
+      component: () =>
+        import ('@/components/expert/expertAll1'),
+      meta: {
+        title: '资讯专区',
+        keepAlive: true
+      }
+    },
+    {
+      //专家大众天地
+      path: '/expertAll2',
+      name: 'expertAll2',
+      component: () =>
+        import ('@/components/expert/expertAll2'),
+      meta: {
+        title: '我的提问',
+        keepAlive: true
+      }
     },
     {
       //专家列表
@@ -249,8 +300,8 @@ const router = new Router({
 })
 export default router;
 router.beforeEach((to, from, next) => {
+  MeScroll.prototype.hideTopBtn(); //MeScroll返回顶部按钮
   if (to.meta.title) {
-    /* 路由发生变化修改页面title */
     document.title = to.meta.title;
   }
   next();

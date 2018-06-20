@@ -45,7 +45,7 @@ import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
     components: {
         swiper,
-        swiperSlide
+        swiperSlide,
     },
     data() {
         return {
@@ -111,7 +111,7 @@ export default {
     methods: {
         goItem(i) {
             if (i == 0) {
-                this.$router.push('/expertAll')
+                this.$router.push('/expertAll0')
             }
             if (i == 1) {
                 this.$router.push('/userType')

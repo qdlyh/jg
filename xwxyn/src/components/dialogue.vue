@@ -6,37 +6,38 @@
         <h1>回复详情</h1>
         <i></i>
       </div>
-      <div class="message-box" v-for="(item,index) in list" :key="index">
-        <div class="message-top">
-          <img src="../assets/logo.png" alt="">
-          <span>
-            <i>{{item.name}}</i>
-            <p>{{item.text}}</p>
-          </span>
-        </div>
-        <div class="message-bottom">
-          <span>{{item.time}}</span>
-          <div>
-            <span class="dialogue" @click="replyBtn(index,item)">回复</span>
-            <span @click="toggle(item)" :class="{active:item.dianzan==1}">
-              <i class="iconfont icon-dianzan"></i>
-              <i>{{item.num}}</i>
-            </span>
-          </div>
-        </div>
-        <div class="reply" v-show="index==num">
-          <input type="text" :placeholder="'@'+placeholder"><br/>
-          <div>
-            <span @click="cancel(index)">取消</span>
-            <span class="btn">评论</span>
+      <div id="pullTo">
+        <div id="mescroll" class="mescroll">
+          <div id="dataList" class="data-list" v-cloak>
+            <div class="message-box" v-for="(item,index) in list" :key="item.id">
+              <div class="message-top">
+                <img v-lazy="item.image" alt="">
+                <span>
+                  <i>{{item.nickName}}</i>
+                  <p>{{item.reply}}</p>
+                </span>
+              </div>
+              <div class="message-bottom">
+                <span>{{item.createDate}}</span>
+                <div v-show="item.wxUserId!=$parent.wxUserId">
+                  <span class="huifu" @click="replyBtn(index,item)">回复</span>
+                </div>
+              </div>
+              <div class="reply" v-show="index==num">
+                <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
+                <div>
+                  <span @click="cancel(index)">取消</span>
+                  <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="msg-input-box">
-        <div class="msg-input">
-          <i class="iconfont icon-xiepinglun"></i>
-          <input type="text" placeholder="写评论">
-          <i class="iconfont icon-fasong"></i>
+      <div class="msg-input-box" v-show="num==null">
+        <div class="msg-input" :class="{activeBtn:msg!=0}">
+          <input type="text" placeholder="回复层主" v-model="msg">
+          <i class="iconfont icon-fasong" @click="msgBtn()"></i>
         </div>
       </div>
     </div>
@@ -46,35 +47,168 @@
 export default {
   data() {
     return {
-      num: null,
+      replyMsg: '',
       placeholder: '',
-      list: [{ name: '野猪', text: '呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害', time: '2018-5-03', num: 88, dianzan: 0 }, { name: '野猪', text: '呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害', time: '2018-5-03', num: 88, dianzan: 1 }, { name: '野猪', text: '呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害', time: '2018-5-03', num: 88, dianzan: 0 }, { name: '野猪', text: '呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害', time: '2018-5-03', num: 88, dianzan: 1 }, { name: '野猪', text: '呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害', time: '2018-5-03', num: 88, dianzan: 0 }, { name: '野猪', text: '呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害呦呵厉害厉害', time: '2018-5-03', num: 88, dianzan: 1 }],
+      msg: '',
+      uuid: '',
+      total: '',
+      num: null,
+      mescroll: null,
+      list: [],
     }
   },
-  mounted() {
+  activated() {
+    this.uuid = this.$route.params.id;
+    this.mescroll = new MeScroll("mescroll", {
+      up: {
+        auto: false,//初始化完毕,是否自动触发上拉加载的回调
+        isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+        callback: this.upCallback, //上拉加载的回调
+        offset: 500,
+        noMoreSize: 5,
+        //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
+        htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+        toTop: { //配置回到顶部按钮
+          src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
+          //offset: 1000
+        },
+      }
+    });
+  },
+  deactivated() {
+    this.mescroll.destroy();
   },
   methods: {
+
     replyBtn(index, item) {
       this.num = index;
-      this.placeholder = item.name;
-      console.log(this.placeholder)
+      this.placeholder = item.nickName;
+      this.replyMsg = '';
     },
-    toggle(item) {
-      item.dianzan = !item.dianzan;
-      if (item.dianzan == 1) {
-        item.num += 1;
-      } else {
-        item.num -= 1;
-      }
-      // console.log(Number(item.dianzan))
-    },
+
     cancel(index) {
       this.num = null;
+    },
+
+    //生成唯一id防止unshift评论的时候数据显示错误
+    guid() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    },
+
+    comment(item) {
+      if (this.replyMsg.length != 0) {
+        let userID = this.guid();
+        this.num = null;
+        let formData = new FormData();
+        formData.append('messageId', this.uuid);  //层主的uuid
+        formData.append('parentId', item.uuid);  //留言列表里回复谁的id
+        formData.append('wxUserId', this.$parent.wxUserId); // this.$parent.wxUserId
+        formData.append('reply', '回复 ' + item.nickName + ' 的评论： ' + this.replyMsg);
+        this.$ajax({
+          method: 'post',
+          data: formData,
+          url: this.psta + '/submitMessageReply',
+        })
+          .then(response => {
+            console.log(response)
+            let user = [response.data.data];
+            this.list.unshift({
+              createDate: user[0].createDate,
+              generalId: user[0].generalId,    //这里是的文章id
+              isPraise: user[0].isPraise,
+              praiseCount: user[0].praiseCount,
+              replyCount: user[0].replyCount,
+              image: user[0].image,
+              nickName: user[0].nickName,
+              reply: user[0].reply,
+              uuid: user[0].uuid,
+              wxUserId: user[0].wxUserId,
+              id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+            })
+          })
+      }
+    },
+
+    msgBtn() {
+      // console.log(this.list)
+      if (this.msg.length != 0) {
+        let userID = this.guid();
+        let formData = new FormData();
+        formData.append('messageId', this.uuid);  //层主的uuid
+        formData.append('parentId', 0);  //层主回复为0
+        formData.append('wxUserId', this.$parent.wxUserId); // this.$parent.wxUserId
+        formData.append('reply', this.msg);
+        this.$ajax({
+          method: 'post',
+          data: formData,
+          url: this.psta + '/submitMessageReply',
+        })
+          .then(response => {
+            console.log(response)
+            let user = [response.data.data];
+            this.list.unshift({
+              createDate: user[0].createDate,
+              generalId: user[0].generalId,    //这里是的文章id
+              isPraise: user[0].isPraise,
+              praiseCount: user[0].praiseCount,
+              replyCount: user[0].replyCount,
+              image: user[0].image,
+              nickName: user[0].nickName,
+              reply: user[0].reply,
+              uuid: user[0].uuid,
+              wxUserId: user[0].wxUserId,
+              id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+            })
+            this.msg = '';
+          })
+      }
+    },
+
+    upCallback(page) {
+      this.getListDataFromNet(page.num, page.size, (curPageData) => {
+        //curPageData = [];
+        if (page.num == 1) this.list = [];
+        let totalPage = this.total;
+        this.list = this.list.concat(curPageData);  //更新列表数据
+        this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+        //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
+      }, function () {
+        this.mescroll.endErr();
+      });
+    },
+
+    getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+      setTimeout(() => {
+        this.$ajax({
+          method: 'get',
+          url: this.psta + '/getWxCommentsReplyByUuid?uuid=' + this.uuid + '&page=' + pageNum + '&size=' + pageSize,
+        })
+          .then(response => {
+            //console.log(response)
+            let listData = [];
+            let listPage = response.data.data;
+            this.total = response.data.total;
+            for (let i = 0; i < listPage.length; i++) {
+              listData.push(listPage[i])
+            }
+            successCallback && successCallback(listData);//成功回调
+          });
+      }, 500)
     }
+
   }
 }
 </script>
 <style lang="less" scoped>
+.mescroll {
+  position: fixed;
+  top: 5rem;
+  bottom: 6rem;
+  height: auto;
+}
 .dialogue {
   .user-header {
     height: 5rem;
@@ -128,11 +262,12 @@ export default {
       color: #9c9c99;
       font-size: 1.5rem;
       div {
-        .dialogue {
-          margin-right: 3.125rem;
-        }
-        i {
-          font-size: 1.75rem;
+        .huifu {
+          background: #f3f3f3;
+          color: #3c3c3c;
+          border-radius: 10px;
+          font-size: 1.25rem;
+          padding: 0.625rem;
         }
       }
     }
@@ -168,7 +303,7 @@ export default {
           border-radius: 5px;
           line-height: 3.75rem;
           text-align: center;
-          background: #007acc;
+          background: #80c2ff;
           color: #fff;
           margin-left: 1.875rem;
         }
@@ -210,17 +345,19 @@ export default {
         color: #9c9c9c;
       }
     }
-  }
-  .active {
-    color: #ff5959;
+    .activeBtn {
+      input {
+        border-bottom: 2px solid #007acc;
+      }
+      i {
+        color: #007acc;
+      }
+    }
   }
 }
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
+
+.btnActive {
+  background: #007acc !important;
 }
 </style>
 

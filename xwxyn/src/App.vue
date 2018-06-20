@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <!-- 6   61 -->
+    <!-- <h2>{{$route.query.wxUserId}}</h2>
+    <h2>{{$route.query.settingId}}</h2> -->
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
@@ -11,19 +14,62 @@
 <script>
 export default {
   name: 'app',
+  data() {
+    return {
+      wxUserId: '',
+      settingId: '',
+    }
+  },
+  created() {
+    if (localStorage.getItem("wxUserId") != null) {
+      this.wxUserId = localStorage.getItem("wxUserId");
+      this.settingId = localStorage.getItem("settingId");
+    } else {
+      this.wxUserId = this.$route.query.wxUserId;
+      localStorage.setItem('userId', this.wxUserId);
+
+      this.settingId = this.$route.query.settingId;
+      localStorage.setItem('userId', this.settingId);
+    }
+    //this.mescroll.hideTopBtn();
+
+  },
   mounted() {
     let htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
     let htmlDom = document.getElementsByTagName('html')[0];
     htmlDom.style.fontSize = htmlWidth / 40 + 'px';
     if (htmlWidth > 750) { htmlWidth = 750; htmlDom.style.fontSize = htmlWidth / 40 + 'px'; }
     //console.log(htmlWidth)
-  }
+  },
+
+
+  // activated() {
+  //   if (sessionStorage.getItem('scrollTop') != null) {
+  //     let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  //     scrollTop = parseInt(sessionStorage.getItem('scrollTop'));
+  //     // setTimeout(() => {
+  //     //   scrollTop = parseInt(sessionStorage.getItem('scrollTop'));
+  //     // }, 500)
+  //     console.log(scrollTop)
+  //   }
+  // }
+
+  // beforeRouteLeave(to, from, next) {
+  //   let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+  //   if (to.meta.keepAlive == true) {
+  //     console.log(to.meta.keepAlive)
+  //   }
+  //   next()
+  // },
 }
 </script>
 
 <style lang="less">
 @import '~vux/src/styles/reset.less';
-
+// .vux-swiper-item{
+//   transition:none;
+//   transform:none;
+// }
 * {
   padding: 0;
   margin: 0;

@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- <h2>{{ $route.params.id }}</h2> -->
-        <div class="article" v-for="(item,index) in list" :key="index">
+        <div class="article" v-for="(item,index) in list" :key="item.uuid">
             <div class="article-box">
                 <h1>{{item.title}}</h1>
                 <div>
@@ -18,7 +18,7 @@
                     </div>
                     <div class="message-box">
                         <span class="message" @click="go(item)">
-                            <i class="iconfont icon-liuyan" @click="$router.push('/message')"></i>
+                            <i class="iconfont icon-liuyan"></i>
                             <span>{{item.messageCount}}</span>
                         </span>
                         <i class="iconfont icon-shoucang" :class="{ active: isActive==1}" @click="toggle()"></i>
@@ -37,8 +37,8 @@ export default {
             list: [],
         }
     },
-    mounted() {
-        this.uuid = this.$route.params.id
+    activated() {
+        this.uuid = this.$route.params.id;
         this.$ajax({
             method: 'get',
             url: this.psta + '/getWxHealthLectureHallByUuid?uuid=' + this.uuid,
@@ -46,22 +46,24 @@ export default {
             .then(response => {
                 // console.log(response)
                 this.list = [response.data.data];
-            })  
+            })
     },
     methods: {
         toggle() {
             this.isActive = !this.isActive;
             console.log(Number(this.isActive))
+            // var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            // console.log(scrollTop)
         },
         go(item) {
             this.$router.push({ name: 'message', params: { id: item.uuid } });
         }
     },
-    watch: {
-        '$route'(to, from) {
-            console.log(to.path)
-        }
-    }
+    // watch: {
+    //     '$route'(to, from) {
+    //         console.log(to.path)
+    //     }
+    // }
 }
 </script>
 <style lang="less" scoped>
