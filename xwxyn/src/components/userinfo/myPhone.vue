@@ -10,29 +10,100 @@
                 <span>
                     手机号:
                 </span>
-                <input type="number" placeholder="请输入手机号">
+                <input type="number" v-model.trim="phone" placeholder="请输入手机号" oninput='if(value.length>11)value=value.slice(0,11)'>
             </div>
             <div class="Phone-input">
                 <span>
                     验证码:
                 </span>
-                <input type="number" placeholder="请输入验证码" style="width:40%">
-                <div class="btn-blue verify-btn">
+                <input type="number" v-model.trim="code" placeholder="请输入验证码" style="width:40%">
+                <div class="btn-blue verify-btn" @click="getCode()" v-show="show">
                     获取验证码
+                </div>
+                <div class="btn-blue verify-btn" v-show="!show">
+                    {{count}} s
                 </div>
             </div>
         </div>
-        <div class="btn-blue" style="margin-top:7rem;" @click="$router.push('/userTypeForm')">
+          <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
+        <div class="btn-blue" style="margin-top:7rem;" @click="sumbit">
             保存
         </div>
     </div>
 </template>
 <script>
+import { Toast, } from 'vux'
 export default {
+    components: {
+        Toast,
+    },
     data() {
         return {
-
+            phone:'',
+            code:'',
+            count: '',
+            show: true,
+            cancel:false,
+            timer: null,
+            cancelText:''
         }
+    },
+        methods: {
+         getCode(){
+          if(this.phone.length==''){
+               this.cancel = true;
+               this.cancelText = '请输入手机号码'
+         }
+         else{ 
+             if(!(/^1[345789][0-9]{9}$/.test(this.phone))){
+               this.cancel = true;
+               this.cancelText = '手机号码错误'
+           }
+           else{
+              if (!this.timer) {
+               this.$ajax({
+                method: 'get',
+                url: this.psta + '/getWxCode?phone='+ this.phone,
+                })
+                    .then(response => {
+                    console.log(response)
+                })
+                this.count = 60;
+                this.show = false;
+                this.timer = setInterval(() => {
+                  if (this.count > 0) {
+                    this.count--;
+                  } else {
+                    this.show = true;
+                    clearInterval(this.timer);
+                    this.timer = null;
+                  }
+                }, 1000)
+              }
+           }
+         }
+        },
+        sumbit(){
+            if(!(/^1[345789][0-9]{9}$/.test(this.phone))){
+                this.cancel = true;
+                this.cancelText = '请完成基本操作'
+            }else{
+                this.$ajax({
+                method: 'get',
+                url: this.psta + '/bindingWxPhone?wxUserId='+this.$parent.wxUserId+'&phone='+this.phone+'&code='+this.code,
+                })
+                    .then(response => {
+                    console.log(response)
+                    if(response.data.status==200){
+
+                    }else{
+                                            this.cancel = true;
+                    this.cancelText = response.data.message;
+                    }
+                })
+            }
+             
+        }   
     }
 }
 </script>

@@ -6,7 +6,9 @@
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
-    <router-view v-if="!$route.meta.keepAlive"></router-view>
+    <transition name="slide-fade">
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </transition>
     <!-- <Footer></Footer> -->
   </div>
 </template>
@@ -233,7 +235,7 @@ img[lazy='loaded'] {
   .weui-label {
     font-size: 1.5rem;
     color: #454545;
-    margin-left: -5px;
+    margin-left: -3px;
   }
   .vux-cell-placeholder {
     font-size: 1.5rem;
@@ -295,5 +297,10 @@ img[lazy='loaded'] {
 .weui-toast {
   padding: 10px !important;
   min-width: 15.625rem !important;
+}
+
+//tab下横线
+.vux-tab-ink-bar{
+  z-index: 999;
 }
 </style>

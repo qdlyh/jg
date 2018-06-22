@@ -8,7 +8,7 @@
             <div class="banner">
                 <swiper :options="swiperOption" ref="mySwiper" v-if='banner.length>0'>
                     <swiper-slide v-for="(img,index) in banner" :key="index">
-                        <img :src="img.image" alt="">
+                        <img :src="img.image" alt="" style="width100%;height: 17.5rem;">
                     </swiper-slide>
                     <div class="swiper-pagination" slot="pagination"></div>
                 </swiper>
@@ -111,13 +111,16 @@ export default {
     methods: {
         goItem(i) {
             if (i == 0) {
-                this.$router.push('/expertAll0')
+                this.$router.push('/forum')
             }
             if (i == 1) {
                 this.$router.push('/userType')
             }
             if (i == 2) {
                 this.$router.push('/articleList')
+            }
+            if(i==3){
+                this.$router.push('/expertList')
             }
         },
         goItem1(i) {
@@ -140,10 +143,6 @@ export default {
       height: 17.5rem;
       .swiper-slide {
         height: 17.5rem;
-        img {
-          width: 100%;
-          height: 100%;
-        }
       }
     }
     .item-img {

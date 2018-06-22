@@ -1,23 +1,25 @@
 <template>
     <div>
-        <div class="userType">
+        <div class="userType" v-for="(item,index) in list" :key="item.uuid">
             <div class="my-type">
-                <div class="show-text" v-show="isText">
+                <!-- <div class="show-text" v-show="isText">
                     <div class="shade" @click="isText=false"></div>
-                    <div class="my-text">的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢
-                    </div>
-                </div>
-                <div class="type-color" :class="{active1:type}">
+                    <div class="my-text">{{item.signature}}</div>
+                </div> -->
+                <div class="type-color" :id="'active'+settingId">
                     <p class="redact" @click="$router.push('/userTypeForm')">编辑</p>
                     <div class="user-msg">
                         <div>
-                            <img src="../../assets/logo.png" alt="">
+                            <img v-lazy="item.image" alt="">
                         </div>
-                        <p>娃哈哈</p>
-                        <i>会员</i>
+                        <p>{{item.nickName}}</p>
+                        <i v-if="item.settingId==61">会员</i>
+                        <i v-if="item.settingId==62">专家：{{item.label}}</i>
+                        <i v-if="item.settingId==63">志愿者</i>
+                        <i v-if="item.settingId==64">企业：{{item.label}}</i>
                     </div>
                 </div>
-                <div class="typeBtn-box">
+                <div class="typeBtn-box" v-if="item.settingId==61">
                     <div class="typeBtn active2">
                         <a href="javascript:;">我是专家</a>
                     </div>
@@ -28,42 +30,31 @@
                         <a href="javascript:;">我是企业家</a>
                     </div>
                 </div>
-                <!-- <div class="text-type" @click="isText=true">
-                    <p class="text">的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢的撒欢地搜的撒欢
-                    </p>
-                </div> -->
+                <div class="text-type" v-if="item.settingId!=61">
+                    <p class="text">{{item.signature}}</p>
+                </div>
             </div>
             <div class="userType-link-box">
-                <div class="userType-link" @click="$router.push('/myWallet')">
+                <div class="userType-link" v-if="item.settingId!=63">
                     <group>
-                        <cell title="钱包" value="10" is-link></cell>
+                        <cell title="购物车" :value="item.spCount" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link">
+                <div class="userType-link" v-if="item.settingId!=63">
                     <group>
-                        <cell title="购物车" value="10" is-link></cell>
+                        <cell title="订单" :value="item.orderCount" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link">
+                <div class="userType-link" v-if="item.settingId!=63" @click="$router.push('/myAddress')">
                     <group>
-                        <cell title="订单" value="10" is-link></cell>
-                    </group>
-                </div>
-                <div class="userType-link" @click="$router.push('/myAddress')">
-                    <group>
-                        <cell title="收货地址" value="10" is-link></cell>
+                        <cell title="收货地址" :value="item.addressCount" is-link></cell>
                     </group>
                 </div>
             </div>
 
             <!-- 企业 -->
             <div class="userType-link-box">
-                <div class="userType-link">
-                    <group>
-                        <cell title="钱包" value="10" is-link></cell>
-                    </group>
-                </div>
-                <div class="userType-link" @click="$router.push('/enterText')">
+                <div class="userType-link" v-if="item.settingId==63" @click="$router.push('/enterText')">
                     <group>
                         <cell title="入驻" is-link></cell>
                     </group>
@@ -71,12 +62,12 @@
             </div>
 
             <div class="userType-link-box">
-                <div class="userType-link" @click="$router.push('/myAttention')">
+                <div class="userType-link" v-if="item.settingId!=62" @click="$router.push('/myAttention')">
                     <group>
                         <cell title="我的关注" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link">
+                <div class="userType-link" v-if="item.settingId==62">
                     <group>
                         <cell title="我的博文" is-link></cell>
                     </group>
@@ -86,12 +77,12 @@
                         <cell title="我的收藏" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link" @click="$router.push('/myIssue')">
+                <div class="userType-link" v-if="item.settingId==61" @click="$router.push('/myIssue')">
                     <group>
                         <cell title="我的提问" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link">
+                <div class="userType-link" v-if="item.settingId==62">
                     <group>
                         <cell title="我的回答" is-link></cell>
                     </group>
@@ -101,7 +92,7 @@
             <div class="userType-link-box">
                 <div class="userType-link" @click="$router.push('/myMessage')">
                     <group>
-                        <cell title="消息通知" value="10" is-link></cell>
+                        <cell title="消息通知" is-link></cell>
                     </group>
                 </div>
                 <div class="userType-link">
@@ -109,6 +100,9 @@
                         <cell title="历史记录" is-link></cell>
                     </group>
                 </div>
+            </div>
+
+            <div class="userType-link-box">
                 <div class="userType-link" @click="$router.push('/safety')">
                     <group>
                         <cell title="设置" is-link></cell>
@@ -128,26 +122,39 @@ export default {
     },
     data() {
         return {
-            type: true,
+            settingId:'',
             isText: false,
+            list: [],
         }
+    },
+    mounted() {
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxPersonalCenterInFo?wxUserId=' + 6//this.$parent.wxUserId,
+        })
+            .then(response => {
+                //console.log(response)
+                this.list = [response.data.data];
+                this.settingId = response.data.data.settingId;
+                //console.log(this.settingId)
+            })
     }
 }
 </script>
 <style lang="less" scoped>
-.active1 {
+#active61 {
   //游客
   background: #00cc9e;
 }
-.active2 {
+#active62 {
   //专家
   background: #23c3ff;
 }
-.active3 {
+#active63 {
   //志愿者
   background: #ff6b6d;
 }
-.active4 {
+#active64 {
   //企业
   background: #ffa34c;
 }

@@ -22,4 +22,11 @@ new Vue({
   render: h => h(App)
 }).$mount('#app-box')
 
-
+router.beforeEach((to, from, next) => {
+  //MeScroll.prototype.hideTopBtn(); //MeScroll返回顶部按钮
+  if (to.from) {
+    console.log(to)
+    alert('1')
+  }
+  next();
+});

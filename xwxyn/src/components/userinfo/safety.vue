@@ -26,7 +26,7 @@ export default {
             email: '',
             isText:'绑定手机',
         }
-    }
+    },
 }
 </script>
 <style lang="less" scoped>

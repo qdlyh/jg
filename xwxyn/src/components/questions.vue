@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="questions">
+        <div class="questions" v-show="show==1">
             <div class="questions-box">
                 <div class="questions-title">填写问题</div>
                 <div class="input">
@@ -14,21 +14,27 @@
                 </div>
             </div>
         </div>
+        <div v-show="show==2">
+            <msg :title="('问题已提交')" :description="('是否前往查看我的问题')"></msg>
+            <x-button type="primary" style="width:80%;" link="BACK">查看我的问题</x-button>
+        </div>
         <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
     </div>
 </template>
 <script>
-import { Toast } from 'vux'
-
+import { Toast, Msg, XButton } from 'vux'
 export default {
     components: {
         Toast,
+        Msg,
+        XButton
     },
     data() {
         return {
             title: '',
             describe: '',
             cancel: false,
+            show: 1,
             cancelText: '',
         }
     },
@@ -36,7 +42,7 @@ export default {
         sumbit() {
             if (this.title.length == 0 || this.describe == 0) {
                 this.cancel = true;
-                this.cancelText = '请填写完整的问题';
+                this.cancelText = '想说什么呢';
             } else {
                 let formData = new FormData();
                 formData.append('expertsUserId', this.$route.params.id);
@@ -50,6 +56,7 @@ export default {
                 })
                     .then(response => {
                         console.log(response)
+                        this.show = 2;
                     })
             }
         }
@@ -57,6 +64,20 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+/* 可以设置不同的进入和离开动画 */
+/* 设置持续时间和动画函数 */
+.slide-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-leave-active {
+  transition: all 0.1s cubic-bezier(1, 0.5, 0.8, 1);
+}
+.slide-fade-enter, .slide-fade-leave-to
+/* .slide-fade-leave-active for below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+
 .questions-box {
   .questions-title {
     font-size: 1.75rem;

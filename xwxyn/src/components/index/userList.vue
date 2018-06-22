@@ -5,13 +5,13 @@
         <span @click="headerTab(index)" :class="{ headerActive: active == index }" v-for="(item,index) in header">{{item.text}}</span>
       </div> -->
       <tab>
-        <tab-item @on-item-click="onItemClick(item)" :selected="item.type==63" v-for="(item,index) in tab" :key="index">{{item.name}}</tab-item>
+        <tab-item @on-item-click="onItemClick(index)" :selected="index==isShow" v-for="(item,index) in tab" :key="index">{{item.tab}}</tab-item>
       </tab>
 
-      <div id="mescroll" class="mescroll">
-        <div id="dataList" class="data-list" v-cloak>
-          <div class="personnel" v-for="(item,index) in list" :key="index">
-            <div class="personnel-box">
+      <div id="mescroll0" class="mescroll">
+        <div id="dataList0" class="data-list" v-cloak>
+          <div class="personnel" v-show="isShow==0">
+            <div class="personnel-box" v-for="(item,index) in list0" :key="index">
               <div class="user-text">
                 <span>
                   <img v-lazy="item.image" alt="">
@@ -42,20 +42,22 @@
         </div>
       </div>
 
-      <!-- <div id="mescroll" class="mescroll">
-        <div id="dataList" class="data-list" v-cloak>
-          <div class="volunteer" v-for="(item,index) in list" :key="item.uuid">
-            <div class="volunteer-box" @click="$router.push('/user')">
-              <img v-lazy="item.image" alt="">
-              <span>
-                <h1>{{item.nickName}}</h1>
-                <i>志愿者</i>
-                <p>2013年参加志愿2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作2013年参加志愿工作工作</p>
-              </span>
+      <div id="mescroll1" class="mescroll">
+        <div id="dataList1" class="data-list" v-cloak>
+          <div class="volunteer" v-show="isShow==1">
+            <div v-for="(item,index) in list1" :key="item.uuid">
+              <div class="volunteer-box" @click="$router.push('/user')">
+                <img v-lazy="item.image" alt="">
+                <span>
+                  <h1>{{item.nickName}}</h1>
+                  <i>{{item.signature}}</i>
+                  <p>2013年参加志愿</p>
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div> -->
+      </div>
 
     </div>
   </div>
@@ -70,73 +72,129 @@ export default {
   },
   data() {
     return {
-      tab: [{ name: '慈善企业', type: 63 }, { name: '志愿者', type: 64 }],
-      list: [],
-      type: 63,
+      tab: [{ tab: '慈善企业' }, { tab: '志愿者' }],
+      isShow: 0,
+      mescrollArr: new Array(2),
+      list0: [],
+      list1: [],
     }
   },
   mounted() {
-    this.mescroll = new MeScroll("mescroll", {
-      up: {
-        auto: true,//初始化完毕,是否自动触发上拉加载的回调
-        isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
-        callback: this.upCallback, //上拉加载的回调
-        offset: 100,
-        noMoreSize: 5,
-        //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-        htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-        toTop: { //配置回到顶部按钮
-          src: "../../static/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
-          //offset: 1000
-        },
-        empty: { //配置列表无任何数据的提示
-          warpId: "dataList",
-          icon: "../../static/mescroll-empty.png",
-          tip: "亲,暂无相关数据哦~",
-        },
-      }
-    });
+    this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
   },
+  activated() {
+    //this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
+  },
+  deactivated() {
+    // console.log(this.initMescroll("mescroll0", "dataList0").length)
+    // if (!this.list0.length) {
+    //this.mescroll.destroy();
+    //     console.log('1')
+    // }
+  },
+
   methods: {
-    onItemClick(item) {
-      this.type = item.type;
-      this.list = [];
-      this.mescroll.resetUpScroll();
+    go() {
+      //console.log(item.uuid)
+      this.$router.push({ name: 'questions', params: { id: 0 } });
+      //this.mescroll.destroy();
+    },
+
+    onItemClick(index) {
+      if (this.isShow != index) {
+        this.isShow = index;
+        if (this.mescrollArr[index] == null) {
+          this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
+        }
+      }
+    },
+    initMescroll(mescrollId, clearEmptyId) {
+      this.mescroll = new MeScroll(mescrollId, {
+        up: {
+          auto: false,//初始化完毕,是否自动触发上拉加载的回调
+          isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+          callback: this.upCallback, //上拉加载的回调
+          offset: 100,
+          noMoreSize: 5,
+          //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
+          htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+          empty: { //配置列表无任何数据的提示
+            warpId: clearEmptyId,
+            icon: "../../static/mescroll-empty.png",
+            tip: "亲,暂无相关数据哦~",
+          },
+        }
+      });
+      return this.mescroll;
     },
 
     upCallback(page) {
-      this.getListDataFromNet(page.num, page.size, (curPageData) => {
+      let dataIndex = this.isShow;
+      this.getListDataFromNet(dataIndex, page.num, page.size, (curPageData) => {
         //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
-        if (page.num == 1); this.list1 = [];
-        let totalPage = this.total;
-        //更新列表数据
-        this.list = this.list.concat(curPageData);
-        this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+        let totalPage = this.total
+        switch (dataIndex) {
+          case 0:
+            if (page.num == 1) this.list0 = [];
+            this.list0 = this.list0.concat(curPageData);
+            // this.mescroll.endByPage(curPageData.length, totalPage);
+            break;
+          case 1:
+            if (page.num == 1) this.list1 = [];
+            this.list1 = this.list1.concat(curPageData);
+            break;
+          case 2:
+            if (page.num == 1) this.list2 = [];
+            this.list2 = this.list2.concat(curPageData);
+            break;
+        }
+        this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
+        console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
       }, function () {
-        this.mescroll.endErr();
+        this.mescrollArr[dataIndex].endErr();
       });
     },
 
-
-    getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+    getListDataFromNet(dataIndex, pageNum, pageSize, successCallback, errorCallback) {
+      let type = '';
+      if (dataIndex == 0) {
+        type = 63
+      }
+      if (dataIndex == 1) {
+        type = 64
+      }
       setTimeout(() => {
         this.$ajax({
           method: 'get',
-          url: this.psta + '/getWxCharityYouAndMe?type=' + this.type + '&page=' + pageNum + '&size=' + pageSize,
+          url: this.psta + '/getWxCharityYouAndMe?type=' + type + '&page=' + pageNum + '&size=' + pageSize,
         })
           .then(response => {
             //console.log(response)
             let listData = [];
             let listPage = response.data.data;
             this.total = response.data.total;
-            for (let i = 0; i < listPage.length; i++) {
-              listData.push(listPage[i])
+            if (dataIndex == 0) {
+              for (let i = 0; i < listPage.length; i++) {
+                listData.push(listPage[i])
+              }
+            }
+
+            if (dataIndex == 1) {
+              for (let i = 0; i < listPage.length; i++) {
+                listData.push(listPage[i])
+              }
+            }
+
+            if (dataIndex == 2) {
+              for (let i = 0; i < listPage.length; i++) {
+                listData.push(listPage[i])
+              }
             }
             successCallback && successCallback(listData);//成功回调
           });
       }, 500)
     }
-  }
+  },
 }
 </script>
 

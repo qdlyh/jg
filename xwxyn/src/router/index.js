@@ -32,7 +32,11 @@ const router = new Router({
       path: '/userList',
       name: 'userList',
       component: () =>
-        import ('@/components/index/userList')
+        import ('@/components/index/userList'),
+      meta: {
+        title: '文章',
+        keepAlive: true
+      }
     },
     {
       //文章列表
@@ -226,7 +230,7 @@ const router = new Router({
         import ('@/components/user')
     },
     {
-      path: '/questions',
+      path: '/questions/:id',
       name: 'questions',
       component: () =>
         import ('@/components/questions')
@@ -258,10 +262,10 @@ const router = new Router({
     },
     {
       //专家大众天地
-      path: '/expertAll0',
-      name: 'expertAll0',
+      path: '/forum',
+      name: 'forum',
       component: () =>
-        import ('@/components/expert/expertAll0'),
+        import ('@/components/forum/forum'),
       meta: {
         title: '专家列表',
         keepAlive: true
@@ -269,23 +273,34 @@ const router = new Router({
     },
     {
       //专家大众天地
-      path: '/expertAll1',
-      name: 'expertAll1',
+      path: '/forumArticle/:id',
+      name: 'forumArticle',
       component: () =>
-        import ('@/components/expert/expertAll1'),
+        import ('@/components/forum/forumArticle'),
       meta: {
-        title: '资讯专区',
+        title: '文章',
         keepAlive: true
       }
     },
     {
       //专家大众天地
-      path: '/expertAll2',
-      name: 'expertAll2',
+      path: '/forumMsg/:id',
+      name: 'forumMsg',
       component: () =>
-        import ('@/components/expert/expertAll2'),
+        import ('@/components/forum/forumMsg'),
       meta: {
-        title: '我的提问',
+        title: '文章',
+        keepAlive: true
+      }
+    },
+    {
+      //专家大众天地
+      path: '/forumReply/:id',
+      name: 'forumReply',
+      component: () =>
+        import ('@/components/forum/forumReply'),
+      meta: {
+        title: '回复',
         keepAlive: true
       }
     },
@@ -294,7 +309,11 @@ const router = new Router({
       path: '/expertList',
       name: 'expertList',
       component: () =>
-        import ('@/components/expert/expertList')
+        import ('@/components/expert/expertList'),
+      meta: {
+        title: '文章',
+        keepAlive: true
+      }
     }
   ]
 })

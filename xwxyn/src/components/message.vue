@@ -26,11 +26,11 @@
                 <div>
                   <span class="dialogue" @click="go(item)" v-if="item.replyCount>0">查看对话</span>
                   <span class="huifu" @click="replyBtn(index,item)" v-if="item.wxUserId!=$parent.wxUserId">
-                    <i v-if="item.replyCount>0">{{item.replyCount}}条</i>
+                    <i v-if="item.replyCount>0">{{item.replyCount}}</i>
                     回复
                   </span>
                   <span class="huifu" v-if="item.replyCount>0&&item.wxUserId==$parent.wxUserId">
-                    <i>{{item.replyCount}}条</i>
+                    <i>{{item.replyCount}}</i>
                     我的回复
                   </span>
                 </div>
