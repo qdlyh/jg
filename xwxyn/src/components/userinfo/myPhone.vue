@@ -95,10 +95,10 @@ export default {
                     .then(response => {
                     console.log(response)
                     if(response.data.status==200){
-
+                        this.$router.push('/safety')
                     }else{
-                                            this.cancel = true;
-                    this.cancelText = response.data.message;
+                        this.cancel = true;
+                        this.cancelText = response.data.message;
                     }
                 })
             }
