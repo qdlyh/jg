@@ -3,7 +3,7 @@
         <div class="myPhone">
             <div class="user-header">
                 <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-                <h1>手机验证</h1>
+                <h1>绑定手机</h1>
                 <i></i>
             </div>
             <div class="Phone-input">
@@ -25,7 +25,7 @@
                 </div>
             </div>
         </div>
-          <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
+        <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
         <div class="btn-blue" style="margin-top:7rem;" @click="sumbit">
             保存
         </div>
@@ -39,73 +39,80 @@ export default {
     },
     data() {
         return {
-            phone:'',
-            code:'',
+            phone: '',
+            code: '',
             count: '',
             show: true,
-            cancel:false,
+            cancel: false,
             timer: null,
-            cancelText:''
+            cancelText: ''
         }
     },
-        methods: {
-         getCode(){
-          if(this.phone.length==''){
-               this.cancel = true;
-               this.cancelText = '请输入手机号码'
-         }
-         else{ 
-             if(!(/^1[345789][0-9]{9}$/.test(this.phone))){
-               this.cancel = true;
-               this.cancelText = '手机号码错误'
-           }
-           else{
-              if (!this.timer) {
-               this.$ajax({
-                method: 'get',
-                url: this.psta + '/getWxCode?phone='+ this.phone,
-                })
-                    .then(response => {
-                    console.log(response)
-                })
-                this.count = 60;
-                this.show = false;
-                this.timer = setInterval(() => {
-                  if (this.count > 0) {
-                    this.count--;
-                  } else {
-                    this.show = true;
-                    clearInterval(this.timer);
-                    this.timer = null;
-                  }
-                }, 1000)
-              }
-           }
-         }
+    methods: {
+        getCode() {
+            if (this.phone.length == '') {
+                this.cancel = true;
+                this.cancelText = '请输入手机号码'
+            }
+            else {
+                if (!(/^1[345789][0-9]{9}$/.test(this.phone))) {
+                    this.cancel = true;
+                    this.cancelText = '手机号码错误'
+                }
+                else {
+                    if (!this.timer) {
+                        this.$ajax({
+                            method: 'get',
+                            url: this.psta + '/getWxCode?phone=' + this.phone,
+                        })
+                            .then(response => {
+                                //console.log(response)
+                            })
+                        this.count = 60;
+                        this.show = false;
+                        this.timer = setInterval(() => {
+                            if (this.count > 0) {
+                                this.count--;
+                            } else {
+                                this.show = true;
+                                clearInterval(this.timer);
+                                this.timer = null;
+                            }
+                        }, 1000)
+                    }
+                }
+            }
         },
-        sumbit(){
-            if(!(/^1[345789][0-9]{9}$/.test(this.phone))){
+        sumbit() {
+            if (!(/^1[345789][0-9]{9}$/.test(this.phone))) {
                 this.cancel = true;
                 this.cancelText = '请完成基本操作'
-            }else{
+            } else {
                 this.$ajax({
-                method: 'get',
-                url: this.psta + '/bindingWxPhone?wxUserId='+this.$parent.wxUserId+'&phone='+this.phone+'&code='+this.code,
+                    method: 'get',
+                    url: this.psta + '/bindingWxPhone?wxUserId=' + this.$parent.wxUserId + '&phone=' + this.phone + '&code=' + this.code,
                 })
                     .then(response => {
-                    console.log(response)
-                    if(response.data.status==200){
-                        this.$router.push('/safety')
-                    }else{
-                        this.cancel = true;
-                        this.cancelText = response.data.message;
-                    }
-                })
+                        //console.log(response)
+                        if (response.data.status == 200) {
+                            this.$router.push('/safety')
+                        } else {
+                            this.cancel = true;
+                            this.cancelText = response.data.message;
+                        }
+                    })
             }
-             
-        }   
+
+        }
     }
 }
+
+                // if (!(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(this.email))) {
+                //     this.cancel = true;
+                //     this.cancelText = '邮箱格式错误'
+                //     have = false;
+                //     return false;
+                // }
 </script>
 <style lang="less" scoped>
 .myPhone {

@@ -2,11 +2,7 @@
     <div>
         <div class="userType" v-for="(item,index) in list" :key="item.uuid">
             <div class="my-type">
-                <!-- <div class="show-text" v-show="isText">
-                    <div class="shade" @click="isText=false"></div>
-                    <div class="my-text">{{item.signature}}</div>
-                </div> -->
-                <div class="type-color" :id="'active'+settingId">
+                <div class="type-color" :id="'active'+item.settingId">
                     <p class="redact" @click="$router.push('/userTypeForm')">编辑</p>
                     <div class="user-msg">
                         <div>
@@ -14,16 +10,16 @@
                         </div>
                         <p>{{item.nickName}}</p>
                         <i v-if="item.settingId==61">会员</i>
-                        <i v-if="item.settingId==62">专家：{{item.label}}</i>
+                        <i v-if="item.settingId==62">专家</i>
                         <i v-if="item.settingId==63">志愿者</i>
-                        <i v-if="item.settingId==64">企业：{{item.label}}</i>
+                        <i v-if="item.settingId==64">企业</i>
                     </div>
                 </div>
                 <div class="typeBtn-box" v-if="item.settingId==61">
                     <div class="typeBtn active2">
-                        <a href="javascript:;">我是专家</a>
+                        <a href="javascript:;" @click="$router.push({ name: 'resume', params: { id: 0 } })">我是专家</a>
                     </div>
-                    <div class="typeBtn active3" @click="$router.push('/volunteer')">
+                    <div class="typeBtn active3" @click="$router.push({ name: 'resume', params: { id: 1 } })">
                         <a href="javascript:;">我是志愿者</a>
                     </div>
                     <div class="typeBtn active4" @click="$router.push('/enterprise')">
@@ -67,22 +63,22 @@
                         <cell title="我的关注" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link" v-if="item.settingId==62">
+                <div class="userType-link" v-if="item.settingId==62" @click="$router.push('/myArticle')">
                     <group>
                         <cell title="我的博文" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link" @click="$router.push('/mySchistory')">
+                <div class="userType-link" @click="$router.push({ name: 'mySchistory', params: { id: 4 } })">
                     <group>
                         <cell title="我的收藏" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link" v-if="item.settingId==61" @click="$router.push('/myIssue')">
+                <div class="userType-link" v-if="item.settingId==61" @click="$router.push({ name: 'myIssue', params: { id: 5 } })">
                     <group>
                         <cell title="我的提问" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link" v-if="item.settingId==62">
+                <div class="userType-link" v-if="item.settingId==62" @click="$router.push({ name: 'myIssue', params: { id: 6 } })">
                     <group>
                         <cell title="我的回答" is-link></cell>
                     </group>
@@ -95,7 +91,7 @@
                         <cell title="消息通知" is-link></cell>
                     </group>
                 </div>
-                <div class="userType-link">
+                <div class="userType-link" @click="$router.push({ name: 'mySchistory', params: { id: 8 } })">
                     <group>
                         <cell title="历史记录" is-link></cell>
                     </group>
@@ -122,7 +118,6 @@ export default {
     },
     data() {
         return {
-            settingId:'',
             isText: false,
             list: [],
         }
@@ -130,13 +125,11 @@ export default {
     mounted() {
         this.$ajax({
             method: 'get',
-            url: this.psta + '/getWxPersonalCenterInFo?wxUserId=' + 6//this.$parent.wxUserId,
+            url: this.psta + '/getWxPersonalCenterInFo?wxUserId=' + this.$parent.wxUserId,
         })
             .then(response => {
                 //console.log(response)
                 this.list = [response.data.data];
-                this.settingId = response.data.data.settingId;
-                //console.log(this.settingId)
             })
     }
 }
@@ -174,13 +167,16 @@ export default {
       .user-msg {
         padding: 4.6875rem 0 0 1.875rem;
         display: flex;
+        position: relative;
         p {
           margin-top: 1.5rem;
           font-size: 2rem;
           color: #fff;
         }
         i {
-          margin: 5.5rem 0 0 -6rem;
+          position: absolute;
+          left: 11rem;
+          bottom: 0;
           font-size: 1.5rem;
           color: #9c9c9c;
         }

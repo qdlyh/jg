@@ -117,6 +117,7 @@ export default {
           width: 6.25rem;
           height: 3rem;
           border-radius: 15px;
+          background: #ff6c6c;
           color: #fff;
           font-size: 1.5rem;
           text-align: center;
@@ -200,7 +201,7 @@ export default {
   }
 }
 .active {
-  background: #9c9c9c;
+  background: #9c9c9c !important;
 }
 </style>
 

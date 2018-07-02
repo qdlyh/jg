@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="introduce">
+    <div class="introduce" v-if="list.length">
       <div class="user-header">
         <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
         <h1>产品介绍</h1>
@@ -11,10 +11,11 @@
         <img v-lazy="item.image" alt="">
         <p v-html="item.content" class="v-html"></p>
       </div>
+      <div class="btn-blue" @click="$router.push('/introduceForm')">
+        安装申请
+      </div>
     </div>
-    <div class="btn-blue" @click="$router.push('/introduceForm')">
-      安装申请
-    </div>
+    <loading v-if="!list.length"></loading>
   </div>
 </template>
 
@@ -25,7 +26,7 @@ export default {
       list: [],
     }
   },
-  mounted() {
+  activated() {
     this.$ajax({
       method: 'get',
       url: this.psta + '/getWxIntestinalHealth',
@@ -34,10 +35,6 @@ export default {
         //console.log(response)
         this.list = response.data.data;
       })
-      .catch(error => {
-        console.log(error);
-        //alert('网络错误，不能访问');
-      });
   },
 }
 </script>

@@ -99,7 +99,6 @@ export default {
         this.mescroll.destroy();
     },
     methods: {
-
         toggle(item) {
             item.isPraise = !item.isPraise;
             let formData = new FormData();

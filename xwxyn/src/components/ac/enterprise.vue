@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="enterprise">
+        <div class="enterprise" v-show="show==0">
             <input type="file" id="file-img" @change="onChange" hidden>
             <input type="file" id="file-camera" accept="image/*" capture="camera" @change="onChange" hidden>
             <div class="user-header">
@@ -37,10 +37,10 @@
             <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
             <div class="btn-blue" style="margin-top:100px;" @click="submit">提交</div>
         </div>
-        <!-- <div>
+        <div v-show="show==1">
             <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您')"></msg>
-            <x-button type="primary" style="width:80%;" link="/userType">返回个人中心</x-button>
-        </div> -->
+            <x-button type="primary" style="width:80%;" link="BACK">返回个人中心</x-button>
+        </div>
     </div>
 </template>
 <script>
@@ -55,6 +55,7 @@ export default {
     },
     data() {
         return {
+            show: 0,
             num: null,
             Image: '',
             Images: '',
@@ -69,7 +70,7 @@ export default {
     },
     methods: {
         click(key) {
-            let image = document.querySelector("#file-img");
+            let divImage = document.querySelector("#file-img");
             let camera = document.querySelector("#file-camera");
             if (key == 'menu1') {
                 //设置重复选择同一张图片，以免重新选择照片或者拍照file的值还是前一张图片
@@ -78,7 +79,7 @@ export default {
             }
             if (key == 'menu2') {
                 document.querySelector("#file-img").value = null;
-                image.click();
+                divImage.click();
             }
         },
         showBtn(i) {
@@ -116,12 +117,26 @@ export default {
             }
         },
         submit() {
-            if (this.Image == '' || this.Images == '' || this.isActive == false) {
+            let have = true;
+            if (this.Image == '' || this.Images == '') {
+                have = false;
                 this.cancel = true;
                 this.cancelText = '请上传完整信息'
-            } else {
-                this.cancel = true;
-                this.cancelText = '上传成功';
+            }
+            if (have) {
+                let formData = new FormData();
+                formData.append('wxUserId', this.$parent.wxUserId);
+                formData.append('image01', this.Image);
+                formData.append('image02', this.Images);
+                this.$ajax({
+                    method: 'post',
+                    url: this.psta + '/submitCertification03',
+                    data: formData
+                })
+                    .then(response => {
+                        // console.log(response)
+                        this.show = 1;
+                    })
             }
         }
     }

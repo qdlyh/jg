@@ -1,23 +1,24 @@
 <template>
     <div>
-        <div class="index">
+        <div class="index" v-show="banner.length">
             <div class="header">
                 <span @click="$router.push('/article')">健康讲堂</span>
             </div>
             <!--swiper-->
             <div class="banner">
                 <swiper :options="swiperOption" ref="mySwiper" v-if='banner.length>0'>
-                    <swiper-slide v-for="(img,index) in banner" :key="index">
-                        <img :src="img.image" alt="" style="width100%;height: 17.5rem;">
+                    <swiper-slide v-for="(img,index) in banner" :key="index" style="width: 100%;height: 17.5rem;">
+                        <div class="swiper-img" :style="'backgroundImage:url('+img.image+')'"></div>
+                        <!-- <img :src="img.image" alt=""> -->
                     </swiper-slide>
                     <div class="swiper-pagination" slot="pagination"></div>
                 </swiper>
-                <div class="item-img">
-                    <span v-for="(item,index) in listItem" :key="index" @click="goItem(index)">
-                        <img v-lazy="item.icon" alt="">
-                        <p>{{item.setting}}</p>
-                    </span>
-                </div>
+            </div>
+            <div class="item-img">
+                <span v-for="(item,index) in listItem" :key="index" @click="goItem(index)">
+                    <img v-lazy="item.icon" alt="">
+                    <p>{{item.setting}}</p>
+                </span>
             </div>
             <div class="header margin-header">
                 <span>慈善你我他</span>
@@ -29,7 +30,7 @@
                 </span>
             </div>
             <div class="header margin-header">
-                <span @click="$router.push('/articleList')">肠道保健</span>
+                <span @click="$router.push('/enterForm')">肠道保健</span>
             </div>
             <div class="item-2">
                 <div @click="$router.push('/introduce')">
@@ -37,13 +38,17 @@
                 </div>
             </div>
         </div>
+        <Footer></Footer>
+        <loading v-show="!banner.length"></loading>
     </div>
 </template>
 <script>
+import Footer from '@/components/common/Footer'
 import '../../../static/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 export default {
     components: {
+        Footer,
         swiper,
         swiperSlide,
     },
@@ -77,11 +82,6 @@ export default {
                 this.banner = response.data.data.images;
                 this.listItem = response.data.data.wxs
             })
-            .catch(error => {
-                console.log(error);
-                //alert('网络错误，不能访问');
-            });
-
         this.$ajax({
             method: 'get',
             url: this.psta + '/getWxHomeCharityYouAndMe',
@@ -90,10 +90,6 @@ export default {
                 //console.log(response)
                 this.item1 = response.data.data;
             })
-            .catch(error => {
-                console.log(error);
-                //alert('网络错误，不能访问');
-            });
 
         this.$ajax({
             method: 'get',
@@ -103,10 +99,6 @@ export default {
                 //console.log(response)
                 this.item2 = response.data.data.image;
             })
-            .catch(error => {
-                console.log(error);
-                //alert('网络错误，不能访问');
-            });
     },
     methods: {
         goItem(i) {
@@ -119,8 +111,11 @@ export default {
             if (i == 2) {
                 this.$router.push('/articleList')
             }
-            if(i==3){
+            if (i == 3) {
                 this.$router.push('/expertList')
+            }
+            if (i == 4) {
+                this.$router.push('/yzList')
             }
         },
         goItem1(i) {
@@ -138,34 +133,30 @@ export default {
 .index {
   .banner {
     background: #fff;
-    .swiper {
-      width: 100%;
-      height: 17.5rem;
-      .swiper-slide {
-        height: 17.5rem;
+  }
+  .item-img {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0.9375rem;
+    padding: 0 1.875rem;
+    width: 100%;
+    span {
+      border-radius: 0.625rem;
+      display: inline-block;
+           margin-right: 0.625rem;
+      width: 20%;
+      img {
+        width: 100%;
+        height: 6rem;
+      }
+      p {
+        text-align: center;
+        color: #454545;
+        font-size: 1.5rem;
       }
     }
-    .item-img {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 0.625rem;
-      padding: 0 1.875rem;
-      span {
-        border-radius: 0.625rem;
-        display: inline-block;
-        img {
-          width: 6rem;
-          height: 6rem;
-        }
-        p {
-          text-align: center;
-          color: #454545;
-          font-size: 1.5rem;
-        }
-      }
-      span:last-child {
-        margin-right: 0;
-      }
+    span:last-child {
+      margin-right: 0;
     }
   }
   .margin-header {
@@ -176,12 +167,14 @@ export default {
     justify-content: space-between;
     background: #fff;
     padding: 1.25rem 0.625rem;
+    width: 100%;
     span {
+      width: 50%;
       text-align: center;
       display: inline-block;
       border-radius: 10px;
       img {
-        width: 18.125rem;
+        width: 100%;
         height: 12.5rem;
       }
       p {
@@ -189,9 +182,9 @@ export default {
         color: #454545;
       }
     }
-    // span:nth-child(1) {
-    //   margin: 0 0.625rem 0 1.875rem;
-    // }
+    span:nth-child(1) {
+      margin-right: 0.625rem;
+    }
     // span:nth-child(2) {
     //   margin-right: 1.875rem;
     // }

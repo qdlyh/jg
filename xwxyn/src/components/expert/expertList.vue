@@ -40,15 +40,19 @@
       <div id="mescroll2" class="mescroll" v-show="isShow==2">
         <div id="dataList2" class="data-list" v-cloak>
           <div class="expert-article" v-for="(item,index) in list2" :key="item.uuid">
-            <h1>{{item.author}}</h1>
-            <img v-lazy="item.image" alt="">
-            <div class="article-box-bottom">
-              <div class="article-msg">
-                <span>1586浏览</span>
-                <span>126评论</span>
+            <div @click="$router.push({ name: 'article', params: { id: item.uuid } })">
+              <h1>{{item.title}}</h1>
+              <div class="article-img">
+                <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
               </div>
-              <div>
-                {{item.modifyDate}}
+              <div class="article-box-bottom">
+                <div class="article-msg">
+                  <span>{{item.count}}浏览</span>
+                  <span>{{item.messageCount}}评论</span>
+                </div>
+                <div>
+                  {{item.modifyDate}}
+                </div>
               </div>
             </div>
           </div>
@@ -107,11 +111,11 @@ export default {
     initMescroll(mescrollId, clearEmptyId) {
       this.mescroll = new MeScroll(mescrollId, {
         up: {
-          auto: false,//初始化完毕,是否自动触发上拉加载的回调
+          auto: true,//初始化完毕,是否自动触发上拉加载的回调
           isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
           callback: this.upCallback, //上拉加载的回调
-          offset: 100,
-          noMoreSize: 5,
+          offset: 300,
+          noMoreSize: 3,
           //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
           htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
           empty: { //配置列表无任何数据的提示
@@ -296,10 +300,16 @@ export default {
       -webkit-line-clamp: 3;
       overflow: hidden;
     }
-    img {
-      width: 13.75rem;
+    .article-img {
+      display: flex;
+      width: 100%;
       height: 8.75rem;
-      font-size: 8.75rem;
+      overflow: hidden;
+      img {
+        width: 30%;
+        height: 100%;
+        margin: 0 5px;
+      }
     }
     .article-box-bottom {
       display: flex;

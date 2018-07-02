@@ -1,15 +1,11 @@
 <template>
   <div id="app">
-    <!-- 6   61 -->
-    <!-- <h2>{{$route.query.wxUserId}}</h2>
-    <h2>{{$route.query.settingId}}</h2> -->
     <keep-alive>
       <router-view v-if="$route.meta.keepAlive"></router-view>
     </keep-alive>
-    <transition name="slide-fade">
+    <transition>
       <router-view v-if="!$route.meta.keepAlive"></router-view>
     </transition>
-    <!-- <Footer></Footer> -->
   </div>
 </template>
 
@@ -23,6 +19,7 @@ export default {
     }
   },
   created() {
+    this.wxUserId = 6;
     if (localStorage.getItem("wxUserId") != null) {
       this.wxUserId = localStorage.getItem("wxUserId");
       this.settingId = localStorage.getItem("settingId");
@@ -56,13 +53,15 @@ export default {
   //   }
   // }
 
-  // beforeRouteLeave(to, from, next) {
-  //   let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-  //   if (to.meta.keepAlive == true) {
-  //     console.log(to.meta.keepAlive)
+
+  // watch: {
+  //   '$route'(to, from) {
+  //     if(to.name=='yzArticle'){
+  //       this.isFooter = false;
+  //     }
+  //     //console.log(to.name)
   //   }
-  //   next()
-  // },
+  // }
 }
 </script>
 
@@ -92,6 +91,10 @@ body {
   // max-width: 750px;
   letter-spacing: 1px;
   -webkit-overflow-scrolling: touch; //在ios上滑动不流畅样式设置处理
+  //mescroll
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* 懒加载图片过渡效果 */
@@ -105,6 +108,16 @@ img[lazy='loaded'] {
   100% {
     opacity: 1;
   }
+}
+
+//首页轮播
+.swiper-img {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .header {
@@ -159,9 +172,19 @@ img[lazy='loaded'] {
   }
 }
 
+//义诊文章
+.yzArticle {
+  .v-html {
+    font-size: 1.5rem;
+    color: #454545;
+    img {
+      width: 100%;
+    }
+  }
+}
+
 //申请安装页面
 .input-box {
-  .weui-cells,
   .weui-cell {
     height: 6.25rem !important;
     line-height: 6.25rem !important;
@@ -172,24 +195,11 @@ img[lazy='loaded'] {
     font-size: 1.5rem;
   }
   //底部选择器左侧标题文字大小
-  .vux-label,
   .weui-label {
     width: 8.5rem !important;
     font-size: 1.5rem;
     color: #454545;
     margin-left: -7px;
-  }
-
-  //底部选择器文字
-  .weui-cell__ft {
-    text-align: left !important;
-  }
-  .vux-cell-placeholder {
-    color: #999;
-  }
-  //底部选择器
-  .weui-cells {
-    margin-top: 0 !important;
   }
   //选中颜色
   .vux-cell-value {
@@ -300,7 +310,14 @@ img[lazy='loaded'] {
 }
 
 //tab下横线
-.vux-tab-ink-bar{
+.vux-tab-ink-bar {
   z-index: 999;
+}
+
+//userTypeForm性别和城市选择
+.Form-user {
+  .vux-popup-picker-placeholder {
+    color: #454545 !important;
+  }
 }
 </style>

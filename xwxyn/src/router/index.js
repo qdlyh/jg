@@ -18,7 +18,11 @@ const router = new Router({
       path: '/introduce',
       name: 'introduce',
       component: () =>
-        import ('@/components/index/introduce')
+        import ('@/components/index/introduce'),
+      meta: {
+        title: '产品详情',
+        keepAlive: true
+      }
     },
     {
       //产品安装表
@@ -63,37 +67,64 @@ const router = new Router({
       component: () =>
         import ('@/components/userinfo/userTypeForm'),
       meta: {
-        title: '',
+        title: '信息编辑',
         keepAlive: true
       }
     },
     {
       //我的提问和回答
-      path: '/myIssue',
+      path: '/myIssue/:id',
       name: 'myIssue',
       component: () =>
-        import ('@/components/userinfo/myIssue')
+        import ('@/components/userinfo/myIssue'),
+      meta: {
+        title: '',
+        keepAlive: true
+      }
     },
     {
       //我的关注
       path: '/myAttention',
       name: 'myAttention',
       component: () =>
-        import ('@/components/userinfo/myAttention')
+        import ('@/components/userinfo/myAttention'),
+      meta: {
+        title: '我的关注',
+        keepAlive: true
+      }
     },
     {
       //收藏和历史记录
-      path: '/mySchistory',
+      path: '/mySchistory/:id',
       name: 'mySchistory',
       component: () =>
-        import ('@/components/userinfo/mySchistory')
+        import ('@/components/userinfo/mySchistory'),
+      meta: {
+        title: '我的关注',
+        keepAlive: true
+      }
+    },
+    {
+      //我的博文
+      path: '/myArticle',
+      name: 'myArticle',
+      component: () =>
+        import ('@/components/userinfo/myArticle'),
+      meta: {
+        title: '我的博文',
+        keepAlive: true
+      }
     },
     {
       //我的消息
       path: '/myMessage',
       name: 'myMessage',
       component: () =>
-        import ('@/components/userinfo/myMessage')
+        import ('@/components/userinfo/myMessage'),
+        meta: {
+          title: '我的消息',
+          keepAlive: true
+        }
     },
     {
       //收货地址
@@ -114,14 +145,25 @@ const router = new Router({
       path: '/safety',
       name: 'safety',
       component: () =>
-        import ('@/components/userinfo/safety')
+        import ('@/components/userinfo/safety'),
+      meta: {
+        title: '账号安全',
+        keepAlive: true
+      }
     },
     {
-      //手机验证
+      //手机绑定
       path: '/myPhone',
       name: 'myPhone',
       component: () =>
         import ('@/components/userinfo/myPhone')
+    },
+    {
+      //邮箱绑定
+      path: '/myEmail',
+      name: 'myEmail',
+      component: () =>
+        import ('@/components/userinfo/myEmail')
     },
     {
       //我的钱包
@@ -180,11 +222,11 @@ const router = new Router({
         import ('@/components/enter/uploadFile')
     },
     {
-      //志愿者认证
-      path: '/volunteer',
-      name: 'volunteer',
+      //志愿者/专家认证
+      path: '/resume/:id',
+      name: 'resume',
       component: () =>
-        import ('@/components/ac/volunteer')
+        import ('@/components/ac/resume')
     },
     {
       //企业认证
@@ -224,10 +266,14 @@ const router = new Router({
       }
     },
     {
-      path: '/user',
+      path: '/user/:id',
       name: 'user',
       component: () =>
-        import ('@/components/user')
+        import ('@/components/user'),
+      meta: {
+        title: '用户详情',
+        keepAlive: true
+      }
     },
     {
       path: '/questions/:id',
@@ -244,10 +290,14 @@ const router = new Router({
     },
     {
       //义诊文章
-      path: '/yzArticle',
+      path: '/yzArticle/:id',
       name: 'yzArticle',
       component: () =>
-        import ('@/components/yizhen/yzArticle')
+        import ('@/components/yizhen/yzArticle'),
+      meta: {
+        title: '专家信息',
+        keepAlive: true
+      }
     },
     {
       //专家信息
@@ -277,10 +327,10 @@ const router = new Router({
       name: 'forumArticle',
       component: () =>
         import ('@/components/forum/forumArticle'),
-      meta: {
-        title: '文章',
-        keepAlive: true
-      }
+      // meta: {
+      //   title: '文章',
+      //   keepAlive: true
+      // }
     },
     {
       //专家大众天地
@@ -312,6 +362,7 @@ const router = new Router({
         import ('@/components/expert/expertList'),
       meta: {
         title: '文章',
+        require: '62',
         keepAlive: true
       }
     }

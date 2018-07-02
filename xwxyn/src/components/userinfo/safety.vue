@@ -9,11 +9,12 @@
             <div class="input-box">
                 <span>绑定手机</span>
                 <input type="text" v-model="phone" placeholder="未绑定" disabled="disabled" style="background:#fff">
-                <i @click="$router.push('/myPhone')">{{isText}}</i>
+                <i @click="$router.push('/myPhone')">{{isPhone}}</i>
             </div>
             <div class="input-box">
                 <span>绑定邮箱</span>
                 <input type="text" v-model="email" placeholder="未绑定" disabled="disabled" style="background:#fff">
+                <i @click="$router.push('/myEmail')">{{isEmail}}</i>
             </div>
         </div>
     </div>
@@ -24,9 +25,21 @@ export default {
         return {
             phone: '',
             email: '',
-            isText:'绑定手机',
+            isPhone: '绑定手机',
+            isEmail: '绑定邮箱'
         }
     },
+    activated() {
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxPersonalCenterSetting?wxUserId=' + this.$parent.wxUserId,
+        })
+            .then(response => {
+                //console.log(response)
+                this.phone = response.data.data.phone;
+                this.email = response.data.data.email;
+            })
+    }
 }
 </script>
 <style lang="less" scoped>
@@ -63,20 +76,20 @@ export default {
       color: #454545;
       padding-left: 1.25rem;
     }
-    i{
-        position: absolute;
-        right: 3.125rem;
-        top: .9375rem;
-        min-width: 6.25rem;
-        height: 3.125rem;
-        line-height: 3.125rem;
-        display: inline-block;
-        font-size: 1.2rem;
-        border-radius: 10px;
-        border: 1px solid #ccc;
-        text-align: center;
-        padding:0 .625rem;
-        color: #454545;
+    i {
+      position: absolute;
+      right: 3.125rem;
+      top: 0.9375rem;
+      min-width: 6.25rem;
+      height: 3.125rem;
+      line-height: 3.125rem;
+      display: inline-block;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+      padding: 0 0.625rem;
+      color: #454545;
     }
     input {
       width: 70%;

@@ -1,52 +1,22 @@
 <template>
     <div>
-        <div class="yzArticle">
+        <div class="yzArticle" v-for="(item,index) in list" :key="item.uuid">
             <div class="yzArticle-box">
-                <h1>文章标题文章标题</h1>
+                <h1>{{item.title}}</h1>
                 <div class="time">
-                    <span>2018-05-06</span>
-                    <span>广州白云区</span>
+                    <span>{{item.modifyDate}}</span>
+                    <span>{{item.address}}</span>
                 </div>
-                <div class="v-html">
-
-                </div>
+                <img v-for="src in item.images" v-lazy="src.image" alt="" style="width: 100%;margin-top:1.25rem;">
+                <div class="v-html" v-html="item.content"></div>
             </div>
             <div class="specialist">
                 <h1>专家坐诊</h1>
                 <div class="specialist-list">
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <i>李人人</i>
+                    <span v-for="(data,index) in item.users" :key="data.uuid">
+                        <img v-lazy="data.image" alt="">
+                        <i>{{data.nickName}}</i>
                     </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <i>李人人</i>
-                    </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <i>李人人</i>
-                    </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <i>李人人李啊</i>
-                    </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <i>李人人</i>
-                    </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <i>李人人</i>
-                    </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <i>李人人</i>
-                    </span>
-                    <span>
-                        <img src="../../assets/logo.png" alt="">
-                        <i>李人人</i>
-                    </span>
-
                 </div>
             </div>
         </div>
@@ -56,8 +26,21 @@
 export default {
     data() {
         return {
-
+            uuid: '',
+            list: [],
         }
+    },
+    activated() {
+        this.uuid = this.$route.params.id
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxFreeClinicByUuid?uuid=' + this.uuid,
+        })
+            .then(response => {
+                //console.log(response)
+                this.list = [response.data.data];
+                console.log(this.list)
+            })
     }
 }
 </script>

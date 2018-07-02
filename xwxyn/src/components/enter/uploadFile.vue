@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="uploadFile">
+        <div class="uploadFile" v-show="show==0">
             <input type="file" id="file-img" @change="onChange" hidden>
             <input type="file" id="file-camera" accept="image/*" capture="camera" @change="onChange" hidden>
             <div class="user-header">
@@ -59,10 +59,10 @@
             <div class="btn-blue" style="margin-top:70px;" @click="submit">提交</div>
             <br/>
         </div>
-        <!-- <div>
+        <div v-show="show==1">
             <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您')"></msg>
             <x-button type="primary" style="width:80%;" link="/userType">返回个人中心</x-button>
-        </div> -->
+        </div>
     </div>
 </template>
 <script>
@@ -77,6 +77,7 @@ export default {
     },
     data() {
         return {
+            show: 0,
             num: null,
             Image0: '',
             Image1: '',
@@ -168,12 +169,28 @@ export default {
             }
         },
         submit() {
-            if (this.Image0 == '' || this.Image1 == '' || this.Image2 == '' || this.Image3 == '' || this.isActive == false) {
+            let have = true;
+            if (this.Image0 == '' || this.Image1 == '' || this.Image2 == '' || this.Image3 == '') {
+                have = false;
                 this.cancel = true;
-                this.cancelText = '请上传完整信息'
-            } else {
-                this.cancel = true;
-                this.cancelText = '上传成功';
+                this.cancelText = '请上传完整资料'
+            }
+            if (have) {
+                let formData = new FormData();
+                formData.append('wxUserId', this.$parent.wxUserId);
+                formData.append('attachment01', this.Image0);
+                formData.append('attachment02', this.Image1);
+                formData.append('attachment03', this.Image2);
+                formData.append('attachment04', this.Image3);
+                this.$ajax({
+                    method: 'post',
+                    url: this.psta + '/submitWxEnterprisesAttachment',
+                    data: formData
+                })
+                    .then(response => {
+                        // console.log(response)
+                        this.show = 1;
+                    })
             }
         }
     }

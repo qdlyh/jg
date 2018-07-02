@@ -154,7 +154,7 @@ export default {
                         break;
                 }
                 this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
-                console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
+                //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
             }, function () {
                 this.mescrollArr[dataIndex].endErr();
             });

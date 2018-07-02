@@ -1,25 +1,27 @@
 <template>
     <div>
+        <h1>{{this.$parent.settingId}}</h1>
+        <h2>{{this.$parent.wxUserId}}</h2>
         <div class="footer">
             <ul class="footer-tab">
-                <li @click="homepage">
+                <li @click="go0">
                     <i class="iconfont icon-shouye"></i>
                     <p>首页</p>
                 </li>
-                <li @click="flashsale">
+                <li @click="go1">
                     <i class="iconfont icon-yiliaojiankang"></i>
                     <p>义诊</p>
                 </li>
-                <li @click="classify" class="tab-active">
+                <li @click="go2" class="tab-active">
                     <div></div>
                     <i class="iconfont icon-yimai"></i>
                     <p>爱心谷</p>
                 </li>
-                <li @click="my">
+                <li @click="go3">
                     <i class="iconfont icon-zhuanjia"></i>
                     <p>专家天地</p>
                 </li>
-                <li @click="my">
+                <li @click="go4">
                     <i class="iconfont icon-gerenzhongxin-xuanzhongxin"></i>
                     <p>个人中心</p>
                 </li>
@@ -32,23 +34,32 @@
 <script>
 export default {
     methods: {
-        homepage() {
-            //this.$router.push({ path: "/" });
+        go0() {
+            this.$router.push({ path: "/" });
         },
-        flashsale() {
-            // this.$router.push({ path: "/flashsale" });
+        go1() {
+            this.$router.push({ path: "/yzList" });
         },
-        classify() {
+        go2() {
             //this.$router.push({ path: "/classify" });
         },
-        my() { }
+        go3() {
+            if (this.$parent.$parent.settingId == 62) {
+                this.$router.push({ path: "/expertList" });
+            } else {
+                this.$router.push({ path: "/forum" });
+            }
+        },
+        go4() {
+            this.$router.push({ path: "/userType" });
+        },
     }
 };
 </script>
 
 <style lang="less" scoped>
 .footer {
-  margin-top: 6.25rem;
+  padding-top: 6.25rem;
   position: relative;
   .footer-tab {
     width: 100%;
@@ -62,7 +73,7 @@ export default {
       display: inline-block;
       text-align: center;
       width: 20%;
-      margin-left: -2.6px;
+      margin-left: -3.8px;
       i {
         font-size: 2.125rem;
         color: #454545;

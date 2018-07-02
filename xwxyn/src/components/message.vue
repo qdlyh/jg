@@ -87,6 +87,10 @@ export default {
         },
       }
     });
+
+    let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
+    dom.scrollTop = this.$store.state.scrollTop;
+
   },
   deactivated() {
     this.mescroll.destroy();
@@ -123,6 +127,7 @@ export default {
 
     go(item) {
       this.$router.push({ name: 'dialogue', params: { id: item.uuid, messageId: item.uuid } });
+      this.$store.state.scrollTop = this.mescroll.getScrollTop();
     },
 
     replyBtn(index, item) {
@@ -231,11 +236,6 @@ export default {
     }
 
   },
-  // watch: {
-  //   '$route'(to, from) {
-  //     console.log(to.path)
-  //   }
-  // }
 }
 </script>
 <style lang="less" scoped>

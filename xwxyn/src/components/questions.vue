@@ -15,8 +15,8 @@
             </div>
         </div>
         <div v-show="show==2">
-            <msg :title="('问题已提交')" :description="('是否前往查看我的问题')"></msg>
-            <x-button type="primary" style="width:80%;" link="BACK">查看我的问题</x-button>
+            <msg :title="('问题已提交')" :description="('是否返回继续浏览？')"></msg>
+            <x-button type="primary" style="width:80%;" link="BACK">返回继续浏览</x-button>
         </div>
         <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
     </div>
@@ -55,7 +55,7 @@ export default {
                     data: formData
                 })
                     .then(response => {
-                        console.log(response)
+                        //console.log(response)
                         this.show = 2;
                     })
             }

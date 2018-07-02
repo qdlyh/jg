@@ -1,6 +1,7 @@
 <template>
     <div>
         <!-- <h2>{{ $route.params.id }}</h2> -->
+        <loading v-show="!list.length"></loading>
         <div class="article" v-for="(item,index) in list" :key="item.uuid">
             <div class="article-box">
                 <h1>{{item.title}}</h1>
@@ -21,7 +22,7 @@
                             <i class="iconfont icon-liuyan"></i>
                             <span>{{item.messageCount}}</span>
                         </span>
-                        <i class="iconfont icon-shoucang" :class="{ active: isActive==1}" @click="toggle()"></i>
+                        <i class="iconfont icon-shoucang" :class="{ active: item.isCollection==1}" @click="toggle(item)"></i>
                     </div>
                 </div>
             </div>
@@ -33,7 +34,6 @@ export default {
     data() {
         return {
             uuid: '',
-            isActive: 0,
             list: [],
         }
     },
@@ -41,27 +41,52 @@ export default {
         this.uuid = this.$route.params.id;
         this.$ajax({
             method: 'get',
-            url: this.psta + '/getWxHealthLectureHallByUuid?uuid=' + this.uuid,
+            url: this.psta + '/getWxHealthLectureHallByUuid?wxUserId=' + this.$parent.wxUserId + '&uuid=' + this.uuid,
         })
             .then(response => {
-                // console.log(response)
+                //console.log(response)
                 this.list = [response.data.data];
             })
     },
     methods: {
-        toggle() {
-            this.isActive = !this.isActive;
-            console.log(Number(this.isActive))
-            // var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            // console.log(scrollTop)
+        toggle(item) {
+            item.isCollection = !item.isCollection;
+            let formData = new FormData();
+            formData.append('generalId', item.uuid);
+            formData.append('wxUserId', this.$parent.wxUserId);
+            if (item.isCollection == 1) {
+                this.$ajax({
+                    method: 'post',
+                    url: this.psta + '/submitCollection',
+                    data: formData
+                })
+                    .then(response => {
+                        //console.log(response)
+                    })
+            } else {
+                this.$ajax({
+                    method: 'post',
+                    url: this.psta + '/submitCollection',
+                    data: formData
+                })
+                    .then(response => {
+                        //console.log(response)
+                    })
+            }
         },
+
         go(item) {
             this.$router.push({ name: 'message', params: { id: item.uuid } });
         }
     },
+    // computed: {
+    // 	msgId() {
+    // 		return this.$store.state.msgId;
+    // 	}
+    // },
     // watch: {
-    //     '$route'(to, from) {
-    //         console.log(to.path)
+    //     uuid(data) {
+    //         console.log(data)
     //     }
     // }
 }

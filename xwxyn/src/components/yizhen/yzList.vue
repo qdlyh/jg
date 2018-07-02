@@ -1,32 +1,89 @@
 <template>
     <div>
         <div class="yzList">
-            <!-- <div class="header">
-                <span class="headerActive">正在进行</span>
-                <span>即将开始</span>
-                <span>已结束</span>
-            </div> -->
             <tab>
-                <tab-item @on-item-click="onItemClick(item)" :selected="item.type==55" v-for="(item,index) in tab" :key="index">{{item.name}}</tab-item>
+                <tab-item @on-item-click="onItemClick(index)" :selected="index==isShow" v-for="(item,index) in tab" :key="index">{{item.tab}}</tab-item>
             </tab>
-            <div class="yz-box" v-for="(item,index) in list" :key="index">
-                <div class="yz-banner">
-                    <img src="../../assets/logo.png" alt="">
-                    <span>
-                        {{item.text}}
-                    </span>
-                </div>
-                <div class="specialist">
-                    <h1>专家坐诊</h1>
-                    <div class="specialist-list">
-                        <span v-for="(item,index) in list[0].spore" :key="index">
-                            <img src="../../assets/logo.png" alt="">
-                            <i>{{item.name}}</i>
-                        </span>
+            <div id="mescroll0" class="mescroll" v-show="isShow==0">
+                <div id="dataList0" class="data-list" v-cloak>
+                    <div class="yz-box" v-for="(item,index) in list0" :key="item.uuid">
+                        <div @click="$router.push({ name: 'yzArticle', params: { id: item.uuid } })">
+                            <div class="yz-banner">
+                                <img v-lazy="item.images[0].image" alt="">
+                                <span>
+                                    {{item.title}}
+                                </span>
+                            </div>
+                            <div class="specialist">
+                                <h1>专家坐诊</h1>
+                                <div class="specialist-list">
+                                    <span v-for="(user,index) in item.users" :key="user.uuid">
+                                        <img v-lazy="user.image" alt="">
+                                        <i>{{item.nickName}}</i>
+                                    </span>
+                                </div>
+                                <div class="time">
+                                    <span>{{item.createDate}}</span>
+                                    <span>{{item.address}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="time">
-                        <span>{{item.time}}</span>
-                        <span>{{item.address}}</span>
+                </div>
+            </div>
+
+            <div id="mescroll1" class="mescroll" v-show="isShow==1">
+                <div id="dataList1" class="data-list" v-cloak>
+                    <div class="yz-box" v-for="(item,index) in list1" :key="item.uuid">
+                        <div @click="$router.push({ name: 'yzArticle', params: { id: item.uuid } })">
+                            <div class="yz-banner">
+                                <img v-lazy="item.images[0].image" alt="">
+                                <span>
+                                    {{item.title}}
+                                </span>
+                            </div>
+                            <div class="specialist">
+                                <h1>专家坐诊</h1>
+                                <div class="specialist-list">
+                                    <span v-for="(user,index) in item.users" :key="user.uuid">
+                                        <img v-lazy="user.image" alt="">
+                                        <i>{{item.nickName}}</i>
+                                    </span>
+                                </div>
+                                <div class="time">
+                                    <span>{{item.createDate}}</span>
+                                    <span>{{item.address}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="mescroll2" class="mescroll" v-show="isShow==2">
+                <div id="dataList2" class="data-list" v-cloak>
+                    <div class="yz-box" v-for="(item,index) in list2" :key="item.uuid">
+                        <div @click="$router.push({ name: 'yzArticle', params: { id: item.uuid } })">
+                            <div class="yz-banner">
+                                <img v-lazy="item.images[0].image" alt="">
+                                <span>
+                                    {{item.title}}
+                                </span>
+                            </div>
+                            <div class="specialist">
+                                <h1>专家坐诊</h1>
+                                <div class="specialist-list">
+                                    <span v-for="(user,index) in item.users" :key="user.uuid">
+                                        <img v-lazy="user.image" alt="">
+                                        <i>{{item.nickName}}</i>
+                                    </span>
+                                </div>
+                                <div class="time">
+                                    <span>{{item.createDate}}</span>
+                                    <span>{{item.address}}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -36,85 +93,130 @@
 <script>
 import { Tab, TabItem } from 'vux'
 export default {
+    components: {
+        Tab,
+        TabItem,
+    },
     data() {
         return {
             mescroll: null,
-            type: 55,
-            list: [],
-            // list: [{                text: '关爱老人，从我做起。', time: '2018-05-01', address: '广州白云区飞翔公园',
-            //     spore: [{ name: '倪开超2' }, { name: '倪开超2' }, { name: '倪开超3' }, { name: '倪开超4' }, { name: '倪开超5' }, { name: '倪开超5', }, { name: '倪开超5', }]            },
-            // {                text: '关爱老人，从我做起。', time: '2018-05-01', address: '广州白云区飞翔公园',
-            //     spore: [{ name: '倪开超2' }, { name: '倪开超2' }, { name: '倪开超3' }, { name: '倪开超4' }, { name: '倪开超5' }, { name: '倪开超5', }, { name: '倪开超5', }]            }],
+            tab: [{ tab: '正在进行' }, { tab: '即将开始' }, { tab: '已经结束' }],
+            isShow: 0,
+            mescrollArr: new Array(3),
+            list0: [],
+            list1: [],
+            list2: [],
         }
     },
     mounted() {
-        this.mescroll = new MeScroll("mescroll", {
-            up: {
-                auto: true,//初始化完毕,是否自动触发上拉加载的回调
-                isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
-                callback: this.upCallback, //上拉加载的回调
-                offset: 100,
-                noMoreSize: 5,
-                //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-                htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-                toTop: { //配置回到顶部按钮
-                    src: "../../static/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
-                    //offset: 1000
-                },
-                empty: { //配置列表无任何数据的提示
-                    warpId: "dataList",
-                    icon: "../../static/mescroll-empty.png",
-                    tip: "亲,暂无相关数据哦~",
-                },
-            }
-        });
+        this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
     },
     methods: {
-        onItemClick(item) {
-            this.type = item.type;
-            this.list = [];
-            this.mescroll.resetUpScroll();
+        onItemClick(index) {
+            if (this.isShow != index) {
+                this.isShow = index;
+                if (this.mescrollArr[index] == null) {
+                    this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
+                }
+            }
+        },
+        initMescroll(mescrollId, clearEmptyId) {
+            this.mescroll = new MeScroll(mescrollId, {
+                up: {
+                    auto: false,//初始化完毕,是否自动触发上拉加载的回调
+                    isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+                    callback: this.upCallback, //上拉加载的回调
+                    offset: 500,
+                    noMoreSize: 3,
+                    //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
+                    htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+                }
+            });
+            return this.mescroll;
         },
 
         upCallback(page) {
-            this.getListDataFromNet(page.num, page.size, (curPageData) => {
+            let dataIndex = this.isShow;
+            this.getListDataFromNet(dataIndex, page.num, page.size, (curPageData) => {
                 //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
-                if (page.num == 1); this.list1 = [];
-                let totalPage = this.total;
-                //更新列表数据
-                this.list = this.list.concat(curPageData);
-                this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+                let totalPage = this.total
+                switch (dataIndex) {
+                    case 0:
+                        if (page.num == 1) this.list0 = [];
+                        this.list0 = this.list0.concat(curPageData);
+                        // this.mescroll.endByPage(curPageData.length, totalPage);
+                        break;
+                    case 1:
+                        if (page.num == 1) this.list1 = [];
+                        this.list1 = this.list1.concat(curPageData);
+                        break;
+                    case 2:
+                        if (page.num == 1) this.list2 = [];
+                        this.list2 = this.list2.concat(curPageData);
+                        break;
+                }
+                this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
+                //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
             }, function () {
-                this.mescroll.endErr();
+                this.mescrollArr[dataIndex].endErr();
             });
         },
 
+        getListDataFromNet(dataIndex, pageNum, pageSize, successCallback, errorCallback) {
+            let type = '';
+            if (dataIndex == 0) {
+                type = 55
+            }
+            if (dataIndex == 1) {
+                type = 56
 
-        getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+            }
+            if (dataIndex == 2) {
+                type = 57
+            }
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',
-                    url: this.psta + '/getWxFreeClinic?type=' + this.type + '&page=' + pageNum + '&size=' + pageSize,
+                    url: this.psta + '/getWxFreeClinic?type=' + type + '&page=' + pageNum + '&size=' + pageSize,
                 })
                     .then(response => {
                         //console.log(response)
                         let listData = [];
                         let listPage = response.data.data;
                         this.total = response.data.total;
-                        for (let i = 0; i < listPage.length; i++) {
-                            listData.push(listPage[i])
+                        if (dataIndex == 0) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
+                        }
+
+                        if (dataIndex == 1) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
+                        }
+
+                        if (dataIndex == 2) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
                         }
                         successCallback && successCallback(listData);//成功回调
                     });
             }, 500)
         }
-    }
+    },
 }
 </script>
 <style lang="less" scoped>
+.mescroll {
+  position: fixed;
+  top: 45px;
+  bottom: 0;
+  height: auto;
+}
 .yzList {
   .yz-box {
-    margin-top: 0.625rem;
     background: #fff;
     padding: 1.25rem 1.875rem;
     .yz-banner {

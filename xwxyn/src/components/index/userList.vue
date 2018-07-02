@@ -8,33 +8,17 @@
         <tab-item @on-item-click="onItemClick(index)" :selected="index==isShow" v-for="(item,index) in tab" :key="index">{{item.tab}}</tab-item>
       </tab>
 
-      <div id="mescroll0" class="mescroll">
+      <div id="mescroll0" class="mescroll" v-show="isShow==0">
         <div id="dataList0" class="data-list" v-cloak>
-          <div class="personnel" v-show="isShow==0">
+          <div class="personnel">
             <div class="personnel-box" v-for="(item,index) in list0" :key="index">
-              <div class="user-text">
+              <div class="user-text" @click="$router.push({ name: 'user', params: { id: item.uuid } })">
                 <span>
                   <img v-lazy="item.image" alt="">
                 </span>
                 <span class="right">
-                  <h1>某某某公司</h1>
-                  <p>简介：阿打算大所大所大所大所多</p>
-                </span>
-              </div>
-              <div class="user-theme">
-                <span class="left-theme">
-                  参与活动主题参与活动主题参与活动主题参与活动主题参与活动主题参与活动主题
-                </span>
-                <span class="right-time">
-                  2018-4-05
-                </span>
-              </div>
-              <div class="user-theme">
-                <span class="left-theme">
-                  参与活动主题
-                </span>
-                <span class="right-time">
-                  2018-4-05
+                  <h1>{{item.nickName}}</h1>
+                  <p>{{item.signature}}</p>
                 </span>
               </div>
             </div>
@@ -42,11 +26,11 @@
         </div>
       </div>
 
-      <div id="mescroll1" class="mescroll">
+      <div id="mescroll1" class="mescroll" v-show="isShow==1">
         <div id="dataList1" class="data-list" v-cloak>
-          <div class="volunteer" v-show="isShow==1">
+          <div class="volunteer">
             <div v-for="(item,index) in list1" :key="item.uuid">
-              <div class="volunteer-box" @click="$router.push('/user')">
+              <div class="volunteer-box" @click="$router.push({ name: 'user', params: { id: item.uuid } })">
                 <img v-lazy="item.image" alt="">
                 <span>
                   <h1>{{item.nickName}}</h1>
@@ -143,10 +127,6 @@ export default {
             if (page.num == 1) this.list1 = [];
             this.list1 = this.list1.concat(curPageData);
             break;
-          case 2:
-            if (page.num == 1) this.list2 = [];
-            this.list2 = this.list2.concat(curPageData);
-            break;
         }
         this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
         console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
@@ -169,7 +149,7 @@ export default {
           url: this.psta + '/getWxCharityYouAndMe?type=' + type + '&page=' + pageNum + '&size=' + pageSize,
         })
           .then(response => {
-            //console.log(response)
+            console.log(response)
             let listData = [];
             let listPage = response.data.data;
             this.total = response.data.total;
@@ -180,12 +160,6 @@ export default {
             }
 
             if (dataIndex == 1) {
-              for (let i = 0; i < listPage.length; i++) {
-                listData.push(listPage[i])
-              }
-            }
-
-            if (dataIndex == 2) {
               for (let i = 0; i < listPage.length; i++) {
                 listData.push(listPage[i])
               }
@@ -201,8 +175,8 @@ export default {
 <style lang="less" scoped>
 .mescroll {
   position: fixed;
-  top: 1.8rem;
-  bottom: 6rem;
+  top: 40px;
+  bottom: 0;
   height: auto;
 }
 

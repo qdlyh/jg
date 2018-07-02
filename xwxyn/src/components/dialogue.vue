@@ -113,7 +113,7 @@ export default {
           url: this.psta + '/submitMessageReply',
         })
           .then(response => {
-            console.log(response)
+            //console.log(response)
             let user = [response.data.data];
             this.list.unshift({
               createDate: user[0].createDate,

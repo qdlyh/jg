@@ -6,13 +6,20 @@
                 <h1>我的消息</h1>
                 <i></i>
             </div>
-            <div class="article-list">
-                <div>
-                    <img src="../../assets/logo.png" alt="">
-                    <h1>咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区咨询专区</h1>
-                    <div class="article-box-bottom">
+            <div id="mescroll" class="mescroll">
+                <div id="dataList" class="data-list" v-cloak>
+                    <div class="article-list" v-for="(item,index) in list" :key="item.uuid">
                         <div>
-                            2018-03-12 09:32
+                            <div style="text-align: center">
+                                <img v-lazy="item.image" alt="">
+                            </div>
+                            <h1>{{item.title}}</h1>
+                            <p>{{item.message}}</p>
+                            <div class="article-box-bottom">
+                                <div>
+                                    {{item.createDate}}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -24,13 +31,74 @@
 export default {
     data() {
         return {
+            mescroll: null,
+            list: [],
+        }
+    },
+    activated() {
+        this.mescroll = new MeScroll("mescroll", {
+            up: {
+                auto: true,//初始化完毕,是否自动触发上拉加载的回调
+                isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+                callback: this.upCallback, //上拉加载的回调
+                offset: 300,
+                noMoreSize: 3,
+                //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
+                htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+                toTop: { //配置回到顶部按钮
+                    src: "../../static/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
+                    //offset: 1000
+                },
+            }
+        });
+    },
+    deactivated() {
+        this.mescroll.destroy();
+    },
+    methods: {
+        upCallback(page) {
+            this.getListDataFromNet(page.num, page.size, (curPageData) => {
+                //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
+                if (page.num == 1) this.list = [];
+                let totalPage = this.total;
+                //更新列表数据
+                this.list = this.list.concat(curPageData);
+                this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+                //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
+            }, function () {
+                this.mescroll.endErr();
+            });
+        },
 
+        getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+            setTimeout(() => {
+                this.$ajax({
+                    method: 'get',
+                    url: this.psta + '/findAlerts?wxUserId=' + this.$parent.wxUserId + '&page=' + pageNum + '&size=' + pageSize,
+                })
+                    .then(response => {
+                        //console.log(response)
+                        let listData = [];
+                        let listPage = response.data.data;
+                        this.total = response.data.total;
+                        for (let i = 0; i < listPage.length; i++) {
+                            listData.push(listPage[i])
+                        }
+                        successCallback && successCallback(listData);//成功回调
+                    });
+            }, 500)
         }
     }
 }
 </script>
 
 <style lang="less" scoped>
+.mescroll {
+  position: fixed;
+  top: 5.3rem;
+  bottom: 0;
+  height: auto;
+}
 .myMessage {
   .user-header {
     height: 5rem;
@@ -53,7 +121,6 @@ export default {
   }
 
   .article-list {
-    margin-top: 0.625rem;
     padding: 1.25rem 1.875rem;
     background: #fff;
     border-bottom: 1px solid #bdbdbd;
@@ -69,10 +136,10 @@ export default {
       -webkit-line-clamp: 3;
       overflow: hidden;
     }
-    img{
-        max-width: 750px;
-        max-height: 100px;
-        overflow: hidden;
+    img {
+      max-width: 750px;
+      max-height: 100px;
+      overflow: hidden;
     }
     .questions-btn {
       color: #fff;

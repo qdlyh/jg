@@ -24,6 +24,7 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
     data() {
         return {
@@ -32,21 +33,30 @@ export default {
             list: [],
         }
     },
-    activated() {
+    mounted() {
         this.uuid = this.$route.params.id;
-        this.$ajax({
-            method: 'get',
-            url: this.psta + '/getWxProblemInFoByUuid?uuid=' + this.uuid,
-        })
-            .then(response => {
-                // console.log(response)
-                this.list = [response.data.data];
+        if (this.article.hasOwnProperty(this.uuid)) {
+            this.list = this.article[this.uuid];
+        } else {
+            this.$ajax({
+                method: 'get',
+                url: this.psta + '/getWxProblemInFoByUuid?uuid=' + this.uuid,
             })
+                .then(response => {
+                    // console.log(response)
+                    this.article[this.uuid] = [response.data.data];
+                    this.list = [response.data.data];
+                })
+        }
+        //console.log(this.article[this.uuid])
     },
     methods: {
         go(item) {
             this.$router.push({ name: 'forumMsg', params: { id: item.uuid } });
         }
+    },
+    computed: {
+        ...mapState(['article'])
     },
 }
 </script>

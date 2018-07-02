@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="introduceForm">
+        <div class="introduceForm" v-show="show==0">
             <div class="user-header">
                 <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
                 <h1>安装申请</h1>
@@ -9,7 +9,7 @@
             <div class="form">
                 <div class="input-box">
                     <group>
-                        <popup-picker value-text-align="left" :title="title" :data="list" v-model="values" :columns="1" @on-change="onChange" :placeholder="('选择产品')" show-name>
+                        <popup-picker value-text-align="left" :title="title" :data="list" v-model="values" :columns="1" :placeholder="('选择产品')" show-name>
                         </popup-picker>
                     </group>
                 </div>
@@ -25,11 +25,8 @@
                     <span>安装地址</span>
                     <input type="text" v-model.trim="address" placeholder="安装地址" maxlength="40">
                 </div>
-                <div class="input-box">
-                    <calendar @on-change="onTime" v-model="date" :title="('安装日期')" :placeholder="('安装日期')" show-popup-header disable-past :popup-header-title="('选择安装日期')"></calendar>
-                </div>
                 <div class="input-box" style="height:15rem">
-                    <span style="position: relative;top: -100px;">留言</span>
+                    <span style="position: relative;top: -5.5rem;">留言</span>
                     <textarea type="text" v-model.trim="msg" placeholder="想说的话" maxlength="100"></textarea>
                 </div>
             </div>
@@ -38,55 +35,61 @@
                 提交
             </div>
         </div>
+        <div v-show="show==1">
+            <msg :title="('安装申请已提交')" :description="('审核结果将会以消息或者电话形式通知您')"></msg>
+            <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
+        </div>
     </div>
 </template>
 <script>
-import { PopupPicker, Group, Calendar, Toast } from 'vux'
+import { PopupPicker, Group, Toast, Msg, XButton } from 'vux'
 export default {
     components: {
         Group,
         PopupPicker,
-        Calendar,
-        Toast
+        Toast,
+        Msg,
+        XButton
     },
     data() {
         return {
             cancelText: '',
             title: '洁肠仪',
             cancel: false,
+            show: 0,
             list: [
-                { name: '国有企业', value: '1', ids: 1 },
-                { name: '集体企业', value: '2' },
-                { name: '联营企业', value: '3' },
-                { name: '三资企业', value: '4' },
-                { name: '私营企业', value: '5' },
-                { name: '其他企业', value: '6', ppiad: 123 }
+                // { name: '国有企业', value: '1' },
+                // { name: '集体企业', value: '2' },
+                // { name: '联营企业', value: '3' },
+                // { name: '三资企业', value: '4' },
+                // { name: '私营企业', value: '5' },
+                // { name: '其他企业', value: '6' }
             ],
             values: [],
             name: '',
             phone: '',
             address: '',
-            date: '',
             msg: '',
         }
     },
     mounted() {
-
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/findWxJieChangYiType',
+        })
+            .then(response => {
+                //console.log(response)
+                this.list = response.data.data;
+            })
     },
     methods: {
-        //产品
-        onChange(val) {
-            console.log(Number(val))
-        },
-        //时间
-        onTime(val) {
-            console.log(val, this.date)
-        },
         submit() {
+            //console.log(this.values)
             let have = true;
-            if (this.name.length == 0 || this.phone.length == 0 || this.address.length == 0 || this.values.length == 0 || this.date == '') {
+            if (this.name.length == 0 || this.phone.length == 0 || this.address.length == 0 || this.values.length == 0) {
                 this.cancel = true;
                 this.cancelText = '请填写完整的基本信息'
+                have = false;
                 return false;
             }
             if (!(/^1[345789][0-9]{9}$/.test(this.phone))) {
@@ -99,7 +102,20 @@ export default {
                 this.cancel = true;
                 this.cancelText = '已提交'
                 let formData = new FormData();
-                //formData.append('userId', this.$parent.userId);
+                formData.append('settingId', this.values[0]);
+                formData.append('contactName', this.name);
+                formData.append('contactPhone', this.phone);
+                formData.append('inAddress', this.address);
+                formData.append('message', this.msg);
+                this.$ajax({
+                    method: 'post',
+                    url: this.psta + '/getWxInstallApply',
+                    data: formData
+                })
+                    .then(response => {
+                        console.log(response)
+                        this.show = 1;
+                    })
             }
         }
     }
@@ -149,7 +165,7 @@ export default {
         color: #454545;
       }
       input {
-        width: 75%;
+        width: 60%;
         border: 0;
         font-size: 1.5rem;
         color: #454545;
@@ -159,7 +175,7 @@ export default {
         }
       }
       textarea {
-        width: 75%;
+        width: 60%;
         height: 8rem;
         border: 0;
         font-size: 1.5rem;

@@ -2,24 +2,136 @@
     <div>
         <div class="article-list">
             <tab>
-                <tab-item @on-item-click="onItemClick(item)" :selected="item.typeNum==1" v-for="(item,index) in tab" :key="index">{{item.name}}</tab-item>
+                <tab-item @on-item-click="onItemClick(index,item)" :selected="index==isShow" v-for="(item,index) in tab" :key="index">{{item.name}}</tab-item>
             </tab>
-            <div id="pullTo">
-                <div id="mescroll" class="mescroll">
-                    <div id="dataList" class="data-list" v-cloak>
-                        <div class="article-box" v-for="(item,index) in list" :key="index" @click="go(item)">
-                            <h1>{{item.title}}</h1>
-                            <div class="article-img">
-                                <img v-for="src in item.images" v-lazy="src.image" alt="">
+            <div id="mescroll0" class="mescroll" v-show="isShow==0" @touchend="touchEnd">
+                <div id="dataList0" class="data-list" v-cloak>
+                    <div class="article-box" v-for="(item,index) in list0" :key="item.uuid" @click="go(item)">
+                        <h1>{{item.title}}</h1>
+                        <div class="article-img">
+                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-box-bottom">
+                            <div class="article-msg">
+                                <span>{{item.count}}浏览</span>
+                                <span>{{item.messageCount}}评论</span>
                             </div>
-                            <div class="article-box-bottom">
-                                <div class="article-msg">
-                                    <span>{{item.count}}浏览</span>
-                                    <span>{{item.messageCount}}评论</span>
-                                </div>
-                                <div>
-                                    {{item.modifyDate}}
-                                </div>
+                            <div>
+                                {{item.modifyDate}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mescroll1" class="mescroll" v-show="isShow==1" @touchend="touchEnd">
+                <div id="dataList1" class="data-list" v-cloak>
+                    <div class="article-box" v-for="(item,index) in list1" :key="item.uuid" @click="go(item)">
+                        <h1>{{item.title}}</h1>
+                        <div class="article-img">
+                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-box-bottom">
+                            <div class="article-msg">
+                                <span>{{item.count}}浏览</span>
+                                <span>{{item.messageCount}}评论</span>
+                            </div>
+                            <div>
+                                {{item.modifyDate}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mescroll2" class="mescroll" v-show="isShow==2" @touchend="touchEnd">
+                <div id="dataList2" class="data-list" v-cloak>
+                    <div class="article-box" v-for="(item,index) in list2" :key="item.uuid" @click="go(item)">
+                        <h1>{{item.title}}</h1>
+                        <div class="article-img">
+                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-box-bottom">
+                            <div class="article-msg">
+                                <span>{{item.count}}浏览</span>
+                                <span>{{item.messageCount}}评论</span>
+                            </div>
+                            <div>
+                                {{item.modifyDate}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mescroll3" class="mescroll" v-show="isShow==3" @touchend="touchEnd">
+                <div id="dataList3" class="data-list" v-cloak>
+                    <div class="article-box" v-for="(item,index) in list3" :key="item.uuid" @click="go(item)">
+                        <h1>{{item.title}}</h1>
+                        <div class="article-img">
+                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-box-bottom">
+                            <div class="article-msg">
+                                <span>{{item.count}}浏览</span>
+                                <span>{{item.messageCount}}评论</span>
+                            </div>
+                            <div>
+                                {{item.modifyDate}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mescroll4" class="mescroll" v-show="isShow==4" @touchend="touchEnd">
+                <div id="dataList4" class="data-list" v-cloak>
+                    <div class="article-box" v-for="(item,index) in list4" :key="item.uuid" @click="go(item)">
+                        <h1>{{item.title}}</h1>
+                        <div class="article-img">
+                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-box-bottom">
+                            <div class="article-msg">
+                                <span>{{item.count}}浏览</span>
+                                <span>{{item.messageCount}}评论</span>
+                            </div>
+                            <div>
+                                {{item.modifyDate}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mescroll5" class="mescroll" v-show="isShow==5" @touchend="touchEnd">
+                <div id="dataList5" class="data-list" v-cloak>
+                    <div class="article-box" v-for="(item,index) in list5" :key="item.uuid" @click="go(item)">
+                        <h1>{{item.title}}</h1>
+                        <div class="article-img">
+                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-box-bottom">
+                            <div class="article-msg">
+                                <span>{{item.count}}浏览</span>
+                                <span>{{item.messageCount}}评论</span>
+                            </div>
+                            <div>
+                                {{item.modifyDate}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="mescroll6" class="mescroll" v-show="isShow==6" @touchend="touchEnd">
+                <div id="dataList6" class="data-list" v-cloak>
+                    <div class="article-box" v-for="(item,index) in list6" :key="item.uuid" @click="go(item)">
+                        <h1>{{item.title}}</h1>
+                        <div class="article-img">
+                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-box-bottom">
+                            <div class="article-msg">
+                                <span>{{item.count}}浏览</span>
+                                <span>{{item.messageCount}}评论</span>
+                            </div>
+                            <div>
+                                {{item.modifyDate}}
                             </div>
                         </div>
                     </div>
@@ -37,103 +149,227 @@ export default {
     },
     data() {
         return {
-            tab: [{ name: '推荐', typeNum: 1 }, { name: '全部', typeNum: 0 }, { name: '文化', typeNum: 50 }, { name: '常识', typeNum: 51 }, { name: '医疗', typeNum: 52 }, { name: '保健', typeNum: 53 }, { name: '养生', typeNum: 54 }],
-            mescroll: null,
-            list: [],
-            listType: [],
+            tab: [{ name: '推荐', top: 0, i: 0 }, { name: '全部', top: 10, i: 1 }, { name: '文化', top: 0, i: 2 }, { name: '常识', top: 0, i: 3 }, { name: '医疗', top: 0, i: 4 }, { name: '保健', top: 0, i: 5 }, { name: '养生', top: 0, i: 6 }],
             total: '',
-            type: 1,
-            page: 1,
-            scrollTop: 0,
+            isShow: 0,
+            mescroll: null,
+            mescrollArr: new Array(7),
+            list0: [],
+            list1: [],
+            list2: [],
+            list3: [],
+            list4: [],
+            list5: [],
+            list6: [],
         }
+    },
+    mounted() {
+        this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
     },
     activated() {
-        if (sessionStorage.getItem('scrollTop') != null) {
-            // let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-
+        for(let i=0;i<this.tab.length;i++){
+            let dom = document.querySelector('#mescroll' + this.tab[i].i);
+            dom.scrollTop=this.tab[i].top;
         }
-
-
-        this.mescroll = new MeScroll("mescroll", {
-            up: {
-                auto: true,//初始化完毕,是否自动触发上拉加载的回调
-                isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
-                callback: this.upCallback, //上拉加载的回调
-                offset: 100,
-                noMoreSize: 5,
-                //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-                htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-                toTop: { //配置回到顶部按钮
-                    src: "../../static/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
-                    //offset: 1000
-                },
-                empty: { //配置列表无任何数据的提示
-                    warpId: "dataList",
-                    icon: "../../static/mescroll-empty.png",
-                    tip: "亲,暂无相关数据哦~",
-                },
-            }
-        });
     },
-    deactivated() {
-        this.mescroll.destroy();
-    },
+    // deactivated() {
+    //     this.mescroll.destroy();
+    // },
     methods: {
         go(item) {
             this.$router.push({ name: 'article', params: { id: item.uuid } });
-            sessionStorage.setItem('scrollTop', this.mescroll.getScrollTop())
-            // var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            // //scrollTop = 800
-            // console.log(scrollTop.scrollHeight)
+            // this.$store.state.scrollTop = this.mescroll.getScrollTop();
         },
-        onItemClick(item) {
-            this.type = item.typeNum;
-            this.list = [];
-            this.mescroll.resetUpScroll();
+        onItemClick(index, item) {
+            if (this.isShow != index) {
+                this.isShow = index;
+                if (this.mescrollArr[index] == null) {
+                    this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
+                }
+            }
+        },
+        touchEnd(ev){
+            let dom = document.querySelector('#mescroll' + this.isShow);
+            if(this.isShow==0){
+                this.tab[0].top = dom.scrollTop;
+            }
+             if(this.isShow==1){
+                this.tab[1].top = dom.scrollTop;
+            }
+            if(this.isShow==2){
+                this.tab[2].top = dom.scrollTop;
+            }
+            if(this.isShow==3){
+                this.tab[3].top = dom.scrollTop;
+            }
+            if(this.isShow==4){
+                this.tab[4].top = dom.scrollTop;
+            }
+            if(this.isShow==5){
+                this.tab[5].top = dom.scrollTop;
+            }
+            if(this.isShow==6){
+                this.tab[6].top = dom.scrollTop;
+            }
+        },
+        initMescroll(mescrollId, clearEmptyId) {
+            this.mescroll = new MeScroll(mescrollId, {
+                up: {
+                    auto: true,//初始化完毕,是否自动触发上拉加载的回调
+                    isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+                    callback: this.upCallback, //上拉加载的回调
+                    offset: 500,
+                    noMoreSize: 3,
+                    //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
+                    htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+                }
+            });
+            return this.mescroll;
         },
         upCallback(page) {
-            this.getListDataFromNet(page.num, page.size, (curPageData) => {
+            let dataIndex = this.isShow;
+            this.getListDataFromNet(dataIndex, page.num, page.size, (curPageData) => {
                 //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
-                if (page.num == 1) this.list = [];
-                let totalPage = this.total;
-                //更新列表数据
-                this.list = this.list.concat(curPageData);
-                this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
-                //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
+                let totalPage = this.total
+                switch (dataIndex) {
+                    case 0:
+                        if (page.num == 1) this.list0 = [];
+                        this.list0 = this.list0.concat(curPageData);
+                        break;
+                    case 1:
+                        if (page.num == 1) this.list1 = [];
+                        this.list1 = this.list1.concat(curPageData);
+                        break;
+                    case 2:
+                        if (page.num == 1) this.list2 = [];
+                        this.list2 = this.list2.concat(curPageData);
+                        break;
+                    case 3:
+                        if (page.num == 1) this.list3 = [];
+                        this.list3 = this.list3.concat(curPageData);
+                        break;
+                    case 4:
+                        if (page.num == 1) this.list4 = [];
+                        this.list4 = this.list4.concat(curPageData);
+                        break;
+                    case 5:
+                        if (page.num == 1) this.list5 = [];
+                        this.list5 = this.list5.concat(curPageData);
+                        break;
+                    case 6:
+                        if (page.num == 1) this.list6 = [];
+                        this.list6 = this.list6.concat(curPageData);
+                        break;
+                }
+                this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
+                //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
             }, function () {
-                this.mescroll.endErr();
+                this.mescrollArr[dataIndex].endErr();
             });
         },
-
-        getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+        getListDataFromNet(dataIndex, pageNum, pageSize, successCallback, errorCallback) {
+            let type = '';
+            if (dataIndex == 0) {
+                type = 1;
+            }
+            if (dataIndex == 1) {
+                type = 0;
+            }
+            if (dataIndex == 2) {
+                type = 50;
+            }
+            if (dataIndex == 3) {
+                type = 51;
+            }
+            if (dataIndex == 4) {
+                type = 52;
+            }
+            if (dataIndex == 5) {
+                type = 53;
+            }
+            if (dataIndex == 6) {
+                type = 54;
+            }
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',
-                    url: this.psta + '/getWxHealthLectureHall?type=' + this.type + '&page=' + pageNum + '&size=' + 10,
+                    url: this.psta + '/getWxHealthLectureHall?type=' + type + '&page=' + pageNum + '&size=' + pageSize,
                 })
                     .then(response => {
                         //console.log(response)
                         let listData = [];
                         let listPage = response.data.data;
                         this.total = response.data.total;
-                        for (let i = 0; i < listPage.length; i++) {
-                            listData.push(listPage[i])
+                        if (dataIndex == 0) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
+                        }
+
+                        if (dataIndex == 1) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
+                        }
+
+                        if (dataIndex == 2) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
+                        }
+
+                        if (dataIndex == 3) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
+                        }
+                        if (dataIndex == 4) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
+                        }
+                        if (dataIndex == 5) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
+                        }
+                        if (dataIndex == 6) {
+                            for (let i = 0; i < listPage.length; i++) {
+                                listData.push(listPage[i])
+                            }
                         }
                         successCallback && successCallback(listData);//成功回调
                     });
             }, 500)
         }
-    }
+    },
+    // getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+    //     setTimeout(() => {
+    //         this.$ajax({
+    //             method: 'get',
+    //             url: this.psta + '/getWxHealthLectureHall?type=' + this.type + '&page=' + pageNum + '&size=' + pageNum,
+    //         })
+    //             .then(response => {
+    //                 //console.log(response)
+    //                 let listData = [];
+    //                 let listPage = response.data.data;
+    //                 this.total = response.data.total;
+    //                 for (let i = 0; i < listPage.length; i++) {
+    //                     listData.push(listPage[i])
+    //                 }
+    //                 successCallback && successCallback(listData);//成功回调
+    //             });
+    //     }, 500)
+    // }
 
 }
 </script>
 <style lang="less" scoped>
-#pullTo {
-  position: absolute;
-  width: 100%;
+.mescroll {
+  position: fixed;
   top: 44px;
-  bottom: 0px;
-  overflow: hidden;
+  bottom: 0;
+  height: auto;
 }
 .article-list {
   .article-box {
