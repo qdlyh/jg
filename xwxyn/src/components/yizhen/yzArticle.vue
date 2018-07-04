@@ -9,7 +9,7 @@
                 </div>
                 <img v-for="src in item.images" v-lazy="src.image" alt="" style="width: 100%;margin-top:1.25rem;">
                 <div class="v-html" v-html="item.content"></div>
-            </div>
+            </div> 
             <div class="specialist">
                 <h1>专家坐诊</h1>
                 <div class="specialist-list">
@@ -49,14 +49,6 @@ export default {
   background: #fff;
   .yzArticle-box {
     padding: 1.875rem;
-    .specialist {
-      margin-top: 1.25rem;
-      h1 {
-        font-size: 1.5rem;
-        color: #454545;
-        font-weight: 500;
-      }
-    }
     .time {
       margin-top: 1.25rem;
       display: flex;

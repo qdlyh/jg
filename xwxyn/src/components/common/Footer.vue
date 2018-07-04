@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1>{{this.$parent.settingId}}</h1>
-        <h2>{{this.$parent.wxUserId}}</h2>
         <div class="footer">
             <ul class="footer-tab">
                 <li @click="go0">
@@ -51,7 +49,7 @@ export default {
             }
         },
         go4() {
-            this.$router.push({ path: "/userType" });
+            this.$router.push({ path: "/userType"});
         },
     }
 };

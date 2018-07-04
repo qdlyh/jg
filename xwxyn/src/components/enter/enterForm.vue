@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="enterForm" v-show="show==0">
+        <div class="enterForm" v-if="$parent.isIn==3">
             <div class="user-header">
                 <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
                 <h1>入驻申请表</h1>
@@ -32,8 +32,12 @@
                 下一步
             </div>
         </div>
-        <div v-show="show==1">
-            <msg :title="('安装申请已提交')" :description="('审核结果将会以消息或者电话形式通知您')"></msg>
+        <div v-if="$parent.isIn==0">
+            <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
+            <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
+        </div>
+        <div v-if="$parent.isIn==2">
+            <msg :title="('申请认证失败')" icon="warn" :description="('请前往消息通知查看详情原因')"></msg>
             <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
         </div>
     </div>
@@ -53,7 +57,6 @@ export default {
         return {
             cancelText: '',
             cancel: false,
-            show: 0,
             list: [],
             values: [],
             name: '',
@@ -93,7 +96,6 @@ export default {
                 })
                     .then(response => {
                         this.$router.push('/uploadFile');
-                        console.log(response)
                     })
             }
         }

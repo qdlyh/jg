@@ -29,7 +29,6 @@ export default {
     data() {
         return {
             uuid: '',
-            isActive: 0,
             list: [],
         }
     },

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="enterprise" v-show="show==0">
+        <div class="enterprise" v-if="$parent.isCert==3">
             <input type="file" id="file-img" @change="onChange" hidden>
             <input type="file" id="file-camera" accept="image/*" capture="camera" @change="onChange" hidden>
             <div class="user-header">
@@ -37,25 +37,31 @@
             <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
             <div class="btn-blue" style="margin-top:100px;" @click="submit">提交</div>
         </div>
-        <div v-show="show==1">
-            <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您')"></msg>
-            <x-button type="primary" style="width:80%;" link="BACK">返回个人中心</x-button>
+        <div v-if="$parent.isCert==0">
+            <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
+            <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
         </div>
+        <div v-if="$parent.isCert==2">
+            <msg :title="('申请认证失败')" icon="warn" :description="('请前往消息通知查看详情原因')"></msg>
+            <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
+        </div>
+        <loadings v-if="show"></loadings>
     </div>
 </template>
 <script>
 import { Actionsheet, Toast, Msg, XButton } from 'vux'
-
+import loadings from '@/components/common/loadings'
 export default {
     components: {
         Actionsheet,
         Toast,
         Msg,
-        XButton
+        XButton,
+        loadings
     },
     data() {
         return {
-            show: 0,
+            show: false,
             num: null,
             Image: '',
             Images: '',
@@ -128,6 +134,16 @@ export default {
                 formData.append('wxUserId', this.$parent.wxUserId);
                 formData.append('image01', this.Image);
                 formData.append('image02', this.Images);
+                this.$ajax.interceptors.request.use((config) => {
+                    //在请求发送之前做一些事
+                    //console.log(config)
+                    this.show = true;
+                    return config;
+                }, function (error) {
+                    //当出现请求错误是做一些事
+                    alert('网络发生异常')
+                    return Promise.reject(error);
+                });
                 this.$ajax({
                     method: 'post',
                     url: this.psta + '/submitCertification03',
@@ -135,7 +151,8 @@ export default {
                 })
                     .then(response => {
                         // console.log(response)
-                        this.show = 1;
+                        this.show = false;
+                        this.$parent.isCert = 0;
                     })
             }
         }

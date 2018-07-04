@@ -1,8 +1,9 @@
 <template>
     <div>
+        <loading v-show="!banner.length"></loading>
         <div class="index" v-show="banner.length">
             <div class="header">
-                <span @click="$router.push('/article')">健康讲堂</span>
+                <span @click="$router.push('/enterprise')">健康讲堂</span>
             </div>
             <!--swiper-->
             <div class="banner">
@@ -21,7 +22,7 @@
                 </span>
             </div>
             <div class="header margin-header">
-                <span>慈善你我他</span>
+                <span @click="$router.push({ name: 'resume', params: { id: 0 } })">慈善你我他</span>
             </div>
             <div class="item-1">
                 <span v-for="(item,index) in item1" :key="index" @click="goItem1(index)">
@@ -30,7 +31,7 @@
                 </span>
             </div>
             <div class="header margin-header">
-                <span @click="$router.push('/enterForm')">肠道保健</span>
+                <span @click="$router.push('/enterText')">肠道保健</span>
             </div>
             <div class="item-2">
                 <div @click="$router.push('/introduce')">
@@ -39,7 +40,6 @@
             </div>
         </div>
         <Footer></Footer>
-        <loading v-show="!banner.length"></loading>
     </div>
 </template>
 <script>
@@ -138,13 +138,13 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-top: 0.9375rem;
-    padding: 0 1.875rem;
+    padding: 0 0.625rem;
     width: 100%;
     span {
+      width: 20%;
       border-radius: 0.625rem;
       display: inline-block;
-           margin-right: 0.625rem;
-      width: 20%;
+      margin-right: 1.25rem;
       img {
         width: 100%;
         height: 6rem;

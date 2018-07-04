@@ -30,6 +30,7 @@
     </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
     data() {
         return {
@@ -37,16 +38,21 @@ export default {
             list: [],
         }
     },
-    activated() {
+    mounted() {
         this.uuid = this.$route.params.id;
-        this.$ajax({
-            method: 'get',
-            url: this.psta + '/getWxHealthLectureHallByUuid?wxUserId=' + this.$parent.wxUserId + '&uuid=' + this.uuid,
-        })
-            .then(response => {
-                //console.log(response)
-                this.list = [response.data.data];
+        if (this.article.hasOwnProperty(this.uuid)) {
+            this.list = this.article[this.uuid];
+        } else {
+            this.$ajax({
+                method: 'get',
+                url: this.psta + '/getWxHealthLectureHallByUuid?wxUserId=' + this.$parent.wxUserId + '&uuid=' + this.uuid,
             })
+                .then(response => {
+                    //console.log(response)
+                    this.article[this.uuid] = [response.data.data];
+                    this.list = [response.data.data];
+                })
+        }
     },
     methods: {
         toggle(item) {
@@ -78,6 +84,9 @@ export default {
         go(item) {
             this.$router.push({ name: 'message', params: { id: item.uuid } });
         }
+    },
+    computed: {
+        ...mapState(['article'])
     },
     // computed: {
     // 	msgId() {

@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div class="questions" v-show="show==1">
+        <div class="questions">
             <div class="questions-box">
                 <div class="questions-title">填写问题</div>
                 <div class="input">
-                    <input type="text" v-model="title" placeholder="填写标题" maxlength="50">
+                    <input type="text" v-model="title" placeholder="填写标题" maxlength="30">
                 </div>
                 <div class="textarea">
                     <textarea v-model="describe" cols="30" rows="10" placeholder="填写内容" maxlength="200"></textarea>
@@ -14,35 +14,28 @@
                 </div>
             </div>
         </div>
-        <div v-show="show==2">
-            <msg :title="('问题已提交')" :description="('是否返回继续浏览？')"></msg>
-            <x-button type="primary" style="width:80%;" link="BACK">返回继续浏览</x-button>
-        </div>
         <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
     </div>
 </template>
 <script>
-import { Toast, Msg, XButton } from 'vux'
+import { Toast } from 'vux'
 export default {
     components: {
         Toast,
-        Msg,
-        XButton
     },
     data() {
         return {
             title: '',
             describe: '',
             cancel: false,
-            show: 1,
             cancelText: '',
         }
     },
     methods: {
         sumbit() {
-            if (this.title.length == 0 || this.describe == 0) {
+            if (this.title.length == 5 || this.describe == 10) {
                 this.cancel = true;
-                this.cancelText = '想说什么呢';
+                this.cancelText = '填写的问题不够完整';
             } else {
                 let formData = new FormData();
                 formData.append('expertsUserId', this.$route.params.id);
@@ -56,7 +49,8 @@ export default {
                 })
                     .then(response => {
                         //console.log(response)
-                        this.show = 2;
+                        let uuid = response.data.data.uuid;
+                        this.$router.push({name:'forumArticle',params:{id:uuid}})
                     })
             }
         }

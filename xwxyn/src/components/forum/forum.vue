@@ -24,7 +24,7 @@
                 <div id="mescroll1" class="mescroll">
                     <div id="dataList1" class="data-list" v-cloak>
                         <div class="article-list" v-for="(item,index) in list1" :key="item.uuid">
-                            <div @click="$router.push({ name: 'forumArticle', params: { id: item.uuid } })">
+                            <div @click="$router.push({ name: 'forumMsg', params: { id: item.uuid } })">
                                 <h1>{{item.title}}</h1>
                                 <div class="article-box-bottom">
                                     <div>
@@ -116,11 +116,11 @@ export default {
         initMescroll(mescrollId, clearEmptyId) {
             this.mescroll = new MeScroll(mescrollId, {
                 up: {
-                    auto: false,//初始化完毕,是否自动触发上拉加载的回调
+                    auto: true,//初始化完毕,是否自动触发上拉加载的回调
                     isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                     callback: this.upCallback, //上拉加载的回调
-                    offset: 100,
-                    noMoreSize: 5,
+                    offset: 300,
+                    noMoreSize: 3,
                     //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
                     htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
                     empty: { //配置列表无任何数据的提示

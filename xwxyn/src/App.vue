@@ -14,24 +14,34 @@ export default {
   name: 'app',
   data() {
     return {
-      wxUserId: '',
-      settingId: '',
+      wxUserId: '6',
+      settingId: '63',
+      isCert: '',
+      isIn: '',
     }
   },
   created() {
-    this.wxUserId = 6;
-    if (localStorage.getItem("wxUserId") != null) {
-      this.wxUserId = localStorage.getItem("wxUserId");
-      this.settingId = localStorage.getItem("settingId");
-    } else {
-      this.wxUserId = this.$route.query.wxUserId;
-      localStorage.setItem('userId', this.wxUserId);
+    // if (localStorage.getItem("wxUserId") != null) {
+    //   this.wxUserId = localStorage.getItem("wxUserId");
+    //   this.settingId = localStorage.getItem("settingId");
+    // } else {
+    //   this.wxUserId = this.$route.query.wxUserId;
+    //   localStorage.setItem('userId', this.wxUserId);
 
-      this.settingId = this.$route.query.settingId;
-      localStorage.setItem('userId', this.settingId);
+    //   this.settingId = this.$route.query.settingId;
+    //   localStorage.setItem('userId', this.settingId);
+    // }
+    if (this.settingId == 61 || this.settingId == 63) {
+      this.$ajax({
+        method: 'get',
+        url: this.psta + '/findIsCert?wxUserId=' + this.wxUserId,
+      })
+        .then(response => {
+          //console.log(response)
+          this.isCert = response.data.data.isCert;
+          this.isIn = response.data.data.isIn;
+        })
     }
-    //this.mescroll.hideTopBtn();
-
   },
   mounted() {
     let htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
@@ -54,14 +64,31 @@ export default {
   // }
 
 
-  // watch: {
-  //   '$route'(to, from) {
-  //     if(to.name=='yzArticle'){
-  //       this.isFooter = false;
-  //     }
-  //     //console.log(to.name)
-  //   }
-  // }
+  watch: {
+    '$route'(to, from) {
+      if (to.name == 'expertList') {
+         //大众论坛，专家论坛拦截
+        if (this.settingId != 62) {
+          this.$router.push('/');
+        } else {
+          this.$router.push('/expertList');
+        }
+      }
+      if (to.name == 'enterprise' || to.name == 'resume') {
+        //企业认证，志愿者申请拦截
+        if (this.settingId != 61) {
+          this.$router.push('/');
+        }
+      }
+      if (to.name == 'enterText' || to.name == 'enterForm' || to.name == 'uploadFile') {
+        //企业入驻拦截
+        if (this.settingId != 63) {
+          this.$router.push('/');
+        }
+      }
+      //console.log(to.name)
+    }
+  }
 }
 </script>
 
@@ -86,6 +113,13 @@ i {
 body {
   background: #f3f3f3;
 }
+
+@media screen and (min-width: 750px) {
+  #app {
+    max-width: 750px;
+  }
+}
+
 #app {
   margin: 0 auto;
   // max-width: 750px;
@@ -97,17 +131,31 @@ body {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 懒加载图片过渡效果 */
-img[lazy='loaded'] {
-  animation: fade 0.5s;
+//mscroll，加载中
+.upwarp-tip,
+.downwarp-tip {
+  display: none !important;
 }
-@keyframes fade {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+/* 懒加载图片过渡效果 */
+// img[lazy='loaded'] {
+//   animation: fade 0.5s;
+// }
+// @keyframes fade {
+//   0% {
+//     opacity: 0;
+//   }
+//   100% {
+//     opacity: 1;
+//   }
+// }
+
+img[lazy='loading'] {
+  /*width: 100px;*/
+  background-position: center center !important;
+  background: #ccc;
+  background-size: 100px 100px;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 //首页轮播

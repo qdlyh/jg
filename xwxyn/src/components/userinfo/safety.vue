@@ -92,7 +92,7 @@ export default {
       color: #454545;
     }
     input {
-      width: 70%;
+      width: 60%;
       border: 0;
       font-size: 1.5rem;
       color: #454545;

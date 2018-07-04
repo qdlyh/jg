@@ -74,11 +74,11 @@ export default {
     this.uuid = this.$route.params.id;
     this.mescroll = new MeScroll("mescroll", {
       up: {
-        auto: false,//初始化完毕,是否自动触发上拉加载的回调
+        auto: true,//初始化完毕,是否自动触发上拉加载的回调
         isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
         callback: this.upCallback, //上拉加载的回调
-        offset: 500,
-        noMoreSize: 5,
+        offset: 300,
+        noMoreSize: 3,
         //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
         htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
         toTop: { //配置回到顶部按钮

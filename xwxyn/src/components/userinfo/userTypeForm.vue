@@ -54,7 +54,7 @@
                     <span>
                         就职机构
                     </span>
-                    <input placeholder="未设置" v-model.trim="item.company" maxlength="20">
+                    <input placeholder="未设置" v-model.trim="item.company" maxlength="500">
                 </div>
                 <div class="redact-msg-input" style="height:15rem">
                     <span v-if="item.settingId!=63" style="position: relative;top: -9.375rem;">
@@ -321,7 +321,7 @@ export default {
                             'city': city,
                             'county': county,
                             'signature': item.signature,
-                            'company': item.company                        
+                            'company': item.company
                         }
                     })
                         .then(response => {
@@ -468,20 +468,26 @@ export default {
     line-height: 5rem;
     width: 100%;
     margin-top: 0.625rem;
+    position: relative;
     span {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
       display: inline-block;
       width: 9.375rem;
       font-size: 1.5rem;
       color: #454545;
       padding-left: 1.25rem;
+      background: #fff;
     }
     input {
-      width: 70%;
+      width: 100%;
       border: 0;
       font-size: 1.5rem;
       color: #454545;
       text-align: right;
-      padding-right: 0.625rem;
+      padding-right: 1.5625rem;
       &::-webkit-input-placeholder {
         color: #999;
         font-size: 1.5rem;

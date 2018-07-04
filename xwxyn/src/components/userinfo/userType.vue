@@ -16,14 +16,14 @@
                     </div>
                 </div>
                 <div class="typeBtn-box" v-if="item.settingId==61">
-                    <div class="typeBtn active2">
-                        <a href="javascript:;" @click="$router.push({ name: 'resume', params: { id: 0 } })">我是专家</a>
+                    <div class="typeBtn" @click="$router.push({ name: 'resume', params: { id: 0 } })">
+                        <a href="javascript:;" style="background:#23C3FF">我是专家</a>
                     </div>
-                    <div class="typeBtn active3" @click="$router.push({ name: 'resume', params: { id: 1 } })">
-                        <a href="javascript:;">我是志愿者</a>
+                    <div class="typeBtn" @click="$router.push({ name: 'resume', params: { id: 1 } })">
+                        <a href="javascript:;" style="background:#FF6B6D">我是志愿者</a>
                     </div>
-                    <div class="typeBtn active4" @click="$router.push('/enterprise')">
-                        <a href="javascript:;">我是企业家</a>
+                    <div class="typeBtn" @click="$router.push('/enterprise')">
+                        <a href="javascript:;" style="background:#FFA34C">我是企业家</a>
                     </div>
                 </div>
                 <div class="text-type" v-if="item.settingId!=61">
@@ -176,7 +176,7 @@ export default {
         i {
           position: absolute;
           left: 11rem;
-          bottom: 0;
+          bottom: .625rem;
           font-size: 1.5rem;
           color: #9c9c9c;
         }
@@ -200,7 +200,7 @@ export default {
       .typeBtn {
         text-align: center;
         margin: 1.25rem auto;
-        width: 9.375rem;
+        width: 30%;
         height: 3.125rem;
         line-height: 3.125rem;
         border-radius: 0.9375rem;
@@ -209,6 +209,7 @@ export default {
           width: 100%;
           height: 100%;
           font-size: 1.5rem;
+          border-radius: 0.9375rem;
           color: #fff;
           text-overflow: ellipsis;
           border: none;

@@ -7,25 +7,23 @@
             <div id="mescroll0" class="mescroll" v-show="isShow==0">
                 <div id="dataList0" class="data-list" v-cloak>
                     <div class="yz-box" v-for="(item,index) in list0" :key="item.uuid">
-                        <div @click="$router.push({ name: 'yzArticle', params: { id: item.uuid } })">
-                            <div class="yz-banner">
-                                <img v-lazy="item.images[0].image" alt="">
-                                <span>
-                                    {{item.title}}
+                        <div class="yz-banner" @click="go(item)">
+                            <img v-lazy="item.images[0].image" alt="">
+                            <span>
+                                {{item.title}}
+                            </span>
+                        </div>
+                        <div class="specialist">
+                            <h1>专家坐诊</h1>
+                            <div class="specialist-list">
+                                <span v-for="(user,index) in item.users" :key="user.uuid" @click="goUser(user)">
+                                    <img v-lazy="user.image" alt="">
+                                    <i>{{user.nickName}}</i>
                                 </span>
                             </div>
-                            <div class="specialist">
-                                <h1>专家坐诊</h1>
-                                <div class="specialist-list">
-                                    <span v-for="(user,index) in item.users" :key="user.uuid">
-                                        <img v-lazy="user.image" alt="">
-                                        <i>{{item.nickName}}</i>
-                                    </span>
-                                </div>
-                                <div class="time">
-                                    <span>{{item.createDate}}</span>
-                                    <span>{{item.address}}</span>
-                                </div>
+                            <div class="time">
+                                <span>{{item.createDate}}</span>
+                                <span>{{item.address}}</span>
                             </div>
                         </div>
                     </div>
@@ -35,25 +33,23 @@
             <div id="mescroll1" class="mescroll" v-show="isShow==1">
                 <div id="dataList1" class="data-list" v-cloak>
                     <div class="yz-box" v-for="(item,index) in list1" :key="item.uuid">
-                        <div @click="$router.push({ name: 'yzArticle', params: { id: item.uuid } })">
-                            <div class="yz-banner">
-                                <img v-lazy="item.images[0].image" alt="">
-                                <span>
-                                    {{item.title}}
+                        <div class="yz-banner" @click="go(item)">
+                            <img v-lazy="item.images[0].image" alt="">
+                            <span>
+                                {{item.title}}
+                            </span>
+                        </div>
+                        <div class="specialist">
+                            <h1>专家坐诊</h1>
+                            <div class="specialist-list">
+                                <span v-for="(user,index) in item.users" :key="user.uuid" @click="goUser(user)">
+                                    <img v-lazy="user.image" alt="">
+                                    <i>{{user.nickName}}</i>
                                 </span>
                             </div>
-                            <div class="specialist">
-                                <h1>专家坐诊</h1>
-                                <div class="specialist-list">
-                                    <span v-for="(user,index) in item.users" :key="user.uuid">
-                                        <img v-lazy="user.image" alt="">
-                                        <i>{{item.nickName}}</i>
-                                    </span>
-                                </div>
-                                <div class="time">
-                                    <span>{{item.createDate}}</span>
-                                    <span>{{item.address}}</span>
-                                </div>
+                            <div class="time">
+                                <span>{{item.createDate}}</span>
+                                <span>{{item.address}}</span>
                             </div>
                         </div>
                     </div>
@@ -63,25 +59,23 @@
             <div id="mescroll2" class="mescroll" v-show="isShow==2">
                 <div id="dataList2" class="data-list" v-cloak>
                     <div class="yz-box" v-for="(item,index) in list2" :key="item.uuid">
-                        <div @click="$router.push({ name: 'yzArticle', params: { id: item.uuid } })">
-                            <div class="yz-banner">
-                                <img v-lazy="item.images[0].image" alt="">
-                                <span>
-                                    {{item.title}}
+                        <div class="yz-banner" @click="go(item)">
+                            <img v-lazy="item.images[0].image" alt="">
+                            <span>
+                                {{item.title}}
+                            </span>
+                        </div>
+                        <div class="specialist">
+                            <h1>专家坐诊</h1>
+                            <div class="specialist-list">
+                                <span v-for="(user,index) in item.users" :key="user.uuid" @click="goUser(user)">
+                                    <img v-lazy="user.image" alt="">
+                                    <i>{{user.nickName}}</i>
                                 </span>
                             </div>
-                            <div class="specialist">
-                                <h1>专家坐诊</h1>
-                                <div class="specialist-list">
-                                    <span v-for="(user,index) in item.users" :key="user.uuid">
-                                        <img v-lazy="user.image" alt="">
-                                        <i>{{item.nickName}}</i>
-                                    </span>
-                                </div>
-                                <div class="time">
-                                    <span>{{item.createDate}}</span>
-                                    <span>{{item.address}}</span>
-                                </div>
+                            <div class="time">
+                                <span>{{item.createDate}}</span>
+                                <span>{{item.address}}</span>
                             </div>
                         </div>
                     </div>
@@ -111,7 +105,19 @@ export default {
     mounted() {
         this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
     },
+    activated() {
+        let dom = document.querySelector('#mescroll' + this.isShow); //找到滚动条主体内容
+        dom.scrollTop = this.$store.state.scrollTop;
+    },
     methods: {
+        go(item) {
+            this.$router.push({ name: 'yzArticle', params: { id: item.uuid } });
+            this.$store.state.scrollTop = this.mescroll.getScrollTop();
+        },
+        goUser(user) {
+            this.$router.push({ name: 'expertUser', params: { id: user.uuid } });
+            this.$store.state.scrollTop = this.mescroll.getScrollTop();
+        },
         onItemClick(index) {
             if (this.isShow != index) {
                 this.isShow = index;
@@ -126,7 +132,7 @@ export default {
                     auto: false,//初始化完毕,是否自动触发上拉加载的回调
                     isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                     callback: this.upCallback, //上拉加载的回调
-                    offset: 500,
+                    offset: 300,
                     noMoreSize: 3,
                     //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
                     htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
@@ -169,7 +175,6 @@ export default {
             }
             if (dataIndex == 1) {
                 type = 56
-
             }
             if (dataIndex == 2) {
                 type = 57
@@ -270,8 +275,8 @@ export default {
           border-radius: 100%;
         }
         i {
-          float: left;
-          width: 100%;
+          width: 6.25rem;
+          display: inline-block;
           font-size: 1.25rem;
           color: #454545;
           overflow: hidden;
@@ -280,7 +285,7 @@ export default {
         }
       }
       .time {
-        margin-top: 1.25rem;
+        margin-top: 0.9375rem;
         display: flex;
         justify-content: space-between;
         color: #9c9c9c;

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="resume" v-show="show==0">
+        <div class="resume" v-if="$parent.isCert==3">
             <input type="file" id="file-img" @change="onChange" hidden>
             <input type="file" id="file-camera" accept="image/*" capture="camera" @change="onChange" hidden>
             <div class="user-header">
@@ -41,9 +41,13 @@
             <toast v-model="cancel" :time="3000" type="cancel">{{(cancelText)}}</toast>
             <div class="btn-blue" id="clickMe" style="margin-top:50px;" @click="submit">提交</div>
         </div>
-        <div v-show="show==1">
-            <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您')"></msg>
-            <x-button type="primary" style="width:80%;" link="BACK">返回个人中心</x-button>
+        <div v-if="$parent.isCert==0">
+            <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
+            <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
+        </div>
+        <div v-if="$parent.isCert==2">
+            <msg :title="('申请认证失败')" icon="warn" :description="('请前往消息通知查看详情原因')"></msg>
+            <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
         </div>
     </div>
 </template>
@@ -59,7 +63,6 @@ export default {
     },
     data() {
         return {
-            show: 0,
             num: null,
             Image: '',
             show1: false,
@@ -140,11 +143,10 @@ export default {
             }
             let formData = new FormData();
             formData.append('wxUserId', this.$parent.wxUserId);
-            formData.append('res', e.target.files[0]);
+            formData.append('files', e.target.files[0]);
             this.$ajax({
                 method: 'post',
                 url: this.psta + '/submitCertification02',
-                headers: { 'Content-Type': 'multipart/form-data' },
                 data: formData
             })
                 .then(response => {
@@ -158,7 +160,7 @@ export default {
                 this.cancel = true;
                 this.cancelText = '请上传完整信息'
             } else {
-                this.show = 1;
+                this.$parent.isCert = 0;
             }
         }
     },

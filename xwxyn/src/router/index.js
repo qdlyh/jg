@@ -121,10 +121,10 @@ const router = new Router({
       name: 'myMessage',
       component: () =>
         import ('@/components/userinfo/myMessage'),
-        meta: {
-          title: '我的消息',
-          keepAlive: true
-        }
+      meta: {
+        title: '我的消息',
+        keepAlive: true
+      }
     },
     {
       //收货地址
@@ -242,7 +242,7 @@ const router = new Router({
         import ('@/components/index/article'),
       meta: {
         title: '',
-        keepAlive: true
+        keepAlive: false
       }
     },
     {
@@ -286,7 +286,11 @@ const router = new Router({
       path: '/yzList',
       name: 'yzList',
       component: () =>
-        import ('@/components/yizhen/yzList')
+        import ('@/components/yizhen/yzList'),
+      meta: {
+        title: '专家信息',
+        keepAlive: true
+      }
     },
     {
       //义诊文章

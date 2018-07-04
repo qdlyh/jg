@@ -9,9 +9,9 @@
             <div id="pullTo">
                 <div id="mescroll" class="mescroll">
                     <div id="dataList" class="data-list" v-cloak>
-                        <div class="message-box" v-for="(item,index) in list" :key="item.id">
+                        <div class="message-box" v-for="(item,index) in list" :key="item.uuid">
                             <div class="message-top">
-                                <img v-lazy="item.image" alt="">
+                                <img v-lazy="item.image" alt="" @click="goUser(item)">
                                 <span>
                                     <i class="name">{{item.nickName}}</i>
                                     <i class="status" v-if="item.settingId==62">专家认证</i>
@@ -80,7 +80,15 @@ export default {
         this.mescroll.destroy();
     },
     methods: {
-
+        goUser(item) {
+            if (item.settingId == 62) {
+                this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
+                this.$store.state.scrollTop = this.mescroll.getScrollTop();
+            } else {
+                this.$router.push({ name: 'user', params: { id: item.wxUserId } });
+                this.$store.state.scrollTop = this.mescroll.getScrollTop();
+            }
+        },
         replyBtn(index, item) {
             this.num = index;
             this.placeholder = item.nickName;

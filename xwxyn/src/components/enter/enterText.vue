@@ -1,57 +1,58 @@
 <template>
-    <div>
-        <div class="enterText">
-            <div class="user-header">
-                <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-                <h1>入驻</h1>
-                <i></i>
-            </div>
-            <div class="enter-title">
-                <h1>简介：</h1>
-                <p>介绍入驻内容...</p>
-            </div>
-            <div class="enter-flow">
-                <h1>入驻流程：</h1>
-                <div class="flow-title">
-                    <div>
-                        <img src="../../assets/logo.png" alt="">
-                        <p>1.填表申请</p>
-                    </div>
-                    <div>
-                        <img src="../../assets/logo.png" alt="">
-                        <p>2.提交资料</p>
-                    </div>
-                    <div>
-                        <img src="../../assets/logo.png" alt="">
-                        <p>3.资料审核</p>
-                    </div>
-                    <div>
-                        <img src="../../assets/logo.png" alt="">
-                        <p>4.认证通过</p>
-                    </div>
-                </div>
-            </div>
-            <div class="accessory">
-                <h1>附件资料：</h1>
-                <p>1、提供企业注册登记证复印件加盖公章</p>
-                <p>2、法人(授权人)身份证复印件</p>
-                <p>3、产品生产准可证及相关质量检测报告</p>
-                <p>4、签署质量保证书</p>
-            </div>
+  <div>
+    <div class="enterText">
+      <div class="user-header">
+        <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
+        <h1>申请入驻</h1>
+        <i></i>
+      </div>
+      <div v-for="(item,index) in list0" :key="index">
+        <div class="enter-title">
+          <h1>{{item.text}}：</h1>
+          <p>{{item.children[0].text}}</p>
         </div>
-        <div class="btn-blue" @click="$router.push('/enterForm')">
-            申请入驻
+        <div class="enter-flow" v-for="(item,index) in list1">
+          <h1>{{item.text}}</h1>
+          <div class="flow-title">
+            <div v-for="src in item.children">
+              <img :src="src.icon" alt="">
+              <p>{{src.text}}</p>
+            </div>
+          </div>
         </div>
-        <br/>
+        <div class="accessory" v-for="(item,index) in list2">
+          <h1>{{item.text}}：</h1>
+          <p v-for="text in item.children">{{text.text}}</p>
+        </div>
+      </div>
     </div>
+    <div class="btn-blue" @click="$router.push('/enterForm')">
+      申请入驻
+    </div>
+    <br/>
+  </div>
 </template>
 <script>
 export default {
-    data() {
-        return {
-
-        }
+  data() {
+    return {
+      list0: [],
+      list1: [],
+      list2: []
     }
+  },
+  mounted() {
+    this.$ajax({
+      method: 'get',
+      url: this.psta + '/findBySettingId?settingId=88',
+    })
+      .then(response => {
+        //console.log(response)
+        this.list0 = [response.data.data[0]];
+        this.list1 = [response.data.data[1]];
+        this.list2 = [response.data.data[2]];
+      })
+  }
 }
 </script>
 <style lang="less" scoped>

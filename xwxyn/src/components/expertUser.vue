@@ -24,10 +24,12 @@
             </div>
             <div class="issue" v-if="item.uuid!=$parent.wxUserId" @click="$router.push({name:'questions',params:{id:item.uuid}})">我要提问</div>
             <div class="specialist-article" v-for="text in item.questions">
-                <p>{{text.title}}</p>
-                <div class="specialist-box-bottom">
-                    <div>
-                        {{text.createDate}}
+                <div @click="$router.push({ name: 'forumArticle', params: { id: text.uuid } })">
+                    <p>{{text.title}}</p>
+                    <div class="specialist-box-bottom">
+                        <div>
+                            {{text.createDate}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -172,6 +174,7 @@ export default {
     color: #454545;
     font-size: 1.75rem;
     line-height: 4.375rem;
+    border-bottom: 1px solid #bdbdbd;
   }
   .specialist-article {
     padding: 1.25rem 1.875rem;

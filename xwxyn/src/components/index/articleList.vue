@@ -9,7 +9,7 @@
                     <div class="article-box" v-for="(item,index) in list0" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
                         <div class="article-img">
-                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -28,7 +28,7 @@
                     <div class="article-box" v-for="(item,index) in list1" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
                         <div class="article-img">
-                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -47,7 +47,7 @@
                     <div class="article-box" v-for="(item,index) in list2" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
                         <div class="article-img">
-                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -66,7 +66,7 @@
                     <div class="article-box" v-for="(item,index) in list3" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
                         <div class="article-img">
-                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -85,7 +85,7 @@
                     <div class="article-box" v-for="(item,index) in list4" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
                         <div class="article-img">
-                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -104,7 +104,7 @@
                     <div class="article-box" v-for="(item,index) in list5" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
                         <div class="article-img">
-                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -123,7 +123,7 @@
                     <div class="article-box" v-for="(item,index) in list6" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
                         <div class="article-img">
-                            <img v-for="src in item.images" v-lazy="src.image" alt="">
+                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -167,10 +167,13 @@ export default {
         this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
     },
     activated() {
-        for(let i=0;i<this.tab.length;i++){
-            let dom = document.querySelector('#mescroll' + this.tab[i].i);
-            dom.scrollTop=this.tab[i].top;
-        }
+        this.$nextTick(() => {
+            for (let i = 0; i < this.tab.length; i++) {
+                let dom = document.querySelector('#mescroll' + this.tab[i].i);
+                dom.scrollTop = this.tab[i].top;
+            }
+        })
+
     },
     // deactivated() {
     //     this.mescroll.destroy();
@@ -178,7 +181,7 @@ export default {
     methods: {
         go(item) {
             this.$router.push({ name: 'article', params: { id: item.uuid } });
-            // this.$store.state.scrollTop = this.mescroll.getScrollTop();
+            //this.$store.state.scrollTop = this.mescroll.getScrollTop();
         },
         onItemClick(index, item) {
             if (this.isShow != index) {
@@ -186,29 +189,34 @@ export default {
                 if (this.mescrollArr[index] == null) {
                     this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
                 }
+                // this.$nextTick(() => {
+                //     let dom = document.querySelector('#mescroll' + index);
+                //     dom.scrollTop = this.tab[index].top;
+                // });
+
             }
         },
-        touchEnd(ev){
+        touchEnd(ev) {
             let dom = document.querySelector('#mescroll' + this.isShow);
-            if(this.isShow==0){
+            if (this.isShow == 0) {
                 this.tab[0].top = dom.scrollTop;
             }
-             if(this.isShow==1){
+            if (this.isShow == 1) {
                 this.tab[1].top = dom.scrollTop;
             }
-            if(this.isShow==2){
+            if (this.isShow == 2) {
                 this.tab[2].top = dom.scrollTop;
             }
-            if(this.isShow==3){
+            if (this.isShow == 3) {
                 this.tab[3].top = dom.scrollTop;
             }
-            if(this.isShow==4){
+            if (this.isShow == 4) {
                 this.tab[4].top = dom.scrollTop;
             }
-            if(this.isShow==5){
+            if (this.isShow == 5) {
                 this.tab[5].top = dom.scrollTop;
             }
-            if(this.isShow==6){
+            if (this.isShow == 6) {
                 this.tab[6].top = dom.scrollTop;
             }
         },
@@ -391,7 +399,7 @@ export default {
     .article-img {
       display: flex;
       img {
-        width: 10rem;
+        width: 30%;
         height: 8.75rem;
         font-size: 8.75rem;
         margin: 0 5px;

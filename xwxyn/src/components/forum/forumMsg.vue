@@ -1,47 +1,57 @@
 <template>
     <div>
-        <div class="message">
+        <div class="message" @touchstart="touchStart">
             <div class="user-header">
                 <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-                <h1>留言列表</h1>
+                <h1>问题详情</h1>
                 <i></i>
             </div>
-            <div id="pullTo">
-                <div id="mescroll" class="mescroll">
-                    <div id="dataList" class="data-list" v-cloak>
-                        <div class="message-box" v-for="(item,index) in list" :key="item.id">
-                            <div class="message-top">
-                                <img v-lazy="item.image" alt="">
-                                <span>
-                                    <i class="name">{{item.nickName}}</i>
-                                    <i class="status" v-if="item.settingId==62">专家认证</i>
-                                    <p>{{item.reply}}</p>
+
+            <div id="mescroll" class="mescroll">
+                <div class="expertArticle" v-for="(item,index) in data" :key="item.uuid">
+                    <div class="article-box">
+                        <h1>{{item.title}}</h1>
+                        <div>
+                            <i>提问者：{{item.nickName}}</i>
+                            <i class="time">{{item.createDate}}</i>
+                        </div>
+                        <div class="article-text">{{item.describe}}</div>
+                    </div>
+                </div>
+
+                <div id="dataList" class="data-list" v-cloak>
+                    <div class="message-box" v-for="(item,index) in list" :key="item.id">
+                        <div class="message-top">
+                            <img v-lazy="item.image" alt="" @click="goUser(item)">
+                            <span>
+                                <i class="name">{{item.nickName}}</i>
+                                <i class="status" v-if="item.settingId==62">专家认证</i>
+                                <p>{{item.reply}}</p>
+                            </span>
+                            <div @click="toggle(item)" :class="{active:item.isPraise==1}">
+                                <i class="iconfont icon-dianzan"></i>
+                                <i v-if="item.praiseCount>0">{{item.praiseCount}}</i>
+                            </div>
+                        </div>
+                        <div class="message-bottom">
+                            <span>{{item.createDate}}</span>
+                            <div>
+                                <span class="dialogue" @click="go(item)" v-if="item.replyCount>0">查看对话</span>
+                                <span class="huifu" @click="replyBtn(index,item)" v-if="item.wxUserId!=$parent.wxUserId">
+                                    <i v-if="item.replyCount>0">{{item.replyCount}}</i>
+                                    回复
                                 </span>
-                                <div @click="toggle(item)" :class="{active:item.isPraise==1}">
-                                    <i class="iconfont icon-dianzan"></i>
-                                    <i v-if="item.praiseCount>0">{{item.praiseCount}}</i>
-                                </div>
+                                <span class="huifu" v-if="item.replyCount>0&&item.wxUserId==$parent.wxUserId">
+                                    <i>{{item.replyCount}}</i>
+                                    我的回复
+                                </span>
                             </div>
-                            <div class="message-bottom">
-                                <span>{{item.createDate}}</span>
-                                <div>
-                                    <span class="dialogue" @click="go(item)" v-if="item.replyCount>0">查看对话</span>
-                                    <span class="huifu" @click="replyBtn(index,item)" v-if="item.wxUserId!=$parent.wxUserId">
-                                        <i v-if="item.replyCount>0">{{item.replyCount}}</i>
-                                        回复
-                                    </span>
-                                    <span class="huifu" v-if="item.replyCount>0&&item.wxUserId==$parent.wxUserId">
-                                        <i>{{item.replyCount}}</i>
-                                        我的回复
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="reply" v-show="index==num">
-                                <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
-                                <div>
-                                    <span @click="cancel(index)">取消</span>
-                                    <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
-                                </div>
+                        </div>
+                        <div class="reply" v-show="index==num">
+                            <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
+                            <div>
+                                <span @click="cancel(index)">取消</span>
+                                <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
                             </div>
                         </div>
                     </div>
@@ -75,30 +85,49 @@ export default {
             num: null,
             mescroll: null,
             list: [],
+            data: [],
         }
     },
-    activated() {
+
+    mounted() {
         this.uuid = this.$route.params.id;
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxProblemInFoByUuid?uuid=' + this.uuid,
+        })
+            .then(response => {
+                // console.log(response)
+                this.data = [response.data.data];
+            })
         this.mescroll = new MeScroll("mescroll", {
             up: {
                 auto: false,//初始化完毕,是否自动触发上拉加载的回调
                 isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                 callback: this.upCallback, //上拉加载的回调
-                offset: 500,
-                noMoreSize: 5,
+                offset: 300,
+                noMoreSize: 3,
                 //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
                 htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
                 toTop: { //配置回到顶部按钮
                     src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
                     //offset: 1000
                 },
-            }
+            },
         });
     },
-    deactivated() {
-        this.mescroll.destroy();
+    activated() {
+        let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
+        dom.scrollTop = this.$store.state.scrollTop;
     },
+    // deactivated() {
+    //     this.mescroll.destroy();
+    // },
     methods: {
+        touchStart() {
+            this.mescroll.optUp.use = true;
+            this.mescroll.options.up.use = true;
+            //console.log(this.mescroll)
+        },
         toggle(item) {
             item.isPraise = !item.isPraise;
             let formData = new FormData();
@@ -129,6 +158,16 @@ export default {
 
         go(item) {
             this.$router.push({ name: 'forumReply', params: { id: item.uuid, messageId: item.uuid } });
+            this.$store.state.scrollTop = this.mescroll.getScrollTop();
+        },
+        goUser(item) {
+            if (item.settingId == 62) {
+                this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
+                this.$store.state.scrollTop = this.mescroll.getScrollTop();
+            } else {
+                this.$router.push({ name: 'user', params: { id: item.wxUserId } });
+                this.$store.state.scrollTop = this.mescroll.getScrollTop();
+            }
         },
 
         replyBtn(index, item) {
@@ -186,7 +225,7 @@ export default {
                     url: this.psta + '/submitAskQuestionsReply',
                 })
                     .then(response => {
-                        console.log(response)
+                        //console.log(response)
                         let user = [response.data.data];
                         this.list.unshift({
                             createDate: user[0].createDate,
@@ -230,6 +269,7 @@ export default {
                         let listData = [];
                         let listPage = response.data.data;
                         this.total = response.data.total;
+                        //this.page = pageNum;
                         for (let i = 0; i < listPage.length; i++) {
                             listData.push(listPage[i])
                         }
@@ -252,6 +292,40 @@ export default {
   top: 5rem;
   bottom: 6rem;
   height: auto;
+}
+
+.expertArticle {
+  background: #fff;
+  margin-bottom: 1.25rem;
+  .article-box {
+    padding: 1.875rem;
+    div {
+      display: flex;
+      justify-content: space-between;
+      margin: 1.875rem 0;
+      i {
+        color: #3c3c3c;
+        font-size: 1.5rem;
+      }
+      .time {
+        color: #9a9a9a;
+        font-size: 1.25rem;
+      }
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 400;
+      color: #3c3c3c;
+    }
+    .article-text {
+      font-size: 1.7rem;
+      color: #3c3c3c;
+    }
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
 }
 
 .empty {
