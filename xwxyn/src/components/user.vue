@@ -50,10 +50,14 @@ export default {
                 this.user = [response.data.data];
                 this.list = response.data.data.generals;
             })
+        let dom = document.querySelector('.volunteer');
+        dom.scrollTop = this.$store.state.scrollTop;
     },
     methods: {
         go(item) {
-            this.$router.push({ name: 'article', params: { id: item.uuid } })
+            let dom = document.querySelector('.volunteer');
+            this.$router.push({ name: 'article', params: { id: item.uuid } });
+            this.$store.state.scrollTop = dom.scrollTop;
         },
     }
 }

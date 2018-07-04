@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="message" @touchstart="touchStart">
+        <div class="message">
             <div class="user-header">
                 <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
                 <h1>问题详情</h1>
@@ -20,7 +20,7 @@
                 </div>
 
                 <div id="dataList" class="data-list" v-cloak>
-                    <div class="message-box" v-for="(item,index) in list" :key="item.id">
+                    <div class="message-box" v-for="(item,index) in list" :key="item.uuid">
                         <div class="message-top">
                             <img v-lazy="item.image" alt="" @click="goUser(item)">
                             <span>
@@ -86,11 +86,16 @@ export default {
             mescroll: null,
             list: [],
             data: [],
+            size: 10,
         }
     },
-
     mounted() {
+    },
+    activated() {
         this.uuid = this.$route.params.id;
+        if (this.list.length < 10) {
+            this.size = 10;
+        }
         this.$ajax({
             method: 'get',
             url: this.psta + '/getWxProblemInFoByUuid?uuid=' + this.uuid,
@@ -101,33 +106,39 @@ export default {
             })
         this.mescroll = new MeScroll("mescroll", {
             up: {
-                auto: false,//初始化完毕,是否自动触发上拉加载的回调
+                auto: true,//初始化完毕,是否自动触发上拉加载的回调
                 isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                 callback: this.upCallback, //上拉加载的回调
+                inited: this.upInited,
+                showNoMore: this.ShowNoMore,
+                page: {
+                    num: 0,
+                    size: this.size,
+                    time: null
+                },
                 offset: 300,
                 noMoreSize: 3,
                 //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
                 htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+                // clearEmptyId: 'dataList',
+                // empty: {
+                //     icon: "../../static/mescroll-empty.png", //图标,默认null
+                //     tip: "暂无相关数据~", //提示
+                // },
                 toTop: { //配置回到顶部按钮
                     src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
                     //offset: 1000
                 },
             },
         });
-    },
-    activated() {
+        // console.log(this.list)
         let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
         dom.scrollTop = this.$store.state.scrollTop;
     },
-    // deactivated() {
-    //     this.mescroll.destroy();
-    // },
+    deactivated() {
+        this.mescroll.destroy();
+    },
     methods: {
-        touchStart() {
-            this.mescroll.optUp.use = true;
-            this.mescroll.options.up.use = true;
-            //console.log(this.mescroll)
-        },
         toggle(item) {
             item.isPraise = !item.isPraise;
             let formData = new FormData();
@@ -248,10 +259,13 @@ export default {
         upCallback(page) {
             this.getListDataFromNet(page.num, page.size, (curPageData) => {
                 //curPageData = [];
-                if (page.num == 1) this.list = [];
                 let totalPage = this.total;
-                this.list = this.list.concat(curPageData);  //更新列表数据
+                if (page.num == 1) this.list = [];
+                if (this.list.length < this.total) this.list = this.list.concat(curPageData);  //更新列表数据
+                if (this.list.length == this.total)
                 this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+                this.size = this.list.length;
+                console.log(this.size, this.total)
                 //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
             }, function () {
                 this.mescroll.endErr();

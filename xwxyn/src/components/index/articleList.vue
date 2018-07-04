@@ -189,11 +189,10 @@ export default {
                 if (this.mescrollArr[index] == null) {
                     this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
                 }
-                // this.$nextTick(() => {
-                //     let dom = document.querySelector('#mescroll' + index);
-                //     dom.scrollTop = this.tab[index].top;
-                // });
-
+                this.$nextTick(() => {
+                    let dom = document.querySelector('#mescroll' + index);
+                    dom.scrollTop = this.tab[index].top;
+                });
             }
         },
         touchEnd(ev) {

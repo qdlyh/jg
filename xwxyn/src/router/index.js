@@ -374,7 +374,6 @@ const router = new Router({
 })
 export default router;
 router.beforeEach((to, from, next) => {
-  MeScroll.prototype.hideTopBtn(); //MeScroll返回顶部按钮
   if (to.meta.title) {
     document.title = to.meta.title;
   }

@@ -66,8 +66,9 @@ export default {
 
   watch: {
     '$route'(to, from) {
+      console.log(MeScroll.prototype.hideTopBtn()) //MeScroll返回顶部按钮)
       if (to.name == 'expertList') {
-         //大众论坛，专家论坛拦截
+        //大众论坛，专家论坛拦截
         if (this.settingId != 62) {
           this.$router.push('/');
         } else {

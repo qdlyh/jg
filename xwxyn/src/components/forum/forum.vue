@@ -24,7 +24,7 @@
                 <div id="mescroll1" class="mescroll">
                     <div id="dataList1" class="data-list" v-cloak>
                         <div class="article-list" v-for="(item,index) in list1" :key="item.uuid">
-                            <div @click="$router.push({ name: 'forumMsg', params: { id: item.uuid } })">
+                            <div @click="goMsg(item)">
                                 <h1>{{item.title}}</h1>
                                 <div class="article-box-bottom">
                                     <div>
@@ -46,7 +46,7 @@
             <div id="mescroll2" class="mescroll" v-show="isShow==2">
                 <div id="dataList2" class="data-list" v-cloak>
                     <div v-for="(item,index) in list2" :key="item.uuid">
-                        <div class="questions-history" @click="$router.push({ name: 'forumArticle', params: { id: item.uuid } })">
+                        <div class="questions-history" @click="goMsg(item)">
                             <h1>{{item.title}}</h1>
                             <div class="article-box-bottom">
                                 <div>
@@ -74,35 +74,43 @@ export default {
     },
     data() {
         return {
-            tab: [{ tab: '专家列表' }, { tab: '咨询专区' }, { tab: '我的提问' }],
+            tab: [{ tab: '专家列表', top: 0, i: 0 }, { tab: '咨询专区', top: 10, i: 1 }, { tab: '我的提问', top: 0, i: 2 }],
             mescroll: null,
             isShow: 0,
             mescrollArr: new Array(3),
             list0: [],
             list1: [],
             list2: [],
-
         }
     },
     mounted() {
         this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
     },
     activated() {
-        //this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
+        this.$nextTick(() => {
+            for (let i = 0; i < this.tab.length; i++) {
+                let dom = document.querySelector('#mescroll' + this.tab[i].i);
+                dom.scrollTop = this.tab[i].top;
+            }
+        })
     },
-    deactivated() {
-        // console.log(this.initMescroll("mescroll0", "dataList0").length)
-        // if (!this.list0.length) {
-        //this.mescroll.destroy();
-        //     console.log('1')
-        // }
-    },
-
+    // deactivated() {
+    //     this.mescroll.destroy();
+    // },
+    // watch: {
+    //     '$route'(to, from) {
+    //         if (to.name == 'forumMsg') {
+    //             to.meta.keepAlive = false;
+    //             console.log(to.meta.keepAlive)
+    //         }
+    //     }
+    // },
     methods: {
         go() {
-            //console.log(item.uuid)
             this.$router.push({ name: 'questions', params: { id: 0 } });
-            //this.mescroll.destroy();
+        },
+        goMsg(item) {
+            this.$router.push({ name: 'forumMsg', params: { id: item.uuid } })
         },
 
         onItemClick(index) {
@@ -111,6 +119,10 @@ export default {
                 if (this.mescrollArr[index] == null) {
                     this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
                 }
+                this.$nextTick(() => {
+                    let dom = document.querySelector('#mescroll' + index);
+                    dom.scrollTop = this.tab[index].top;
+                });
             }
         },
         initMescroll(mescrollId, clearEmptyId) {
@@ -119,6 +131,7 @@ export default {
                     auto: true,//初始化完毕,是否自动触发上拉加载的回调
                     isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                     callback: this.upCallback, //上拉加载的回调
+                    onScroll: this.upScroll,
                     offset: 300,
                     noMoreSize: 3,
                     //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
@@ -131,6 +144,30 @@ export default {
                 }
             });
             return this.mescroll;
+        },
+
+        upScroll(mescroll, y, isUp) {
+            if (this.isShow == 0) {
+                this.tab[0].top = y;
+            }
+            if (this.isShow == 1) {
+                this.tab[1].top = y;
+            }
+            if (this.isShow == 2) {
+                this.tab[2].top = y;
+            }
+            if (this.isShow == 3) {
+                this.tab[3].top = y;
+            }
+            if (this.isShow == 4) {
+                this.tab[4].top = y;
+            }
+            if (this.isShow == 5) {
+                this.tab[5].top = y;
+            }
+            if (this.isShow == 6) {
+                this.tab[6].top = y;
+            }
         },
 
         upCallback(page) {
@@ -204,15 +241,6 @@ export default {
             }, 500)
         }
     },
-    watch: {
-        '$route'(to, from) {
-            //console.log(to)
-            if (to.name == 'expertAll') {
-                //console.log(to)
-
-            }
-        }
-    }
 }
 </script>
 <style lang="less" scoped>

@@ -13,7 +13,7 @@
                         <i class="delete" @click="deleteBtn(item,index)">x</i>
                         <div class="article-box">
                             <h1>{{item.title}}</h1>
-                            <div class="article-img">
+                            <div class="article-img" v-if="item.images.length">
                                 <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
                             </div>
                             <div class="article-box-bottom">
@@ -21,8 +21,11 @@
                                     <span>{{item.count}}浏览</span>
                                     <span>{{item.messageCount}}评论</span>
                                 </div>
-                                <div>
+                                <div v-if="type==4">
                                     {{item.modifyDate}}
+                                </div>
+                                <div v-else>
+                                    {{item.historyDate}}
                                 </div>
                             </div>
                         </div>
@@ -71,8 +74,8 @@ export default {
         deleteBtn(item, index) {
             this.list.splice(index, 1)
             let formData = new FormData();
-            formData.append('wxUserId', this.$parent.wxUserId);
-            formData.append('generalId', item.uuid);
+            formData.append('type', this.type);
+            formData.append('uuid', item.uuid);
             this.$ajax({
                 method: 'post',
                 url: this.psta + '/delMyHistoricalRecord',
@@ -153,9 +156,9 @@ export default {
     top: 10px;
     right: 10px;
     display: inline-block;
-    width: 2.5rem;
-    height: 2.5rem;
-    line-height: 2.5rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
     font-size: 1.5rem;
     color: #fff;
     background: #fd0000;

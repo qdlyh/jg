@@ -1,34 +1,36 @@
 <template>
     <div>
-        <div class="specialistUser" v-for="(item,index) in list" :key="item.uuid">
-            <div class="specialist-top">
-                <div class="user-message">
-                    <img v-lazy="item.image" alt="">
-                    <div class="user">
-                        <h1>{{item.nickName}}</h1>
-                        <i>{{item.label}}</i>
-                        <p>{{item.signature}}</p>
-                        <span class="attention" v-if="item.uuid!=$parent.wxUserId" @click="toggle(item)" :class="{active:item.isFocus==1}">{{isText}}</span>
+        <div class="specialistUser">
+            <div v-for="(item,index) in list" :key="item.uuid">
+                <div class="specialist-top">
+                    <div class="user-message">
+                        <img v-lazy="item.image" alt="">
+                        <div class="user">
+                            <h1>{{item.nickName}}</h1>
+                            <i>{{item.label}}</i>
+                            <p>{{item.signature}}</p>
+                            <span class="attention" v-if="item.uuid!=$parent.wxUserId" @click="toggle(item)" :class="{active:item.isFocus==1}">{{isText}}</span>
+                        </div>
+                    </div>
+                    <div class="number">
+                        <span>
+                            <p>帮助</p>
+                            <i>{{item.helpCount}}</i>
+                        </span>
+                        <span>
+                            <p>关注</p>
+                            <i>{{item.focusCount}}</i>
+                        </span>
                     </div>
                 </div>
-                <div class="number">
-                    <span>
-                        <p>帮助</p>
-                        <i>{{item.helpCount}}</i>
-                    </span>
-                    <span>
-                        <p>关注</p>
-                        <i>{{item.focusCount}}</i>
-                    </span>
-                </div>
-            </div>
-            <div class="issue" v-if="item.uuid!=$parent.wxUserId" @click="$router.push({name:'questions',params:{id:item.uuid}})">我要提问</div>
-            <div class="specialist-article" v-for="text in item.questions">
-                <div @click="$router.push({ name: 'forumArticle', params: { id: text.uuid } })">
-                    <p>{{text.title}}</p>
-                    <div class="specialist-box-bottom">
-                        <div>
-                            {{text.createDate}}
+                <div class="issue" v-if="item.uuid!=$parent.wxUserId" @click="$router.push({name:'questions',params:{id:item.uuid}})">我要提问</div>
+                <div class="specialist-article" v-for="(text,index) in item.questions" :key="index">
+                    <div @click="go(text)">
+                        <p>{{text.title}}</p>
+                        <div class="specialist-box-bottom">
+                            <div>
+                                {{text.createDate}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -58,8 +60,15 @@ export default {
                     this.isText = '已关注'
                 }
             })
+        let dom = document.querySelector('.specialistUser');
+        dom.scrollTop = this.$store.state.scrollTop;
     },
     methods: {
+        go(text) {
+            let dom = document.querySelector('.specialistUser');
+            this.$router.push({ name: 'forumMsg', params: { id: text.uuid } });
+            this.$store.state.scrollTop = dom.scrollTop;
+        },
         toggle(item) {
             item.isFocus = !item.isFocus;
             let formData = new FormData();

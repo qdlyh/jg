@@ -10,7 +10,7 @@
             <div id="mescroll" class="mescroll">
                 <div id="dataList" class="data-list" v-cloak>
                     <div class="article-list" v-for="(item,index) in list" :key="item.uuid">
-                        <div @click="$router.push({ name: 'forumArticle', params: { id: item.uuid } })">
+                        <div @click="go(item)">
                             <h1>{{item.title}}</h1>
                             <div class="article-box-bottom">
                                 <div>
@@ -58,6 +58,9 @@ export default {
         this.mescroll.destroy();
     },
     methods: {
+        go(item) {
+            this.$router.push({ name: 'forumMsg', params: { id: item.uuid } })
+        },
         upCallback(page) {
             this.getListDataFromNet(page.num, page.size, (curPageData) => {
                 //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置

@@ -10,9 +10,9 @@
                 <div id="dataList" class="data-list" v-cloak>
                     <div class="article-list" v-for="(item,index) in list" :key="item.uuid">
                         <div>
-                            <div style="text-align: center">
+                            <!-- <div style="text-align: center">
                                 <img v-lazy="item.image" alt="">
-                            </div>
+                            </div> -->
                             <h1>{{item.title}}</h1>
                             <p>{{item.message}}</p>
                             <div class="article-box-bottom">
