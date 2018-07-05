@@ -15,7 +15,7 @@ export default {
   data() {
     return {
       wxUserId: '6',
-      settingId: '63',
+      settingId: '62',
       isCert: '',
       isIn: '',
     }
@@ -66,7 +66,7 @@ export default {
 
   watch: {
     '$route'(to, from) {
-      console.log(MeScroll.prototype.hideTopBtn()) //MeScroll返回顶部按钮)
+      //console.log(MeScroll.prototype.hideTopBtn()) //MeScroll返回顶部按钮)
       if (to.name == 'expertList') {
         //大众论坛，专家论坛拦截
         if (this.settingId != 62) {
@@ -115,11 +115,6 @@ body {
   background: #f3f3f3;
 }
 
-@media screen and (min-width: 750px) {
-  #app {
-    max-width: 750px;
-  }
-}
 
 #app {
   margin: 0 auto;
@@ -130,6 +125,18 @@ body {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
+}
+
+//msg.png
+.empty {
+  margin: 3.125rem auto;
+  text-align: center;
+  color: #9a9a9a;
+  font-size: 1.5rem;
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 //mscroll，加载中

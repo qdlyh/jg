@@ -6,29 +6,28 @@
         <h1>回复详情</h1>
         <i></i>
       </div>
-      <div id="pullTo">
-        <div id="mescroll" class="mescroll">
-          <div id="dataList" class="data-list" v-cloak>
-            <div class="message-box" v-for="(item,index) in list" :key="item.id">
-              <div class="message-top">
-                <img v-lazy="item.image" alt="">
-                <span>
-                  <i>{{item.nickName}}</i>
-                  <p>{{item.reply}}</p>
-                </span>
+      <loading v-show="loading"></loading>
+      <div id="mescroll" class="mescroll" v-show="!loading">
+        <div id="dataList" class="data-list" v-cloak>
+          <div class="message-box" v-for="(item,index) in list" :key="item.uuid">
+            <div class="message-top">
+              <img v-lazy="item.image" alt="" @click="goUser(item)">
+              <span>
+                <i>{{item.nickName}}</i>
+                <p>{{item.reply}}</p>
+              </span>
+            </div>
+            <div class="message-bottom">
+              <span>{{item.createDate}}</span>
+              <div v-show="item.wxUserId!=$parent.wxUserId">
+                <span class="huifu" @click="replyBtn(index,item)">回复</span>
               </div>
-              <div class="message-bottom">
-                <span>{{item.createDate}}</span>
-                <div v-show="item.wxUserId!=$parent.wxUserId">
-                  <span class="huifu" @click="replyBtn(index,item)">回复</span>
-                </div>
-              </div>
-              <div class="reply" v-show="index==num">
-                <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
-                <div>
-                  <span @click="cancel(index)">取消</span>
-                  <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
-                </div>
+            </div>
+            <div class="reply" v-show="index==num">
+              <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
+              <div>
+                <span @click="cancel(index)">取消</span>
+                <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
               </div>
             </div>
           </div>
@@ -47,6 +46,7 @@
 export default {
   data() {
     return {
+      loading: true,
       replyMsg: '',
       placeholder: '',
       msg: '',
@@ -58,7 +58,7 @@ export default {
     }
   },
   activated() {
-    this.uuid = this.$route.params.id;
+    this.uuid = Number(this.$route.params.id);
     this.mescroll = new MeScroll("mescroll", {
       up: {
         auto: false,//初始化完毕,是否自动触发上拉加载的回调
@@ -78,8 +78,21 @@ export default {
   deactivated() {
     this.mescroll.destroy();
   },
+  watch: {
+    uuid(id) {
+      this.loading = true;
+    }
+  },
   methods: {
-
+    goUser(item) {
+      if (item.settingId == 62) {
+        this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
+        this.$store.state.scrollTop = this.mescroll.getScrollTop();
+      } else {
+        this.$router.push({ name: 'user', params: { id: item.wxUserId } });
+        this.$store.state.scrollTop = this.mescroll.getScrollTop();
+      }
+    },
     replyBtn(index, item) {
       this.num = index;
       this.placeholder = item.nickName;
@@ -115,7 +128,7 @@ export default {
           .then(response => {
             //console.log(response)
             let user = [response.data.data];
-            this.list.unshift({
+            this.list.push({
               createDate: user[0].createDate,
               generalId: user[0].generalId,    //这里是的文章id
               isPraise: user[0].isPraise,
@@ -126,7 +139,7 @@ export default {
               reply: user[0].reply,
               uuid: user[0].uuid,
               wxUserId: user[0].wxUserId,
-              id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+              //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
             })
           })
       }
@@ -147,9 +160,9 @@ export default {
           url: this.psta + '/submitMessageReply',
         })
           .then(response => {
-            console.log(response)
+            //console.log(response)
             let user = [response.data.data];
-            this.list.unshift({
+            this.list.push({
               createDate: user[0].createDate,
               generalId: user[0].generalId,    //这里是的文章id
               isPraise: user[0].isPraise,
@@ -160,7 +173,7 @@ export default {
               reply: user[0].reply,
               uuid: user[0].uuid,
               wxUserId: user[0].wxUserId,
-              id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+              //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
             })
             this.msg = '';
           })
@@ -191,6 +204,7 @@ export default {
             let listData = [];
             let listPage = response.data.data;
             this.total = response.data.total;
+            this.loading = false;
             for (let i = 0; i < listPage.length; i++) {
               listData.push(listPage[i])
             }

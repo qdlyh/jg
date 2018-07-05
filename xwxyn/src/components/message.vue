@@ -6,46 +6,49 @@
         <h1>留言列表</h1>
         <i></i>
       </div>
-      <div id="pullTo">
-        <div id="mescroll" class="mescroll">
-          <div id="dataList" class="data-list" v-cloak>
-            <div class="message-box" v-for="(item,index) in list" :key="item.id">
-              <div class="message-top">
-                <img v-lazy="item.image" alt="">
-                <span>
-                  <i>{{item.nickName}}</i>
-                  <p>{{item.message}}</p>
+      <loading v-show="loading"></loading>
+      <div id="mescroll" class="mescroll" v-show="!loading">
+        <div id="dataList" class="data-list" v-cloak>
+          <div class="message-box" v-for="(item,index) in list" :key="item.uuid">
+            <div class="message-top">
+              <img v-lazy="item.image" alt="" @click="goUser(item)">
+              <span>
+                <i>{{item.nickName}}</i>
+                <p>{{item.message}}</p>
+              </span>
+              <div @click="toggle(item)" :class="{active:item.isPraise==1}">
+                <i class="iconfont icon-dianzan"></i>
+                <i v-if="item.praiseCount>0">{{item.praiseCount}}</i>
+              </div>
+            </div>
+            <div class="message-bottom">
+              <span>{{item.createDate}}</span>
+              <div>
+                <span class="dialogue" @click="go(item)" v-if="item.replyCount>0">查看对话</span>
+                <span class="huifu" @click="replyBtn(index,item)" v-if="item.wxUserId!=$parent.wxUserId">
+                  <i v-if="item.replyCount>0">{{item.replyCount}}</i>
+                  回复
                 </span>
-                <div @click="toggle(item)" :class="{active:item.isPraise==1}">
-                  <i class="iconfont icon-dianzan"></i>
-                  <i v-if="item.praiseCount>0">{{item.praiseCount}}</i>
-                </div>
+                <span class="huifu" v-if="item.replyCount>0&&item.wxUserId==$parent.wxUserId">
+                  <i>{{item.replyCount}}</i>
+                  我的回复
+                </span>
               </div>
-              <div class="message-bottom">
-                <span>{{item.createDate}}</span>
-                <div>
-                  <span class="dialogue" @click="go(item)" v-if="item.replyCount>0">查看对话</span>
-                  <span class="huifu" @click="replyBtn(index,item)" v-if="item.wxUserId!=$parent.wxUserId">
-                    <i v-if="item.replyCount>0">{{item.replyCount}}</i>
-                    回复
-                  </span>
-                  <span class="huifu" v-if="item.replyCount>0&&item.wxUserId==$parent.wxUserId">
-                    <i>{{item.replyCount}}</i>
-                    我的回复
-                  </span>
-                </div>
-              </div>
-              <div class="reply" v-show="index==num">
-                <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
-                <div>
-                  <span @click="cancel(index)">取消</span>
-                  <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
-                </div>
+            </div>
+            <div class="reply" v-show="index==num">
+              <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
+              <div>
+                <span @click="cancel(index)">取消</span>
+                <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
               </div>
             </div>
           </div>
         </div>
+        <div class="empty" v-show="!list.length">
+          <img src="../../static/mescroll-empty.png" alt="">
+        </div>
       </div>
+
       <div class="msg-input-box" v-show="num==null">
         <div class="msg-input" :class="{activeBtn:msg!=0}">
           <!-- <i class="iconfont icon-xiepinglun"></i> -->
@@ -60,6 +63,7 @@
 export default {
   data() {
     return {
+      loading: true,
       placeholder: '',
       replyMsg: '',
       msg: '',
@@ -68,15 +72,23 @@ export default {
       num: null,
       mescroll: null,
       list: [],
+      size: 10,
     }
   },
   activated() {
-    this.uuid = this.$route.params.id;
+    this.uuid = Number(this.$route.params.id);
+    if (this.list.length >= 10) {
+      this.size = this.list.length;
+    }
     this.mescroll = new MeScroll("mescroll", {
       up: {
         auto: true,//初始化完毕,是否自动触发上拉加载的回调
         isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
         callback: this.upCallback, //上拉加载的回调
+        page: {
+          // num: this.page,
+          size: this.size,
+        },
         offset: 300,
         noMoreSize: 3,
         //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
@@ -94,6 +106,11 @@ export default {
   },
   deactivated() {
     this.mescroll.destroy();
+  },
+  watch: {
+    uuid(id) {
+      this.loading = true;
+    }
   },
   methods: {
 
@@ -128,6 +145,16 @@ export default {
     go(item) {
       this.$router.push({ name: 'dialogue', params: { id: item.uuid, messageId: item.uuid } });
       this.$store.state.scrollTop = this.mescroll.getScrollTop();
+    },
+
+    goUser(item) {
+      if (item.settingId == 62) {
+        this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
+        this.$store.state.scrollTop = this.mescroll.getScrollTop();
+      } else {
+        this.$router.push({ name: 'user', params: { id: item.wxUserId } });
+        this.$store.state.scrollTop = this.mescroll.getScrollTop();
+      }
     },
 
     replyBtn(index, item) {
@@ -185,7 +212,7 @@ export default {
           .then(response => {
             //console.log(response)
             let user = [response.data.data];
-            this.list.unshift({
+            this.list.push({
               createDate: user[0].createDate,
               generalId: user[0].generalId,    //这里是的文章id
               isPraise: user[0].isPraise,
@@ -196,7 +223,7 @@ export default {
               message: user[0].message,
               uuid: user[0].uuid,
               wxUserId: user[0].wxUserId,
-              id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+              //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
             })
             this.msg = '';
           })
@@ -208,7 +235,7 @@ export default {
         //curPageData = [];
         if (page.num == 1) this.list = [];
         let totalPage = this.total;
-        this.list = this.list.concat(curPageData);  //更新列表数据
+        if (this.list.length < this.total) this.list = this.list.concat(curPageData);  //更新列表数据
         this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
         //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
       }, function () {
@@ -227,6 +254,7 @@ export default {
             let listData = [];
             let listPage = response.data.data;
             this.total = response.data.total;
+            this.loading = false;
             for (let i = 0; i < listPage.length; i++) {
               listData.push(listPage[i])
             }
@@ -402,7 +430,12 @@ export default {
     }
   }
 }
-
+.empty {
+  img {
+    width: 100%;
+    height: 100%;
+  }
+}
 .btnActive {
   background: #007acc !important;
 }

@@ -1,6 +1,7 @@
 <template>
     <div>
-        <div class="specialistUser">
+        <loading v-show="loading"></loading>
+        <div class="specialistUser" v-show="!loading">
             <div v-for="(item,index) in list" :key="item.uuid">
                 <div class="specialist-top">
                     <div class="user-message">
@@ -34,6 +35,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="empty" v-show="!list[0].questions.length">
+                    <img src="../../static/msg.png" alt="">
+                    <p>还没有发布任何内容</p>
+                </div>
             </div>
         </div>
     </div>
@@ -42,13 +47,14 @@
 export default {
     data() {
         return {
+            loading: true,
             uuid: '',
             list: [],
             isText: '关注'
         }
     },
     activated() {
-        this.uuid = this.$route.params.id;
+        this.uuid = Number(this.$route.params.id);
         this.$ajax({
             method: 'get',
             url: this.psta + '/getWxExpertsByUuid?uuid=' + this.uuid + '&wxUserId=' + this.$parent.wxUserId,
@@ -56,12 +62,18 @@ export default {
             .then(response => {
                 //console.log(response)
                 this.list = [response.data.data];
+                this.loading = false;
                 if (this.list[0].isFocus == 1) {
                     this.isText = '已关注'
                 }
             })
         let dom = document.querySelector('.specialistUser');
         dom.scrollTop = this.$store.state.scrollTop;
+    },
+    watch: {
+        uuid(id) {
+            this.loading = true;
+        }
     },
     methods: {
         go(text) {

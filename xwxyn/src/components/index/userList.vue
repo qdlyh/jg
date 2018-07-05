@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      tab: [{ tab: '慈善企业' }, { tab: '志愿者' }],
+      tab: [{ tab: '慈善企业',top: 0, i: 0 }, { tab: '志愿者',top: 0, i: 1 }],
       isShow: 0,
       mescrollArr: new Array(2),
       list0: [],
@@ -67,7 +67,12 @@ export default {
     this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
   },
   activated() {
-    //this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
+    this.$nextTick(() => {
+      for (let i = 0; i < this.tab.length; i++) {
+        let dom = document.querySelector('#mescroll' + this.tab[i].i);
+        dom.scrollTop = this.tab[i].top;
+      }
+    })
   },
   deactivated() {
     // console.log(this.initMescroll("mescroll0", "dataList0").length)
@@ -79,9 +84,7 @@ export default {
 
   methods: {
     go() {
-      //console.log(item.uuid)
       this.$router.push({ name: 'questions', params: { id: 0 } });
-      //this.mescroll.destroy();
     },
 
     onItemClick(index) {
@@ -90,16 +93,21 @@ export default {
         if (this.mescrollArr[index] == null) {
           this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
         }
+        this.$nextTick(() => {
+          let dom = document.querySelector('#mescroll' + index);
+          dom.scrollTop = this.tab[index].top;
+        });
       }
     },
     initMescroll(mescrollId, clearEmptyId) {
       this.mescroll = new MeScroll(mescrollId, {
         up: {
-          auto: false,//初始化完毕,是否自动触发上拉加载的回调
+          auto: true,//初始化完毕,是否自动触发上拉加载的回调
           isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
           callback: this.upCallback, //上拉加载的回调
-          offset: 100,
-          noMoreSize: 5,
+          onScroll: this.upScroll,
+          offset: 300,
+          noMoreSize: 3,
           //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
           htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
           empty: { //配置列表无任何数据的提示
@@ -110,6 +118,15 @@ export default {
         }
       });
       return this.mescroll;
+    },
+
+    upScroll(mescroll, y, isUp) {
+      if (this.isShow == 0) {
+        this.tab[0].top = y;
+      }
+      if (this.isShow == 1) {
+        this.tab[1].top = y;
+      }
     },
 
     upCallback(page) {
@@ -129,7 +146,7 @@ export default {
             break;
         }
         this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
-        console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
+        //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
       }, function () {
         this.mescrollArr[dataIndex].endErr();
       });

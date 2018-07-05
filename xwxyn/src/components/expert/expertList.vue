@@ -7,7 +7,7 @@
       <div id="mescroll0" class="mescroll" v-show="isShow==0">
         <div id="dataList0" class="data-list" v-cloak>
           <div class="article-list" v-for="(item,index) in list0" :key="item.uuid">
-            <div @click="$router.push({ name: 'forumArticle', params: { id: item.uuid } })">
+            <div @click="goMsg(item)">
               <h1>{{item.title}}</h1>
               <div class="article-box-bottom">
                 <div>
@@ -25,7 +25,7 @@
       <div id="mescroll1" class="mescroll" v-show="isShow==1">
         <div id="dataList1" class="data-list" v-cloak>
           <div v-for="(item,index) in list1" :key="item.uuid">
-            <div class="article-hd" @click="$router.push({ name: 'forumArticle', params: { id: item.uuid } })">
+            <div class="article-hd" @click="goMsg(item)">
               <h1>{{item.title}}</h1>
               <div class="article-box-bottom">
                 <div>
@@ -71,7 +71,7 @@ export default {
   },
   data() {
     return {
-      tab: [{ tab: '咨询专区' }, { tab: '我来回答' }, { tab: '专家博文' }],
+      tab: [{ tab: '咨询专区', top: 0, i: 0 }, { tab: '我来回答', top: 0, i: 1 }, { tab: '专家博文', top: 0, i: 2 }],
       isShow: 0,
       mescrollArr: new Array(3),
       list0: [],
@@ -83,14 +83,15 @@ export default {
     this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
   },
   activated() {
-    //this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
+    this.$nextTick(() => {
+      for (let i = 0; i < this.tab.length; i++) {
+        let dom = document.querySelector('#mescroll' + this.tab[i].i);
+        dom.scrollTop = this.tab[i].top;
+      }
+    })
   },
   deactivated() {
-    // console.log(this.initMescroll("mescroll0", "dataList0").length)
-    // if (!this.list0.length) {
     //this.mescroll.destroy();
-    //     console.log('1')
-    // }
   },
 
   methods: {
@@ -100,12 +101,20 @@ export default {
       //this.mescroll.destroy();
     },
 
+    goMsg(item) {
+      this.$router.push({ name: 'forumMsg', params: { id: item.uuid } })
+    },
+
     onItemClick(index) {
       if (this.isShow != index) {
         this.isShow = index;
         if (this.mescrollArr[index] == null) {
           this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
         }
+        this.$nextTick(() => {
+          let dom = document.querySelector('#mescroll' + index);
+          dom.scrollTop = this.tab[index].top;
+        });
       }
     },
     initMescroll(mescrollId, clearEmptyId) {
@@ -114,6 +123,7 @@ export default {
           auto: true,//初始化完毕,是否自动触发上拉加载的回调
           isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
           callback: this.upCallback, //上拉加载的回调
+          onScroll: this.upScroll,
           offset: 300,
           noMoreSize: 3,
           //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
@@ -126,6 +136,18 @@ export default {
         }
       });
       return this.mescroll;
+    },
+
+    upScroll(mescroll, y, isUp) {
+      if (this.isShow == 0) {
+        this.tab[0].top = y;
+      }
+      if (this.isShow == 1) {
+        this.tab[1].top = y;
+      }
+      if (this.isShow == 2) {
+        this.tab[2].top = y;
+      }
     },
 
     upCallback(page) {
@@ -149,7 +171,7 @@ export default {
             break;
         }
         this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
-        console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
+        //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
       }, function () {
         this.mescrollArr[dataIndex].endErr();
       });

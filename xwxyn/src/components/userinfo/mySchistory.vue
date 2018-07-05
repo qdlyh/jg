@@ -7,7 +7,8 @@
                 <h1 v-else>历史记录</h1>
                 <i></i>
             </div>
-            <div id="mescroll" class="mescroll">
+            <loading v-show="loading"></loading>
+            <div id="mescroll" class="mescroll" v-show="!loading">
                 <div id="dataList" class="data-list" v-cloak>
                     <div class="article-list" v-for="(item,index) in list" :key="item.uuid">
                         <i class="delete" @click="deleteBtn(item,index)">x</i>
@@ -31,6 +32,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="empty" v-show="!list.length">
+                    <img src="../../../static/msg.png" alt="">
+                    <p>还没有任何内容</p>
+                </div>
             </div>
         </div>
     </div>
@@ -44,13 +49,14 @@ export default {
     },
     data() {
         return {
+            loading: true,
             mescroll: null,
             type: '',
             list: [],
         }
     },
     activated() {
-        this.type = this.$route.params.id;
+        this.type = Number(this.$route.params.id);
         this.mescroll = new MeScroll("mescroll", {
             up: {
                 auto: true,//初始化完毕,是否自动触发上拉加载的回调
@@ -70,6 +76,11 @@ export default {
     deactivated() {
         this.mescroll.destroy();
     },
+    watch: {
+        type(id) {
+            this.loading = true;
+        }
+    },
     methods: {
         deleteBtn(item, index) {
             this.list.splice(index, 1)
@@ -82,7 +93,7 @@ export default {
                 data: formData
             })
                 .then(response => {
-                    console.log(response)
+                    //console.log(response)
                 });
 
         },
@@ -111,6 +122,7 @@ export default {
                         let listData = [];
                         let listPage = response.data.data;
                         this.total = response.data.total;
+                        this.loading = false;
                         for (let i = 0; i < listPage.length; i++) {
                             listData.push(listPage[i])
                         }

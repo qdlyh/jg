@@ -6,9 +6,9 @@
                 <h1>问题详情</h1>
                 <i></i>
             </div>
-
-            <div id="mescroll" class="mescroll">
-                <div class="expertArticle" v-for="(item,index) in data" :key="item.uuid">
+            <loading v-show="loading"></loading>
+            <div id="mescroll" class="mescroll" v-show="!loading">
+                <div class="expertArticle" v-for="(item,index) in data" :key="index">
                     <div class="article-box">
                         <h1>{{item.title}}</h1>
                         <div>
@@ -56,13 +56,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- <div class="empty" v-if="!list.length">
-                <div>
-                    <img src="../../../static/mescroll-empty.png" alt="">
-                    <p>还没有内容</p>
+                <div class="empty" v-show="!list.length">
+                    <img src="../../../static/msg.png" alt=""> 
+                    <p>还没有任何评论</p>
                 </div>
-            </div> -->
+            </div>
             <div class="msg-input-box" v-show="num==null">
                 <div class="msg-input" :class="{activeBtn:msg!=0}">
                     <!-- <i class="iconfont icon-xiepinglun"></i> -->
@@ -77,10 +75,11 @@
 export default {
     data() {
         return {
+            loading: true,
             placeholder: '',
             replyMsg: '',
             msg: '',
-            uuid: '',
+            uuid: null,
             total: '',
             num: null,
             mescroll: null,
@@ -89,13 +88,12 @@ export default {
             size: 10,
         }
     },
-    mounted() {
-    },
     activated() {
-        this.uuid = this.$route.params.id;
-        if (this.list.length < 10) {
-            this.size = 10;
+        this.uuid = Number(this.$route.params.id);
+        if (this.list.length >= 10) {
+            this.size = this.list.length;
         }
+
         this.$ajax({
             method: 'get',
             url: this.psta + '/getWxProblemInFoByUuid?uuid=' + this.uuid,
@@ -104,17 +102,15 @@ export default {
                 // console.log(response)
                 this.data = [response.data.data];
             })
+
         this.mescroll = new MeScroll("mescroll", {
             up: {
                 auto: true,//初始化完毕,是否自动触发上拉加载的回调
                 isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                 callback: this.upCallback, //上拉加载的回调
-                inited: this.upInited,
-                showNoMore: this.ShowNoMore,
                 page: {
-                    num: 0,
+                    // num: this.page,
                     size: this.size,
-                    time: null
                 },
                 offset: 300,
                 noMoreSize: 3,
@@ -131,12 +127,16 @@ export default {
                 },
             },
         });
-        // console.log(this.list)
         let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
         dom.scrollTop = this.$store.state.scrollTop;
     },
     deactivated() {
         this.mescroll.destroy();
+    },
+    watch: {
+        uuid(id) {
+            this.loading = true;
+        }
     },
     methods: {
         toggle(item) {
@@ -169,6 +169,7 @@ export default {
 
         go(item) {
             this.$router.push({ name: 'forumReply', params: { id: item.uuid, messageId: item.uuid } });
+            this.mescroll.removeEmpty();
             this.$store.state.scrollTop = this.mescroll.getScrollTop();
         },
         goUser(item) {
@@ -238,7 +239,7 @@ export default {
                     .then(response => {
                         //console.log(response)
                         let user = [response.data.data];
-                        this.list.unshift({
+                        this.list.push({
                             createDate: user[0].createDate,
                             generalId: user[0].generalId,    //这里是的文章id
                             isPraise: user[0].isPraise,
@@ -249,7 +250,7 @@ export default {
                             reply: user[0].reply,
                             uuid: user[0].uuid,
                             wxUserId: user[0].wxUserId,
-                            id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+                            //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
                         })
                         this.msg = '';
                     })
@@ -259,13 +260,17 @@ export default {
         upCallback(page) {
             this.getListDataFromNet(page.num, page.size, (curPageData) => {
                 //curPageData = [];
+                // if (this.page > 2) {
+                //     page.size = 10;
+                // }
                 let totalPage = this.total;
                 if (page.num == 1) this.list = [];
+                this.$store.state.page = page.num;
                 if (this.list.length < this.total) this.list = this.list.concat(curPageData);  //更新列表数据
-                if (this.list.length == this.total)
+                //if (this.list.length == this.total)  console.log(this.mescroll)
                 this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
-                this.size = this.list.length;
-                console.log(this.size, this.total)
+                //console.log(this.size, this.total, page.num, this.list)
+
                 //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
             }, function () {
                 this.mescroll.endErr();
@@ -273,6 +278,15 @@ export default {
         },
 
         getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+            // if (pageNum > 1) {
+            //     this.mescroll.setPageSize(10);
+            // }
+            // if (pageNum != 1) {
+            //     if (pageNum < this.$store.state.page) {
+            //         console.log('1')
+            //         pageNum = pageNum + this.$store.state.page;
+            //     }
+            // }
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',
@@ -284,6 +298,7 @@ export default {
                         let listPage = response.data.data;
                         this.total = response.data.total;
                         //this.page = pageNum;
+                        this.loading = false;
                         for (let i = 0; i < listPage.length; i++) {
                             listData.push(listPage[i])
                         }
@@ -342,16 +357,6 @@ export default {
   }
 }
 
-.empty {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin: auto;
-  font-size: 1.5rem;
-  color: #9c9c99;
-  text-align: center;
-  transform: translate(-50%, -50%);
-}
 .message {
   .user-header {
     height: 5rem;

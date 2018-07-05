@@ -97,14 +97,6 @@ export default {
     // deactivated() {
     //     this.mescroll.destroy();
     // },
-    // watch: {
-    //     '$route'(to, from) {
-    //         if (to.name == 'forumMsg') {
-    //             to.meta.keepAlive = false;
-    //             console.log(to.meta.keepAlive)
-    //         }
-    //     }
-    // },
     methods: {
         go() {
             this.$router.push({ name: 'questions', params: { id: 0 } });
@@ -155,18 +147,6 @@ export default {
             }
             if (this.isShow == 2) {
                 this.tab[2].top = y;
-            }
-            if (this.isShow == 3) {
-                this.tab[3].top = y;
-            }
-            if (this.isShow == 4) {
-                this.tab[4].top = y;
-            }
-            if (this.isShow == 5) {
-                this.tab[5].top = y;
-            }
-            if (this.isShow == 6) {
-                this.tab[6].top = y;
             }
         },
 

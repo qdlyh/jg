@@ -1,7 +1,8 @@
 <template>
     <div>
-        <div class="volunteer">
-            <div class="volunteer-top" v-for="(user,index) in user" :key="index">
+        <loading v-show="loading"></loading>
+        <div class="volunteer" v-show="!loading">
+            <div class="volunteer-top" v-for="(user,index) in user" :key="user.uuid">
                 <img v-lazy="user.image" alt="">
                 <span>
                     <h1>{{user.nickName}}</h1>
@@ -23,10 +24,10 @@
                     </div>
                 </div>
             </div>
-            <!-- <div class="err" v-if="!list.length">
-                        <img src="../../static/mescroll-empty.png" alt="">
-                        <p>还没有发布任何文章</p>
-                    </div> -->
+            <div class="empty" v-show="!list.length">
+                <img src="../../static/msg.png" alt="">
+                <p>还没有发布任何内容</p>
+            </div>
         </div>
     </div>
 </template>
@@ -34,24 +35,31 @@
 export default {
     data() {
         return {
+            loading: true,
             uuid: '',
             user: [],
             list: [],
         }
     },
     activated() {
-        this.uuid = this.$route.params.id;
+        this.uuid = Number(this.$route.params.id);
         this.$ajax({
             method: 'get',
             url: this.psta + '/getWxCharityYouAndMeByUuid?uuid=' + this.uuid,
         })
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 this.user = [response.data.data];
                 this.list = response.data.data.generals;
+                this.loading = false;
             })
         let dom = document.querySelector('.volunteer');
         dom.scrollTop = this.$store.state.scrollTop;
+    },
+    watch: {
+        uuid(id) {
+            this.loading = true;
+        }
     },
     methods: {
         go(item) {
@@ -130,7 +138,4 @@ export default {
   }
 }
 
-.err {
-  text-align: center;
-}
 </style>

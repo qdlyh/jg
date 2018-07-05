@@ -9,7 +9,7 @@
 .loading {
   margin: auto;
   position: absolute;
-  top: 20px;
+  top: 65px;
   left: 0;
   right: 0;
   background: #fff;

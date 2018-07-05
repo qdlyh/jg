@@ -4,7 +4,7 @@
             <tab>
                 <tab-item @on-item-click="onItemClick(index,item)" :selected="index==isShow" v-for="(item,index) in tab" :key="index">{{item.name}}</tab-item>
             </tab>
-            <div id="mescroll0" class="mescroll" v-show="isShow==0" @touchend="touchEnd">
+            <div id="mescroll0" class="mescroll" v-show="isShow==0">
                 <div id="dataList0" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list0" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <div id="mescroll1" class="mescroll" v-show="isShow==1" @touchend="touchEnd">
+            <div id="mescroll1" class="mescroll" v-show="isShow==1">
                 <div id="dataList1" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list1" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
@@ -42,7 +42,7 @@
                     </div>
                 </div>
             </div>
-            <div id="mescroll2" class="mescroll" v-show="isShow==2" @touchend="touchEnd">
+            <div id="mescroll2" class="mescroll" v-show="isShow==2">
                 <div id="dataList2" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list2" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
@@ -61,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            <div id="mescroll3" class="mescroll" v-show="isShow==3" @touchend="touchEnd">
+            <div id="mescroll3" class="mescroll" v-show="isShow==3">
                 <div id="dataList3" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list3" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div id="mescroll4" class="mescroll" v-show="isShow==4" @touchend="touchEnd">
+            <div id="mescroll4" class="mescroll" v-show="isShow==4">
                 <div id="dataList4" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list4" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
@@ -99,7 +99,7 @@
                     </div>
                 </div>
             </div>
-            <div id="mescroll5" class="mescroll" v-show="isShow==5" @touchend="touchEnd">
+            <div id="mescroll5" class="mescroll" v-show="isShow==5">
                 <div id="dataList5" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list5" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
@@ -118,7 +118,7 @@
                     </div>
                 </div>
             </div>
-            <div id="mescroll6" class="mescroll" v-show="isShow==6" @touchend="touchEnd">
+            <div id="mescroll6" class="mescroll" v-show="isShow==6">
                 <div id="dataList6" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list6" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
@@ -193,30 +193,7 @@ export default {
                     let dom = document.querySelector('#mescroll' + index);
                     dom.scrollTop = this.tab[index].top;
                 });
-            }
-        },
-        touchEnd(ev) {
-            let dom = document.querySelector('#mescroll' + this.isShow);
-            if (this.isShow == 0) {
-                this.tab[0].top = dom.scrollTop;
-            }
-            if (this.isShow == 1) {
-                this.tab[1].top = dom.scrollTop;
-            }
-            if (this.isShow == 2) {
-                this.tab[2].top = dom.scrollTop;
-            }
-            if (this.isShow == 3) {
-                this.tab[3].top = dom.scrollTop;
-            }
-            if (this.isShow == 4) {
-                this.tab[4].top = dom.scrollTop;
-            }
-            if (this.isShow == 5) {
-                this.tab[5].top = dom.scrollTop;
-            }
-            if (this.isShow == 6) {
-                this.tab[6].top = dom.scrollTop;
+
             }
         },
         initMescroll(mescrollId, clearEmptyId) {
@@ -225,6 +202,7 @@ export default {
                     auto: true,//初始化完毕,是否自动触发上拉加载的回调
                     isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                     callback: this.upCallback, //上拉加载的回调
+                    onScroll: this.upScroll,
                     offset: 500,
                     noMoreSize: 3,
                     //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
@@ -232,6 +210,29 @@ export default {
                 }
             });
             return this.mescroll;
+        },
+        upScroll(mescroll, y, isUp) {
+            if (this.isShow == 0) {
+                this.tab[0].top = y;
+            }
+            if (this.isShow == 1) {
+                this.tab[1].top = y;
+            }
+            if (this.isShow == 2) {
+                this.tab[2].top = y;
+            }
+            if (this.isShow == 3) {
+                this.tab[3].top = y;
+            }
+            if (this.isShow == 4) {
+                this.tab[4].top = y;
+            }
+            if (this.isShow == 5) {
+                this.tab[5].top = y;
+            }
+            if (this.isShow == 6) {
+                this.tab[6].top = y;
+            }
         },
         upCallback(page) {
             let dataIndex = this.isShow;

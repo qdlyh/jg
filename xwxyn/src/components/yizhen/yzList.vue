@@ -94,7 +94,7 @@ export default {
     data() {
         return {
             mescroll: null,
-            tab: [{ tab: '正在进行' }, { tab: '即将开始' }, { tab: '已经结束' }],
+            tab: [{ tab: '正在进行', top: 0, i: 0 }, { tab: '即将开始', top: 0, i: 1 }, { tab: '已经结束', top: 0, i: 2 }],
             isShow: 0,
             mescrollArr: new Array(3),
             list0: [],
@@ -106,17 +106,19 @@ export default {
         this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
     },
     activated() {
-        let dom = document.querySelector('#mescroll' + this.isShow); //找到滚动条主体内容
-        dom.scrollTop = this.$store.state.scrollTop;
+        this.$nextTick(() => {
+            for (let i = 0; i < this.tab.length; i++) {
+                let dom = document.querySelector('#mescroll' + this.tab[i].i);
+                dom.scrollTop = this.tab[i].top;
+            }
+        })
     },
     methods: {
         go(item) {
             this.$router.push({ name: 'yzArticle', params: { id: item.uuid } });
-            this.$store.state.scrollTop = this.mescroll.getScrollTop();
         },
         goUser(user) {
             this.$router.push({ name: 'expertUser', params: { id: user.uuid } });
-            this.$store.state.scrollTop = this.mescroll.getScrollTop();
         },
         onItemClick(index) {
             if (this.isShow != index) {
@@ -124,14 +126,19 @@ export default {
                 if (this.mescrollArr[index] == null) {
                     this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
                 }
+                this.$nextTick(() => {
+                    let dom = document.querySelector('#mescroll' + index);
+                    dom.scrollTop = this.tab[index].top;
+                });
             }
         },
         initMescroll(mescrollId, clearEmptyId) {
             this.mescroll = new MeScroll(mescrollId, {
                 up: {
-                    auto: false,//初始化完毕,是否自动触发上拉加载的回调
+                    auto: true,//初始化完毕,是否自动触发上拉加载的回调
                     isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                     callback: this.upCallback, //上拉加载的回调
+                    onScroll: this.upScroll,
                     offset: 300,
                     noMoreSize: 3,
                     //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
@@ -139,6 +146,17 @@ export default {
                 }
             });
             return this.mescroll;
+        },
+        upScroll(mescroll, y, isUp) {
+            if (this.isShow == 0) {
+                this.tab[0].top = y;
+            }
+            if (this.isShow == 1) {
+                this.tab[1].top = y;
+            }
+            if (this.isShow == 2) {
+                this.tab[2].top = y;
+            }
         },
 
         upCallback(page) {

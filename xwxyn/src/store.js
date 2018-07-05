@@ -7,6 +7,7 @@ const vuex = new Vuex.Store({
   //state全局状态变量
   state: {
     msgId:null,
+    page:0,
     scrollTop:0,
     article: {}, //缓存文章详细信息
   },
