@@ -1,35 +1,27 @@
 <template>
     <div>
-        <div class="user-header">
-            <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
-            <h1>我的博文</h1>
-            <i></i>
-        </div>
-        <loading v-show="loading"></loading>
-        <div class="article-list" v-show="!loading">
+        <div class="myMessage">
+            <div class="user-header">
+                <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
+                <h1>我的消息</h1>
+                <i></i>
+            </div>
             <div id="mescroll" class="mescroll">
                 <div id="dataList" class="data-list" v-cloak>
-                    <div class="article-box" v-for="(item,index) in list" :key="item.uuid">
-                        <div @click="$router.push({ name: 'article', params: { id: item.uuid } })">
+                    <div class="article-list" v-for="(item,index) in list" :key="item.uuid">
+                        <div>
+                            <!-- <div style="text-align: center">
+                                <img v-lazy="item.image" alt="">
+                            </div> -->
                             <h1>{{item.title}}</h1>
-                            <div class="article-img">
-                                <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
-                            </div>
+                            <p>{{item.message}}</p>
                             <div class="article-box-bottom">
-                                <div class="article-msg">
-                                    <span>{{item.count}}浏览</span>
-                                    <span>{{item.messageCount}}评论</span>
-                                </div>
                                 <div>
-                                    {{item.modifyDate}}
+                                    {{item.createDate}}
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="empty" v-show="!list.length">
-                    <img src="../../../static/msg.png" alt="">
-                    <p>还没有任何内容</p>
                 </div>
             </div>
         </div>
@@ -39,9 +31,8 @@
 export default {
     data() {
         return {
-            loading: true,
-            list: [],
             mescroll: null,
+            list: [],
         }
     },
     activated() {
@@ -67,12 +58,13 @@ export default {
     methods: {
         upCallback(page) {
             this.getListDataFromNet(page.num, page.size, (curPageData) => {
-                //curPageData = []; //打开本行注释,可演示列表无任何数据empty的配置
+                //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
                 if (page.num == 1) this.list = [];
                 let totalPage = this.total;
                 //更新列表数据
                 this.list = this.list.concat(curPageData);
                 this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+                //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
             }, function () {
                 this.mescroll.endErr();
             });
@@ -82,14 +74,13 @@ export default {
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',
-                    url: this.psta + '/getWxPersonalCenterPageNext?wxUserId=' + this.$parent.wxUserId + '&type=' + 3 + '&page=' + pageNum + '&size=' + pageSize,
+                    url: this.psta + '/findAlerts?wxUserId=' + this.$parent.wxUserId + '&page=' + pageNum + '&size=' + pageSize,
                 })
                     .then(response => {
                         //console.log(response)
                         let listData = [];
                         let listPage = response.data.data;
                         this.total = response.data.total;
-                        this.loading = false;
                         for (let i = 0; i < listPage.length; i++) {
                             listData.push(listPage[i])
                         }
@@ -100,6 +91,7 @@ export default {
     }
 }
 </script>
+
 <style lang="less" scoped>
 .mescroll {
   position: fixed;
@@ -107,28 +99,28 @@ export default {
   bottom: 0;
   height: auto;
 }
-.user-header {
-  height: 5rem;
-  line-height: 5rem;
-  background: #fff;
-  padding: 0 1.25rem;
-  display: flex;
-  justify-content: space-between;
-  h1 {
-    font-size: 2rem;
-    text-align: center;
-    color: #454545;
-    font-weight: 400;
-    margin-left: -1.875rem;
+.myMessage {
+  .user-header {
+    height: 5rem;
+    line-height: 5rem;
+    background: #fff;
+    padding: 0 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      color: #454545;
+      font-weight: 400;
+      margin-left: -1.875rem;
+    }
+    i {
+      font-size: 2rem;
+      color: #0aa6ff;
+    }
   }
-  i {
-    font-size: 2rem;
-    color: #0aa6ff;
-  }
-}
-.article-list {
-  margin-top: 0.625rem;
-  .article-box {
+
+  .article-list {
     padding: 1.25rem 1.875rem;
     background: #fff;
     border-bottom: 1px solid #bdbdbd;
@@ -144,25 +136,40 @@ export default {
       -webkit-line-clamp: 3;
       overflow: hidden;
     }
-    .article-img {
-      display: flex;
-      width: 100%;
-      height: 8.75rem;
+    img {
+      max-width: 750px;
+      max-height: 100px;
       overflow: hidden;
-      img {
-        width: 30%;
-        height: 100%;
-        margin: 0 5px;
-      }
+    }
+    .questions-btn {
+      color: #fff;
+      position: fixed;
+      bottom: 7.5rem;
+      right: 20px;
+      width: 6.25rem;
+      height: 6.25rem;
+      line-height: 6.25rem;
+      text-align: center;
+      border-radius: 100%;
+      background: rgba(4, 142, 255, 0.5);
+      font-size: 1.75rem;
     }
     .article-box-bottom {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       color: #4545;
       font-size: 1.25rem;
-      margin-top: 0.625rem;
+      margin-top: 1.875rem;
+      .article-msg {
+        background: #f3f3f3;
+        width: 6.25rem;
+        height: 2rem;
+        border-radius: 10px;
+        color: #454545;
+        text-align: center;
+        font-size: 1.25rem;
+      }
     }
   }
 }
 </style>
-

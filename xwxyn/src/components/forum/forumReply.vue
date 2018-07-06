@@ -6,7 +6,8 @@
                 <h1>回复详情</h1>
                 <i></i>
             </div>
-            <div id="mescroll" class="mescroll">
+            <loading v-show="loading"></loading>
+            <div id="mescroll" class="mescroll" v-show="!loading">
                 <div id="dataList" class="data-list" v-cloak>
                     <div class="message-box" v-for="(item,index) in list" :key="item.uuid">
                         <div class="message-top">
@@ -46,6 +47,8 @@
 export default {
     data() {
         return {
+            isHave: false, //判断是否缓存
+            loading: true,
             replyMsg: '',
             placeholder: '',
             msg: '',
@@ -54,15 +57,30 @@ export default {
             num: null,
             mescroll: null,
             list: [],
+            page: 1,
+            size: 10,
         }
     },
     activated() {
-        this.uuid = this.$route.params.id;
+        this.uuid = Number(this.$route.params.id);
+
+        if (this.list.length > 10) {
+            this.isHave = true;
+            //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
+            this.size = this.list.length;
+        }
+
         this.mescroll = new MeScroll("mescroll", {
+            down: {
+                use: false
+            },
             up: {
                 auto: true,//初始化完毕,是否自动触发上拉加载的回调
                 isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                 callback: this.upCallback, //上拉加载的回调
+                page: {
+                    size: this.size
+                },
                 offset: 300,
                 noMoreSize: 3,
                 //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
@@ -73,18 +91,28 @@ export default {
                 },
             }
         });
+
+        let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
+        dom.scrollTop = this.$store.state.replyTop;
     },
     deactivated() {
         this.mescroll.destroy();
+    },
+    watch: {
+        uuid(id) {
+            this.loading = true;
+        }
     },
     methods: {
         goUser(item) {
             if (item.settingId == 62) {
                 this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
-                this.$store.state.scrollTop = this.mescroll.getScrollTop();
+                this.$store.state.replyPage = this.page; //记录当前页
+                this.$store.state.replyTop = this.mescroll.getScrollTop();
             } else {
                 this.$router.push({ name: 'user', params: { id: item.wxUserId } });
-                this.$store.state.scrollTop = this.mescroll.getScrollTop();
+                this.$store.state.replyPage = this.page; //记录当前页
+                this.$store.state.replyTop = this.mescroll.getScrollTop();
             }
         },
         replyBtn(index, item) {
@@ -107,13 +135,47 @@ export default {
 
         comment(item) {
             if (this.replyMsg.length != 0) {
-                let userID = this.guid();
+                //let userID = this.guid();
                 this.num = null;
                 let formData = new FormData();
                 formData.append('questionId', 0);  //文章问题为0
                 formData.append('parentId', this.uuid);  //层主id
                 formData.append('wxUserId', this.$parent.wxUserId); // this.$parent.wxUserId
                 formData.append('reply', '回复 ' + item.nickName + ' 的评论： ' + this.replyMsg);
+                this.$ajax({
+                    method: 'post',
+                    data: formData,
+                    url: this.psta + '/submitAskQuestionsReply',
+                })
+                    .then(response => {
+                        console.log(response)
+                        let user = [response.data.data];
+                        this.list.push({
+                            createDate: user[0].createDate,
+                            generalId: user[0].generalId,    //这里是的文章id
+                            isPraise: user[0].isPraise,
+                            praiseCount: user[0].praiseCount,
+                            replyCount: user[0].replyCount,
+                            image: user[0].image,
+                            nickName: user[0].nickName,
+                            reply: user[0].reply,
+                            settingId:user[0].settingId,
+                            uuid: user[0].uuid,
+                            wxUserId: user[0].wxUserId,
+                            // id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+                        })
+                    })
+            }
+        },
+
+        msgBtn() {
+            if (this.msg.length != 0) {
+                //let userID = this.guid();
+                let formData = new FormData();
+                formData.append('questionId', 0);  //文章问题为0
+                formData.append('parentId', this.uuid);  //层主的uuid
+                formData.append('wxUserId', this.$parent.wxUserId); // this.$parent.wxUserId
+                formData.append('reply', this.msg);
                 this.$ajax({
                     method: 'post',
                     data: formData,
@@ -131,43 +193,10 @@ export default {
                             image: user[0].image,
                             nickName: user[0].nickName,
                             reply: user[0].reply,
+                            settingId: user[0].settingId,
                             uuid: user[0].uuid,
                             wxUserId: user[0].wxUserId,
-                            // id: userID  //生成唯一id防止unshift评论的时候数据显示错误
-                        })
-                    })
-            }
-        },
-
-        msgBtn() {
-            // console.log(this.list)
-            if (this.msg.length != 0) {
-                let userID = this.guid();
-                let formData = new FormData();
-                formData.append('questionId', 0);  //文章问题为0
-                formData.append('parentId', this.uuid);  //层主的uuid
-                formData.append('wxUserId', this.$parent.wxUserId); // this.$parent.wxUserId
-                formData.append('reply', this.msg);
-                this.$ajax({
-                    method: 'post',
-                    data: formData,
-                    url: this.psta + '/submitAskQuestionsReply',
-                })
-                    .then(response => {
-                        //console.log(response)
-                        let user = [response.data.data];
-                        this.list.unshift({
-                            createDate: user[0].createDate,
-                            generalId: user[0].generalId,    //这里是的文章id
-                            isPraise: user[0].isPraise,
-                            praiseCount: user[0].praiseCount,
-                            replyCount: user[0].replyCount,
-                            image: user[0].image,
-                            nickName: user[0].nickName,
-                            reply: user[0].reply,
-                            uuid: user[0].uuid,
-                            wxUserId: user[0].wxUserId,
-                            id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+                            //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
                         })
                         this.msg = '';
                     })
@@ -179,7 +208,15 @@ export default {
                 //curPageData = [];
                 if (page.num == 1) this.list = [];
                 let totalPage = this.total;
-                this.list = this.list.concat(curPageData);  //更新列表数据
+
+                if (this.isHave) {
+                    if (page.num > 1 && page.num <= this.$store.state.replyPage) {
+                        page.num = this.$store.state.replyPage + 1;
+                        this.size = 10;
+                        page.size = 10;
+                    }
+                }
+                if (this.list.length < this.total) this.list = this.list.concat(curPageData);  //更新列表数据
                 this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
                 //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
             }, function () {
@@ -188,6 +225,17 @@ export default {
         },
 
         getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+            this.page = pageNum;   //记录需要缓存的当前页
+            if (this.isHave) {
+                //页面缓存，Mescroll只会返回第一页，所以这里从下一页起加载到上次转跳的页数，并设置初始化pageSize
+                if (pageNum > 1 && pageNum <= this.$store.state.replyPage) {
+                    pageNum = this.$store.state.replyPage + 1; //这里的1相当于pageNum
+                    pageSize = 10;
+                    this.size = 10;
+                    //记录已缓存的当前页，-1是因为this.$store.state.replyPage触发上拉加载加了1，所以记录缓存的时候减回去，防止第二次上拉加载的时候pageNum继续增加
+                    this.page = pageNum - 1;
+                }
+            }
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',
@@ -198,6 +246,7 @@ export default {
                         let listData = [];
                         let listPage = response.data.data;
                         this.total = response.data.total;
+                        this.loading = false;
                         for (let i = 0; i < listPage.length; i++) {
                             listData.push(listPage[i])
                         }

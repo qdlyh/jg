@@ -121,7 +121,6 @@ body {
   // max-width: 750px;
   letter-spacing: 1px;
   -webkit-overflow-scrolling: touch; //在ios上滑动不流畅样式设置处理
-  word-break:break-all;  //字母数字强制换行
   //mescroll
   -webkit-touch-callout: none;
   -webkit-user-select: none;

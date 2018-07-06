@@ -6,7 +6,8 @@
                 <h1>我的消息</h1>
                 <i></i>
             </div>
-            <div id="mescroll" class="mescroll">
+            <loading v-show="loading"></loading>
+            <div id="mescroll" class="mescroll" v-show="!loading">
                 <div id="dataList" class="data-list" v-cloak>
                     <div class="article-list" v-for="(item,index) in list" :key="item.uuid">
                         <div>
@@ -23,6 +24,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="empty" v-show="!list.length">
+                    <img src="../../../static/msg.png" alt="">
+                    <p>还没有任何消息</p>
+                </div>
             </div>
         </div>
     </div>
@@ -31,6 +36,7 @@
 export default {
     data() {
         return {
+            loading:true,
             mescroll: null,
             list: [],
         }
@@ -81,6 +87,7 @@ export default {
                         let listData = [];
                         let listPage = response.data.data;
                         this.total = response.data.total;
+                        this.loading = false;
                         for (let i = 0; i < listPage.length; i++) {
                             listData.push(listPage[i])
                         }

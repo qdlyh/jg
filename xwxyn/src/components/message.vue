@@ -45,7 +45,8 @@
           </div>
         </div>
         <div class="empty" v-show="!list.length">
-          <img src="../../static/mescroll-empty.png" alt="">
+          <img src="../../static/msg.png" alt="">
+          <p>还没有发布任何内容</p>
         </div>
       </div>
 
@@ -430,12 +431,7 @@ export default {
     }
   }
 }
-.empty {
-  img {
-    width: 100%;
-    height: 100%;
-  }
-}
+
 .btnActive {
   background: #007acc !important;
 }

@@ -7,7 +7,8 @@
                 <h1 v-else>我的回答</h1>
                 <i></i>
             </div>
-            <div id="mescroll" class="mescroll">
+            <loading v-show="loading"></loading>
+            <div id="mescroll" class="mescroll" v-show="!loading">
                 <div id="dataList" class="data-list" v-cloak>
                     <div class="article-list" v-for="(item,index) in list" :key="item.uuid">
                         <div @click="go(item)">
@@ -23,6 +24,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="empty" v-show="!list.length">
+                    <img src="../../../static/msg.png" alt="">
+                    <p>还没有任何内容</p>
+                </div>
             </div>
         </div>
     </div>
@@ -31,6 +36,7 @@
 export default {
     data() {
         return {
+            loading: true,
             type: '',
             mescroll: null,
             list: [],
@@ -68,7 +74,7 @@ export default {
         },
         upCallback(page) {
             this.getListDataFromNet(page.num, page.size, (curPageData) => {
-                //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
+                //curPageData = []; //打开本行注释,可演示列表无任何数据empty的配置
                 if (page.num == 1) this.list = [];
                 let totalPage = this.total;
                 //更新列表数据
@@ -90,6 +96,7 @@ export default {
                         let listData = [];
                         let listPage = response.data.data;
                         this.total = response.data.total;
+                        this.loading = false;
                         for (let i = 0; i < listPage.length; i++) {
                             listData.push(listPage[i])
                         }

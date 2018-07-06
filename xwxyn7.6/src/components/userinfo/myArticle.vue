@@ -29,7 +29,7 @@
                 </div>
                 <div class="empty" v-show="!list.length">
                     <img src="../../../static/msg.png" alt="">
-                    <p>还没有任何内容</p>
+                    <p>还没有发布任何内容</p>
                 </div>
             </div>
         </div>

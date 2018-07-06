@@ -6,9 +6,8 @@ Vue.use(Vuex)
 const vuex = new Vuex.Store({
   //state全局状态变量
   state: {
-    page:1,     //缓存页数
-    replyPage:1,  //缓存回复页数
-    replyTop:0, //记录回复列表高度
+    msgId:null,
+    page:0,
     scrollTop:0,
     article: {}, //缓存文章详细信息
   },

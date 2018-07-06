@@ -22,7 +22,6 @@
                 <div id="dataList" class="data-list" v-cloak>
                     <div class="message-box" v-for="(item,index) in list" :key="item.uuid">
                         <div class="message-top">
-                            <h1>{{item.uuid}}</h1>
                             <img v-lazy="item.image" alt="" @click="goUser(item)">
                             <span>
                                 <i class="name">{{item.nickName}}</i>
@@ -58,14 +57,14 @@
                     </div>
                 </div>
                 <div class="empty" v-show="!list.length">
-                    <img src="../../../static/msg.png" alt="">
+                    <img src="../../../static/msg.png" alt=""> 
                     <p>还没有任何评论</p>
                 </div>
             </div>
             <div class="msg-input-box" v-show="num==null">
                 <div class="msg-input" :class="{activeBtn:msg!=0}">
                     <!-- <i class="iconfont icon-xiepinglun"></i> -->
-                    <input type="text" placeholder="写评论" v-model.trim="msg">
+                    <input type="text" placeholder="写评论" v-model="msg">
                     <i class="iconfont icon-fasong" @click="msgBtn()"></i>
                 </div>
             </div>
@@ -76,7 +75,6 @@
 export default {
     data() {
         return {
-            isHave: false, //判断是否缓存
             loading: true,
             placeholder: '',
             replyMsg: '',
@@ -87,16 +85,12 @@ export default {
             mescroll: null,
             list: [],
             data: [],
-            page: 1,
             size: 10,
         }
     },
     activated() {
         this.uuid = Number(this.$route.params.id);
-
-        if (this.list.length > 10) {
-            this.isHave = true;
-            //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
+        if (this.list.length >= 10) {
             this.size = this.list.length;
         }
 
@@ -110,19 +104,23 @@ export default {
             })
 
         this.mescroll = new MeScroll("mescroll", {
-            down: {
-                use: false
-            },
             up: {
                 auto: true,//初始化完毕,是否自动触发上拉加载的回调
                 isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                 callback: this.upCallback, //上拉加载的回调
                 page: {
+                    // num: this.page,
                     size: this.size,
                 },
                 offset: 300,
                 noMoreSize: 3,
+                //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
                 htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+                // clearEmptyId: 'dataList',
+                // empty: {
+                //     icon: "../../static/mescroll-empty.png", //图标,默认null
+                //     tip: "暂无相关数据~", //提示
+                // },
                 toTop: { //配置回到顶部按钮
                     src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
                     //offset: 1000
@@ -138,8 +136,7 @@ export default {
     watch: {
         uuid(id) {
             this.loading = true;
-        },
-
+        }
     },
     methods: {
         toggle(item) {
@@ -172,17 +169,15 @@ export default {
 
         go(item) {
             this.$router.push({ name: 'forumReply', params: { id: item.uuid, messageId: item.uuid } });
-            this.$store.state.page = this.page;
+            this.mescroll.removeEmpty();
             this.$store.state.scrollTop = this.mescroll.getScrollTop();
         },
         goUser(item) {
             if (item.settingId == 62) {
                 this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
-                this.$store.state.page = this.page;
                 this.$store.state.scrollTop = this.mescroll.getScrollTop();
             } else {
                 this.$router.push({ name: 'user', params: { id: item.wxUserId } });
-                this.$store.state.page = this.page;
                 this.$store.state.scrollTop = this.mescroll.getScrollTop();
             }
         },
@@ -198,6 +193,7 @@ export default {
         },
 
         comment(item) {
+            //console.log(this.replyMsg);
             if (this.replyMsg.length != 0) {
                 this.num = null;
                 let formData = new FormData();
@@ -229,11 +225,11 @@ export default {
         msgBtn() {
             // console.log(this.list)
             if (this.msg.length != 0) {
-                //let userID = this.guid();
+                let userID = this.guid();
                 let formData = new FormData();
                 formData.append('questionId', this.uuid);  //这里是的文章id
                 formData.append('parentId', 0);
-                formData.append('wxUserId', this.$parent.wxUserId); // this.$parent.wxUserId
+                formData.append('wxUserId', 3); // this.$parent.wxUserId
                 formData.append('reply', this.msg);
                 this.$ajax({
                     method: 'post',
@@ -252,7 +248,6 @@ export default {
                             image: user[0].image,
                             nickName: user[0].nickName,
                             reply: user[0].reply,
-                            settingId: user[0].settingId,
                             uuid: user[0].uuid,
                             wxUserId: user[0].wxUserId,
                             //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
@@ -265,19 +260,16 @@ export default {
         upCallback(page) {
             this.getListDataFromNet(page.num, page.size, (curPageData) => {
                 //curPageData = [];
+                // if (this.page > 2) {
+                //     page.size = 10;
+                // }
                 let totalPage = this.total;
                 if (page.num == 1) this.list = [];
-
-                if (this.isHave) {
-                    if (page.num > 1 && page.num <= this.$store.state.page) {
-                        page.num = this.$store.state.page + 1;
-                        this.size = 10;
-                        page.size = 10;
-                    }
-                }
-                if (this.list.length < this.total) this.list = Array.from(new Set(this.list.concat(curPageData)));  //更新列表数据
+                this.$store.state.page = page.num;
+                if (this.list.length < this.total) this.list = this.list.concat(curPageData);  //更新列表数据
+                //if (this.list.length == this.total)  console.log(this.mescroll)
                 this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
-                //console.log(this.size, this.total, page.num, this.$store.state.page)
+                //console.log(this.size, this.total, page.num, this.list)
 
                 //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
             }, function () {
@@ -286,17 +278,15 @@ export default {
         },
 
         getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
-            this.page = pageNum;   //记录需要缓存的当前页
-            if (this.isHave) {
-                //页面缓存，Mescroll只会返回第一页，所以这里从下一页起加载到上次转跳的页数，并设置初始化pageSize
-                if (pageNum > 1 && pageNum <= this.$store.state.page) {
-                    pageNum = this.$store.state.page + 1; //这里的1相当于pageNum
-                    pageSize = 10;
-                    this.size = 10;
-                    //记录已缓存的当前页，-1是因为this.$store.state.page触发上拉加载加了1，所以记录缓存的时候减回去，防止第二次上拉加载的时候pageNum继续增加
-                    this.page = pageNum - 1;
-                }
-            }
+            // if (pageNum > 1) {
+            //     this.mescroll.setPageSize(10);
+            // }
+            // if (pageNum != 1) {
+            //     if (pageNum < this.$store.state.page) {
+            //         console.log('1')
+            //         pageNum = pageNum + this.$store.state.page;
+            //     }
+            // }
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',
@@ -307,9 +297,9 @@ export default {
                         let listData = [];
                         let listPage = response.data.data;
                         this.total = response.data.total;
+                        //this.page = pageNum;
                         this.loading = false;
                         for (let i = 0; i < listPage.length; i++) {
-                            console.log(listPage[i].uuid)
                             listData.push(listPage[i])
                         }
                         successCallback && successCallback(listData);//成功回调

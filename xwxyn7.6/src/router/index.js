@@ -3,20 +3,8 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const router = new Router({
-  // mode: 'history',
   routes: [{
       path: '/',
-      name: 'index',
-      component: () =>
-        import ('@/components/index/index'),
-      meta: {
-        title: '首页',
-        keepAlive: true
-      }
-    },
-    {
-      //页面404返回首页
-      path: '*',
       name: 'index',
       component: () =>
         import ('@/components/index/index'),
