@@ -37,7 +37,7 @@
                 </div>
                 <div class="empty" v-show="!list[0].questions.length">
                     <img src="../../static/msg.png" alt="">
-                    <p>还没有发布任何内容</p>
+                    <p>暂时没有数据</p>
                 </div>
             </div>
         </div>
@@ -68,7 +68,7 @@ export default {
                 }
             })
         let dom = document.querySelector('.specialistUser');
-        dom.scrollTop = this.$store.state.scrollTop;
+        dom.scrollTop = this.$store.state.itemTop;
     },
     watch: {
         uuid(id) {
@@ -79,7 +79,7 @@ export default {
         go(text) {
             let dom = document.querySelector('.specialistUser');
             this.$router.push({ name: 'forumMsg', params: { id: text.uuid } });
-            this.$store.state.scrollTop = dom.scrollTop;
+            this.$store.state.itemTop = dom.scrollTop;
         },
         toggle(item) {
             item.isFocus = !item.isFocus;

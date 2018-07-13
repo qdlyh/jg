@@ -26,7 +26,7 @@
             </div>
             <div class="empty" v-show="!list.length">
                 <img src="../../static/msg.png" alt="">
-                <p>还没有发布任何内容</p>
+                <p>暂时没有数据</p>
             </div>
         </div>
     </div>
@@ -54,7 +54,7 @@ export default {
                 this.loading = false;
             })
         let dom = document.querySelector('.volunteer');
-        dom.scrollTop = this.$store.state.scrollTop;
+        dom.scrollTop = this.$store.state.itemTop;
     },
     watch: {
         uuid(id) {
@@ -65,7 +65,7 @@ export default {
         go(item) {
             let dom = document.querySelector('.volunteer');
             this.$router.push({ name: 'article', params: { id: item.uuid } });
-            this.$store.state.scrollTop = dom.scrollTop;
+            this.$store.state.itemTop = dom.scrollTop;
         },
     }
 }

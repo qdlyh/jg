@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="enterText">
+    <loading v-show="loading"></loading>
+    <div class="enterText" v-show="list0.length">
       <div class="user-header">
         <i class="iconfont icon-fanhui" @click="$router.go(-1)"></i>
         <h1>申请入驻</h1>
@@ -25,9 +26,9 @@
           <p v-for="text in item.children">{{text.text}}</p>
         </div>
       </div>
-    </div>
-    <div class="btn-blue" @click="$router.push('/enterForm')">
-      申请入驻
+      <div class="btn-blue" @click="$router.push('/enterForm')">
+        申请入驻
+      </div>
     </div>
     <br/>
   </div>
@@ -36,6 +37,7 @@
 export default {
   data() {
     return {
+      loading:true,
       list0: [],
       list1: [],
       list2: []
@@ -51,6 +53,7 @@ export default {
         this.list0 = [response.data.data[0]];
         this.list1 = [response.data.data[1]];
         this.list2 = [response.data.data[2]];
+        this.loading = false;
       })
   }
 }

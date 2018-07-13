@@ -36,7 +36,7 @@
               </div>
             </div>
             <div class="reply" v-show="index==num">
-              <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
+              <input type="text" :placeholder="'@'+placeholder" v-model.trim="replyMsg"><br/>
               <div>
                 <span @click="cancel(index)">取消</span>
                 <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
@@ -46,14 +46,14 @@
         </div>
         <div class="empty" v-show="!list.length">
           <img src="../../static/msg.png" alt="">
-          <p>还没有发布任何内容</p>
+          <p>暂时没有数据</p>
         </div>
       </div>
 
       <div class="msg-input-box" v-show="num==null">
         <div class="msg-input" :class="{activeBtn:msg!=0}">
           <!-- <i class="iconfont icon-xiepinglun"></i> -->
-          <input type="text" placeholder="写评论" v-model="msg">
+          <input type="text" placeholder="写评论" v-model.trim="msg">
           <i class="iconfont icon-fasong" @click="msgBtn()"></i>
         </div>
       </div>
@@ -102,7 +102,7 @@ export default {
     });
 
     let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
-    dom.scrollTop = this.$store.state.scrollTop;
+    dom.scrollTop = this.$store.state.msgTop;
 
   },
   deactivated() {
@@ -145,16 +145,16 @@ export default {
 
     go(item) {
       this.$router.push({ name: 'dialogue', params: { id: item.uuid, messageId: item.uuid } });
-      this.$store.state.scrollTop = this.mescroll.getScrollTop();
+      this.$store.state.msgTop = this.mescroll.getScrollTop();
     },
 
     goUser(item) {
       if (item.settingId == 62) {
         this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
-        this.$store.state.scrollTop = this.mescroll.getScrollTop();
+        this.$store.state.msgTop = this.mescroll.getScrollTop();
       } else {
         this.$router.push({ name: 'user', params: { id: item.wxUserId } });
-        this.$store.state.scrollTop = this.mescroll.getScrollTop();
+        this.$store.state.msgTop = this.mescroll.getScrollTop();
       }
     },
 
@@ -222,6 +222,7 @@ export default {
               image: user[0].image,
               nickName: user[0].nickName,
               message: user[0].message,
+              settingId:user[0].settingId,
               uuid: user[0].uuid,
               wxUserId: user[0].wxUserId,
               //id: userID  //生成唯一id防止unshift评论的时候数据显示错误

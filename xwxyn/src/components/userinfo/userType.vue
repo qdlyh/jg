@@ -3,7 +3,8 @@
         <div class="userType" v-for="(item,index) in list" :key="item.uuid">
             <div class="my-type">
                 <div class="type-color" :id="'active'+item.settingId">
-                    <p class="redact" @click="$router.push('/userTypeForm')">编辑</p>
+                    <!-- @click="$router.push('/userTypeForm')" -->
+                    <p class="redact">编辑</p>
                     <div class="user-msg">
                         <div>
                             <img v-lazy="item.image" alt="">
@@ -30,7 +31,7 @@
                     <p class="text">{{item.signature}}</p>
                 </div>
             </div>
-            <div class="userType-link-box">
+            <!-- <div class="userType-link-box">
                 <div class="userType-link" v-if="item.settingId!=63">
                     <group>
                         <cell title="购物车" :value="item.spCount" is-link></cell>
@@ -46,11 +47,11 @@
                         <cell title="收货地址" :value="item.addressCount" is-link></cell>
                     </group>
                 </div>
-            </div>
+            </div> -->
 
             <!-- 企业 -->
             <div class="userType-link-box">
-                <div class="userType-link" v-if="item.settingId==63" @click="$router.push('/enterText')">
+                <div class="userType-link" v-if="item.settingId==63&&$parent.isIn!=1" @click="$router.push('/enterText')">
                     <group>
                         <cell title="入驻" is-link></cell>
                     </group>
@@ -160,9 +161,17 @@ export default {
       height: 10rem;
       .redact {
         float: right;
+        text-align: center;
         color: #fff;
         font-size: 1.75rem;
         margin: 1.875rem;
+        padding: 8px 5px;
+        border-radius: 50%;
+        transition: 0.3s;
+        &:active {
+          border-radius: 50%;
+          background: #657180;
+        }
       }
       .user-msg {
         padding: 4.6875rem 0 0 1.875rem;
@@ -176,7 +185,7 @@ export default {
         i {
           position: absolute;
           left: 11rem;
-          bottom: .625rem;
+          bottom: 0.625rem;
           font-size: 1.5rem;
           color: #9c9c9c;
         }

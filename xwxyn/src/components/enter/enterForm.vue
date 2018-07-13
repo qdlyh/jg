@@ -65,6 +65,9 @@ export default {
         }
     },
     mounted() {
+        if (this.$parent.isIn == 1) {
+            this.$router.push('/')
+        }
         this.$ajax({
             method: 'get',
             url: this.psta + '/findWxEnterpriseType',

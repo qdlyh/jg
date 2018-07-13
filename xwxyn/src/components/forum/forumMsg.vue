@@ -7,19 +7,18 @@
                 <i></i>
             </div>
             <loading v-show="loading"></loading>
-            <div id="mescroll" class="mescroll" v-show="!loading">
-                <div class="expertArticle" v-for="(item,index) in data" :key="index">
-                    <div class="article-box">
-                        <h1>{{item.title}}</h1>
-                        <div>
-                            <i>提问者：{{item.nickName}}</i>
-                            <i class="time">{{item.createDate}}</i>
+            <scroll ref="scroll" :data="list" :pullUpLoad="pullUpLoad" @pullingUp="onPullingUp">
+                <div class="pullup">
+                    <div class="expertArticle" v-for="(item,index) in data" :key="item.uuid">
+                        <div class="article-box">
+                            <h1>{{item.title}}</h1>
+                            <div>
+                                <i>提问者：{{item.nickName}}</i>
+                                <i class="time">{{item.createDate}}</i>
+                            </div>
+                            <div class="article-text">{{item.describe}}</div>
                         </div>
-                        <div class="article-text">{{item.describe}}</div>
                     </div>
-                </div>
-
-                <div id="dataList" class="data-list" v-cloak>
                     <div class="message-box" v-for="(item,index) in list" :key="item.uuid">
                         <div class="message-top">
                             <h1>{{item.uuid}}</h1>
@@ -49,19 +48,20 @@
                             </div>
                         </div>
                         <div class="reply" v-show="index==num">
-                            <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
+                            <input type="text" :placeholder="'@'+placeholder" v-model.trim="replyMsg"><br/>
                             <div>
                                 <span @click="cancel(index)">取消</span>
                                 <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
                             </div>
                         </div>
                     </div>
+                    <div class="empty" v-show="!list.length">
+                        <img src="../../../static/msg.png" alt="">
+                        <p>暂时没有数据</p>
+                    </div>
                 </div>
-                <div class="empty" v-show="!list.length">
-                    <img src="../../../static/msg.png" alt="">
-                    <p>还没有任何评论</p>
-                </div>
-            </div>
+            </scroll>
+
             <div class="msg-input-box" v-show="num==null">
                 <div class="msg-input" :class="{activeBtn:msg!=0}">
                     <!-- <i class="iconfont icon-xiepinglun"></i> -->
@@ -76,72 +76,73 @@
 export default {
     data() {
         return {
-            isHave: false, //判断是否缓存
             loading: true,
             placeholder: '',
             replyMsg: '',
             msg: '',
             uuid: null,
-            total: '',
             num: null,
-            mescroll: null,
-            list: [],
+            pullUpLoad: {
+                threshold: 10,
+                txt: { more: '', noMore: '暂无更多数据' }
+            },
+            total:0,
             data: [],
-            page: 1,
+            list: [],
+            page: 0,
             size: 10,
         }
     },
+    // mounted() {
+    //     console.log('x')
+    //     this.uuid = Number(this.$route.params.id);
+    //     //console.log(this.uuid)
+    //     this.$ajax({
+    //         method: 'get',
+    //         url: this.psta + '/getWxProblemInFoByUuid?uuid=' + this.uuid,
+    //     })
+    //         .then(response => {
+    //             this.data = [response.data.data];
+    //         })
+    //     this.onPullingUp();
+    // },
     activated() {
+
         this.uuid = Number(this.$route.params.id);
-
-        if (this.list.length > 10) {
-            this.isHave = true;
-            //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
-            this.size = this.list.length;
-        }
-
         this.$ajax({
             method: 'get',
             url: this.psta + '/getWxProblemInFoByUuid?uuid=' + this.uuid,
         })
             .then(response => {
-                // console.log(response)
                 this.data = [response.data.data];
             })
-
-        this.mescroll = new MeScroll("mescroll", {
-            down: {
-                use: false
-            },
-            up: {
-                auto: true,//初始化完毕,是否自动触发上拉加载的回调
-                isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
-                callback: this.upCallback, //上拉加载的回调
-                page: {
-                    size: this.size,
-                },
-                offset: 300,
-                noMoreSize: 3,
-                htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-                toTop: { //配置回到顶部按钮
-                    src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
-                    //offset: 1000
-                },
-            },
-        });
-        let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
-        dom.scrollTop = this.$store.state.scrollTop;
-    },
-    deactivated() {
-        this.mescroll.destroy();
+        //this.onPullingUp();
     },
     watch: {
         uuid(id) {
             this.loading = true;
+            this.page = 0;
+            this.list = [];
+            this.onPullingUp();
         },
-
     },
     methods: {
+        pullDown() {
+            alert('1')
+        },
+        onPullingUp() {
+            this.$ajax({
+                method: 'get',
+                url: this.psta + '/getWxExpertsReplyByUuid?uuid=' + this.uuid + '&wxUserId=' + this.$parent.wxUserId + '&page=' + ++this.page + '&size=' + this.size,
+            })
+                .then(response => {
+                    let data = response.data.data;
+                    //console.log(data)
+                    this.total = response.data.total;
+                    this.list = this.list.concat(data);
+                    this.loading = false;
+                });
+        },
         toggle(item) {
             item.isPraise = !item.isPraise;
             let formData = new FormData();
@@ -172,18 +173,12 @@ export default {
 
         go(item) {
             this.$router.push({ name: 'forumReply', params: { id: item.uuid, messageId: item.uuid } });
-            this.$store.state.page = this.page;
-            this.$store.state.scrollTop = this.mescroll.getScrollTop();
         },
         goUser(item) {
             if (item.settingId == 62) {
                 this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
-                this.$store.state.page = this.page;
-                this.$store.state.scrollTop = this.mescroll.getScrollTop();
             } else {
                 this.$router.push({ name: 'user', params: { id: item.wxUserId } });
-                this.$store.state.page = this.page;
-                this.$store.state.scrollTop = this.mescroll.getScrollTop();
             }
         },
 
@@ -227,7 +222,6 @@ export default {
 
         //留言
         msgBtn() {
-            // console.log(this.list)
             if (this.msg.length != 0) {
                 //let userID = this.guid();
                 let formData = new FormData();
@@ -242,95 +236,38 @@ export default {
                 })
                     .then(response => {
                         //console.log(response)
-                        let user = [response.data.data];
-                        this.list.push({
-                            createDate: user[0].createDate,
-                            generalId: user[0].generalId,    //这里是的文章id
-                            isPraise: user[0].isPraise,
-                            praiseCount: user[0].praiseCount,
-                            replyCount: user[0].replyCount,
-                            image: user[0].image,
-                            nickName: user[0].nickName,
-                            reply: user[0].reply,
-                            settingId: user[0].settingId,
-                            uuid: user[0].uuid,
-                            wxUserId: user[0].wxUserId,
-                            //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
-                        })
+                        if (this.list.length == this.total) {
+                            let user = [response.data.data];
+                            this.list.push({
+                                createDate: user[0].createDate,
+                                generalId: user[0].generalId,    //这里是的文章id
+                                isPraise: user[0].isPraise,
+                                praiseCount: user[0].praiseCount,
+                                replyCount: user[0].replyCount,
+                                image: user[0].image,
+                                nickName: user[0].nickName,
+                                reply: user[0].reply,
+                                settingId: user[0].settingId,
+                                uuid: user[0].uuid,
+                                wxUserId: user[0].wxUserId,
+                                //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+                            })
+                        }
                         this.msg = '';
                     })
             }
         },
-
-        upCallback(page) {
-            this.getListDataFromNet(page.num, page.size, (curPageData) => {
-                //curPageData = [];
-                let totalPage = this.total;
-                if (page.num == 1) this.list = [];
-
-                if (this.isHave) {
-                    if (page.num > 1 && page.num <= this.$store.state.page) {
-                        page.num = this.$store.state.page + 1;
-                        this.size = 10;
-                        page.size = 10;
-                    }
-                }
-                if (this.list.length < this.total) this.list = Array.from(new Set(this.list.concat(curPageData)));  //更新列表数据
-                this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
-                //console.log(this.size, this.total, page.num, this.$store.state.page)
-
-                //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
-            }, function () {
-                this.mescroll.endErr();
-            });
-        },
-
-        getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
-            this.page = pageNum;   //记录需要缓存的当前页
-            if (this.isHave) {
-                //页面缓存，Mescroll只会返回第一页，所以这里从下一页起加载到上次转跳的页数，并设置初始化pageSize
-                if (pageNum > 1 && pageNum <= this.$store.state.page) {
-                    pageNum = this.$store.state.page + 1; //这里的1相当于pageNum
-                    pageSize = 10;
-                    this.size = 10;
-                    //记录已缓存的当前页，-1是因为this.$store.state.page触发上拉加载加了1，所以记录缓存的时候减回去，防止第二次上拉加载的时候pageNum继续增加
-                    this.page = pageNum - 1;
-                }
-            }
-            setTimeout(() => {
-                this.$ajax({
-                    method: 'get',
-                    url: this.psta + '/getWxExpertsReplyByUuid?uuid=' + this.uuid + '&wxUserId=' + this.$parent.wxUserId + '&page=' + pageNum + '&size=' + pageSize,
-                })
-                    .then(response => {
-                        //console.log(response)
-                        let listData = [];
-                        let listPage = response.data.data;
-                        this.total = response.data.total;
-                        this.loading = false;
-                        for (let i = 0; i < listPage.length; i++) {
-                            console.log(listPage[i].uuid)
-                            listData.push(listPage[i])
-                        }
-                        successCallback && successCallback(listData);//成功回调
-                    });
-            }, 500)
-        }
-
     },
-    // watch: {
-    //   '$route'(to, from) {
-    //     console.log(to.path)
-    //   }
-    // }
 }
 </script>
 <style lang="less" scoped>
-.mescroll {
-  position: fixed;
+.wrapper {
+  position: absolute;
+  left: 0;
   top: 5rem;
-  bottom: 6rem;
-  height: auto;
+  right: 0;
+  bottom: 60px;
+  overflow: hidden;
 }
 
 .expertArticle {

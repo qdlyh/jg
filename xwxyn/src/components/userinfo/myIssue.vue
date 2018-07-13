@@ -26,7 +26,7 @@
                 </div>
                 <div class="empty" v-show="!list.length">
                     <img src="../../../static/msg.png" alt="">
-                    <p>还没有任何内容</p>
+                    <p>暂时没有数据</p>
                 </div>
             </div>
         </div>
@@ -40,6 +40,7 @@ export default {
             type: '',
             mescroll: null,
             list: [],
+            size: 10,
         }
     },
     activated() {
@@ -49,6 +50,10 @@ export default {
                 auto: true,//初始化完毕,是否自动触发上拉加载的回调
                 isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                 callback: this.upCallback, //上拉加载的回调
+                page: {
+                    // num: this.page,
+                    size: this.size,
+                },
                 offset: 300,
                 noMoreSize: 3,
                 //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
@@ -59,6 +64,8 @@ export default {
                 },
             }
         });
+        let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
+        dom.scrollTop = this.$store.state.msgTop;
     },
     deactivated() {
         this.mescroll.destroy();
@@ -70,7 +77,8 @@ export default {
     },
     methods: {
         go(item) {
-            this.$router.push({ name: 'forumMsg', params: { id: item.uuid } })
+            this.$router.push({ name: 'forumMsg', params: { id: item.uuid } });
+            this.$store.state.msgTop = this.mescroll.getScrollTop();
         },
         upCallback(page) {
             this.getListDataFromNet(page.num, page.size, (curPageData) => {
@@ -86,10 +94,16 @@ export default {
         },
 
         getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+            let type = '';
+            if (this.type == 5) {
+                type = '/getWxMyQuestionsList?wxUserId='
+            } else {
+                type = '/getWxPersonalCenterPageNext?wxUserId='
+            }
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',
-                    url: this.psta + '/getWxPersonalCenterPageNext?wxUserId=' + this.$parent.wxUserId + '&type=' + this.type + '&page=' + pageNum + '&size=' + pageSize,
+                    url: this.psta + type + this.$parent.wxUserId + '&type=' + this.type + '&page=' + pageNum + '&size=' + pageSize,
                 })
                     .then(response => {
                         //console.log(response)
@@ -139,6 +153,7 @@ export default {
     padding: 1.25rem 1.875rem;
     background: #fff;
     border-bottom: 1px solid #bdbdbd;
+    margin-top: 1px;
     h1 {
       font-size: 1.5rem;
       color: #3c3c3c;

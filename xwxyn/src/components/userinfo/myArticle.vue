@@ -10,7 +10,7 @@
             <div id="mescroll" class="mescroll">
                 <div id="dataList" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list" :key="item.uuid">
-                        <div @click="$router.push({ name: 'article', params: { id: item.uuid } })">
+                        <div @click="go(item)">
                             <h1>{{item.title}}</h1>
                             <div class="article-img">
                                 <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
@@ -29,7 +29,7 @@
                 </div>
                 <div class="empty" v-show="!list.length">
                     <img src="../../../static/msg.png" alt="">
-                    <p>还没有任何内容</p>
+                    <p>暂时没有数据</p>
                 </div>
             </div>
         </div>
@@ -42,14 +42,22 @@ export default {
             loading: true,
             list: [],
             mescroll: null,
+            size: 10,
         }
     },
     activated() {
+        if (this.list.length >= 10) {
+            this.size = this.list.length;
+        }
         this.mescroll = new MeScroll("mescroll", {
             up: {
                 auto: true,//初始化完毕,是否自动触发上拉加载的回调
                 isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                 callback: this.upCallback, //上拉加载的回调
+                page: {
+                    // num: this.page,
+                    size: this.size,
+                },
                 offset: 300,
                 noMoreSize: 3,
                 //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
@@ -60,11 +68,17 @@ export default {
                 },
             }
         });
+        let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
+        dom.scrollTop = this.$store.state.msgTop;
     },
     deactivated() {
         this.mescroll.destroy();
     },
     methods: {
+        go(item){
+            this.$router.push({ name: 'article', params: { id: item.uuid } });
+            this.$store.state.msgTop = this.mescroll.getScrollTop();
+        },
         upCallback(page) {
             this.getListDataFromNet(page.num, page.size, (curPageData) => {
                 //curPageData = []; //打开本行注释,可演示列表无任何数据empty的配置

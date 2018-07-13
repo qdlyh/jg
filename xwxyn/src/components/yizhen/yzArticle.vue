@@ -9,12 +9,12 @@
                 </div>
                 <img v-for="src in item.images" v-lazy="src.image" alt="" style="width: 100%;margin-top:1.25rem;">
                 <div class="v-html" v-html="item.content"></div>
-            </div> 
+            </div>
             <div class="specialist">
                 <h1>专家坐诊</h1>
                 <div class="specialist-list">
                     <span v-for="(data,index) in item.users" :key="data.uuid">
-                        <img v-lazy="data.image" alt="">
+                        <img v-lazy="data.image" alt="" @click="go(data)">
                         <i>{{data.nickName}}</i>
                     </span>
                 </div>
@@ -39,14 +39,20 @@ export default {
             .then(response => {
                 //console.log(response)
                 this.list = [response.data.data];
-                console.log(this.list)
+                //console.log(this.list)
             })
+    },
+    methods: {
+        go(data) {
+            this.$router.push({ name: 'expertUser', params: { id: data.uuid } });
+        }
     }
 }
 </script>
 <style lang="less" scoped>
 .yzArticle {
   background: #fff;
+  margin-bottom: 10px;
   .yzArticle-box {
     padding: 1.875rem;
     .time {
@@ -55,6 +61,9 @@ export default {
       justify-content: space-between;
       color: #9c9c9c;
       font-size: 1.25rem;
+    }
+    h1 {
+      color: #3c3c3c;
     }
   }
   .specialist {

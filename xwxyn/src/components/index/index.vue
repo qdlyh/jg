@@ -3,7 +3,7 @@
         <loading v-show="!banner.length"></loading>
         <div class="index" v-show="banner.length">
             <div class="header">
-                <span @click="$router.push('/enterprise')">健康讲堂</span>
+                <span>健康讲堂</span>
             </div>
             <!--swiper-->
             <div class="banner">
@@ -22,7 +22,7 @@
                 </span>
             </div>
             <div class="header margin-header">
-                <span @click="$router.push({ name: 'resume', params: { id: 0 } })">慈善你我他</span>
+                <span>慈善你我他</span>
             </div>
             <div class="item-1">
                 <span v-for="(item,index) in item1" :key="index" @click="goItem1(index)">
@@ -31,7 +31,7 @@
                 </span>
             </div>
             <div class="header margin-header">
-                <span @click="$router.push('/enterText')">肠道保健</span>
+                <span>肠道保健</span>
             </div>
             <div class="item-2">
                 <div @click="$router.push('/introduce')">
@@ -103,19 +103,23 @@ export default {
     methods: {
         goItem(i) {
             if (i == 0) {
-                this.$router.push('/forum')
+                this.$router.push('/articleList');
+                //this.$router.push({ name: 'articleList', params: { id: 'index' } });
+                this.$store.state.articleListId = 0;
             }
             if (i == 1) {
-                this.$router.push('/userType')
+                this.$router.push('/articleList');
+                this.$store.state.articleListId = 1;
             }
             if (i == 2) {
-                this.$router.push('/articleList')
+                this.$router.push('/articleList');
+                this.$store.state.articleListId = 2;
             }
             if (i == 3) {
-                this.$router.push('/expertList')
+                this.$router.push('/articleList')
             }
             if (i == 4) {
-                this.$router.push('/yzList')
+                this.$router.push('/articleList')
             }
         },
         goItem1(i) {

@@ -128,11 +128,6 @@ export default {
           noMoreSize: 3,
           //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
           htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-          empty: { //配置列表无任何数据的提示
-            warpId: clearEmptyId,
-            icon: "../../static/mescroll-empty.png",
-            tip: "亲,暂无相关数据哦~",
-          },
         }
       });
       return this.mescroll;
@@ -325,11 +320,10 @@ export default {
     .article-img {
       display: flex;
       width: 100%;
-      height: 8.75rem;
       overflow: hidden;
       img {
         width: 30%;
-        height: 100%;
+        height: 8.75rem;
         margin: 0 5px;
       }
     }

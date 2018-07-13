@@ -10,7 +10,7 @@ const router = new Router({
       component: () =>
         import ('@/components/index/index'),
       meta: {
-        title: '首页',
+        title: '',
         keepAlive: true
       }
     },
@@ -21,7 +21,7 @@ const router = new Router({
       component: () =>
         import ('@/components/index/index'),
       meta: {
-        title: '首页',
+        title: '',
         keepAlive: true
       }
     },
@@ -32,7 +32,7 @@ const router = new Router({
       component: () =>
         import ('@/components/index/introduce'),
       meta: {
-        title: '产品详情',
+        title: '',
         keepAlive: true
       }
     },
@@ -50,7 +50,7 @@ const router = new Router({
       component: () =>
         import ('@/components/index/userList'),
       meta: {
-        title: '文章',
+        title: '',
         keepAlive: true
       }
     },
@@ -79,7 +79,7 @@ const router = new Router({
       component: () =>
         import ('@/components/userinfo/userTypeForm'),
       meta: {
-        title: '信息编辑',
+        title: '',
         keepAlive: true
       }
     },
@@ -101,7 +101,7 @@ const router = new Router({
       component: () =>
         import ('@/components/userinfo/myAttention'),
       meta: {
-        title: '我的关注',
+        title: '',
         keepAlive: true
       }
     },
@@ -112,7 +112,7 @@ const router = new Router({
       component: () =>
         import ('@/components/userinfo/mySchistory'),
       meta: {
-        title: '我的关注',
+        title: '',
         keepAlive: true
       }
     },
@@ -123,7 +123,7 @@ const router = new Router({
       component: () =>
         import ('@/components/userinfo/myArticle'),
       meta: {
-        title: '我的博文',
+        title: '',
         keepAlive: true
       }
     },
@@ -134,7 +134,7 @@ const router = new Router({
       component: () =>
         import ('@/components/userinfo/myMessage'),
       meta: {
-        title: '我的消息',
+        title: '',
         keepAlive: true
       }
     },
@@ -159,7 +159,7 @@ const router = new Router({
       component: () =>
         import ('@/components/userinfo/safety'),
       meta: {
-        title: '账号安全',
+        title: '',
         keepAlive: true
       }
     },
@@ -283,7 +283,7 @@ const router = new Router({
       component: () =>
         import ('@/components/user'),
       meta: {
-        title: '用户详情',
+        title: '',
         keepAlive: true
       }
     },
@@ -300,7 +300,7 @@ const router = new Router({
       component: () =>
         import ('@/components/yizhen/yzList'),
       meta: {
-        title: '专家信息',
+        title: '',
         keepAlive: true
       }
     },
@@ -311,7 +311,7 @@ const router = new Router({
       component: () =>
         import ('@/components/yizhen/yzArticle'),
       meta: {
-        title: '专家信息',
+        title: '',
         keepAlive: true
       }
     },
@@ -322,7 +322,7 @@ const router = new Router({
       component: () =>
         import ('@/components/expertUser'),
       meta: {
-        title: '专家信息',
+        title: '',
         keepAlive: true
       }
     },
@@ -333,7 +333,7 @@ const router = new Router({
       component: () =>
         import ('@/components/forum/forum'),
       meta: {
-        title: '专家列表',
+        title: '',
         keepAlive: true
       }
     },
@@ -355,7 +355,7 @@ const router = new Router({
       component: () =>
         import ('@/components/forum/forumMsg'),
       meta: {
-        title: '文章',
+        title: '',
         keepAlive: true
       }
     },
@@ -366,7 +366,7 @@ const router = new Router({
       component: () =>
         import ('@/components/forum/forumReply'),
       meta: {
-        title: '回复',
+        title: '',
         keepAlive: true
       }
     },
@@ -377,17 +377,24 @@ const router = new Router({
       component: () =>
         import ('@/components/expert/expertList'),
       meta: {
-        title: '文章',
-        require: '62',
+        title: '',
         keepAlive: true
       }
     }
   ]
 })
 export default router;
-router.beforeEach((to, from, next) => {
-  if (to.meta.title) {
-    document.title = to.meta.title;
-  }
-  next();
-});
+// router.beforeEach((to, from, next) => {
+//   const toDepth = to.path.split('/').length
+//   const fromDepth = from.path.split('/').length
+//   //console.log(to.path.split('/'))
+//   if (toDepth < fromDepth||toDepth == fromDepth) {
+//     console.log(toDepth,'|',fromDepth)
+//     from.meta.keepAlive = false
+//     to.meta.keepAlive = true
+//   }
+//   if (to.meta.title) {
+//     document.title = to.meta.title;
+//   }
+//   next();
+// });

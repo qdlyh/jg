@@ -78,7 +78,9 @@ export default {
         }
     },
     mounted() {
-
+        if (this.$parent.isCert == 1) {
+            this.$router.push('/')
+        }
     },
     methods: {
         click(key) {

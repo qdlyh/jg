@@ -74,6 +74,11 @@ export default {
             cancelText: ''
         }
     },
+    mounted() {
+        if (this.$parent.isCert == 1) {
+            this.$router.push('/')
+        }
+    },
     methods: {
         click(key) {
             let divImage = document.querySelector("#file-img");

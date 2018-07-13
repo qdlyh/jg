@@ -1,123 +1,124 @@
 <template>
   <div>
     <div class="userList">
-      <!-- <div class="header">
-        <span @click="headerTab(index)" :class="{ headerActive: active == index }" v-for="(item,index) in header">{{item.text}}</span>
-      </div> -->
       <tab>
         <tab-item @on-item-click="onItemClick(index)" :selected="index==isShow" v-for="(item,index) in tab" :key="index">{{item.tab}}</tab-item>
       </tab>
 
-      <div id="mescroll0" class="mescroll" v-show="isShow==0">
-        <div id="dataList0" class="data-list" v-cloak>
-          <div class="personnel">
-            <div class="personnel-box" v-for="(item,index) in list0" :key="index">
-              <div class="user-text" @click="$router.push({ name: 'user', params: { id: item.uuid } })">
-                <span>
-                  <img v-lazy="item.image" alt="">
-                </span>
-                <span class="right">
-                  <h1>{{item.nickName}}</h1>
-                  <p>{{item.signature}}</p>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="mescroll1" class="mescroll" v-show="isShow==1">
-        <div id="dataList1" class="data-list" v-cloak>
-          <div class="volunteer">
-            <div v-for="(item,index) in list1" :key="item.uuid">
-              <div class="volunteer-box" @click="$router.push({ name: 'user', params: { id: item.uuid } })">
+      <scroll ref="scroll" :data="list0" :listenScrollEnd="true" :pullUpLoad="pullUpLoad" @pullingUp="onPullingUp" v-show="isShow==0">
+        <div class="personnel">
+          <div class="personnel-box" v-for="(item,index) in list0" :key="index">
+            <div class="user-text" @click="$router.push({ name: 'user', params: { id: item.uuid } })">
+              <span>
                 <img v-lazy="item.image" alt="">
-                <span>
-                  <h1>{{item.nickName}}</h1>
-                  <i>{{item.signature}}</i>
-                  <p>2013年参加志愿</p>
-                </span>
-              </div>
+              </span>
+              <span class="right">
+                <h1>{{item.nickName}}</h1>
+                <p>{{item.signature}}</p>
+              </span>
             </div>
           </div>
         </div>
-      </div>
+      </scroll>
+
+      <scroll ref="scroll" :data="list1" :listenScrollEnd="true" :pullUpLoad="pullUpLoad" @pullingUp="onPullingUp" v-show="isShow==1">
+        <div class="volunteer">
+          <div v-for="(item,index) in list1" :key="item.uuid">
+            <div class="volunteer-box" @click="$router.push({ name: 'user', params: { id: item.uuid } })">
+              <img v-lazy="item.image" alt="">
+              <span>
+                <h1>{{item.nickName}}</h1>
+                <i>{{item.signature}}</i>
+                <p>2013年参加志愿</p>
+              </span>
+            </div>
+          </div>
+        </div>
+      </scroll>
 
     </div>
+  </div>
   </div>
 </template>
 
 <script>
+import Scroll from '../../components/common/Scroll.vue'
 import { Tab, TabItem } from 'vux'
 export default {
   components: {
     Tab,
     TabItem,
+    Scroll
   },
   data() {
     return {
-      tab: [{ tab: '慈善企业',top: 0, i: 0 }, { tab: '志愿者',top: 0, i: 1 }],
+      tab: [{ tab: '慈善企业', top: 0, i: 0 }, { tab: '志愿者', top: 0, i: 1 }],
+      pullUpLoad: {
+        threshold: 10,
+        txt: { more: '', noMore: '暂无更多数据' }
+      },
       isShow: 0,
-      mescrollArr: new Array(2),
+      page0: 0,
+      page1: 0,
+      size: 10,
       list0: [],
       list1: [],
     }
   },
   mounted() {
-    this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
+    this.onPullingUp();
   },
   activated() {
-    this.$nextTick(() => {
-      for (let i = 0; i < this.tab.length; i++) {
-        let dom = document.querySelector('#mescroll' + this.tab[i].i);
-        dom.scrollTop = this.tab[i].top;
-      }
-    })
+    // this.$nextTick(() => {
+    //   for (let i = 0; i < this.tab.length; i++) {
+    //     let dom = document.querySelector('#mescroll' + this.tab[i].i);
+    //     dom.scrollTop = this.tab[i].top;
+    //   }
+    // })
   },
-  deactivated() {
-    // console.log(this.initMescroll("mescroll0", "dataList0").length)
-    // if (!this.list0.length) {
-    //this.mescroll.destroy();
-    //     console.log('1')
-    // }
+  watch: {
+    isShow() {
+      this.onPullingUp();
+    }
   },
-
   methods: {
     go() {
       this.$router.push({ name: 'questions', params: { id: 0 } });
     },
-
-    onItemClick(index) {
-      if (this.isShow != index) {
-        this.isShow = index;
-        if (this.mescrollArr[index] == null) {
-          this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
-        }
-        this.$nextTick(() => {
-          let dom = document.querySelector('#mescroll' + index);
-          dom.scrollTop = this.tab[index].top;
-        });
+    onPullingUp() {
+      if (this.isShow == 0) {
+        let type = 63;
+        this.$ajax({
+          method: 'get',
+          url: this.psta + '/getWxCharityYouAndMe?type=' + type + '&page=' + ++this.page0 + '&size=' + this.size,
+        })
+          .then(response => {
+            let data = response.data.data;
+            this.total = response.data.total;
+            this.list0 = this.list0.concat(data)
+          });
+      }
+      if (this.isShow == 1) {
+        let type = 64;
+        this.$ajax({
+          method: 'get',
+          url: this.psta + '/getWxCharityYouAndMe?type=' + type + '&page=' + ++this.page1 + '&size=' + this.size,
+        })
+          .then(response => {
+            let data = response.data.data;
+            this.total = response.data.total;
+            this.list1 = this.list1.concat(data)
+          });
       }
     },
-    initMescroll(mescrollId, clearEmptyId) {
-      this.mescroll = new MeScroll(mescrollId, {
-        up: {
-          auto: true,//初始化完毕,是否自动触发上拉加载的回调
-          isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
-          callback: this.upCallback, //上拉加载的回调
-          onScroll: this.upScroll,
-          offset: 300,
-          noMoreSize: 3,
-          //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-          htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-          empty: { //配置列表无任何数据的提示
-            warpId: clearEmptyId,
-            icon: "../../static/mescroll-empty.png",
-            tip: "亲,暂无相关数据哦~",
-          },
-        }
-      });
-      return this.mescroll;
+
+    onItemClick(index) {
+      this.isShow = index;
+      //   this.$nextTick(() => {
+      //     let dom = document.querySelector('#mescroll' + index);
+      //     dom.scrollTop = this.tab[index].top;
+      //   });
+      // }
     },
 
     upScroll(mescroll, y, isUp) {
@@ -129,79 +130,25 @@ export default {
       }
     },
 
-    upCallback(page) {
-      let dataIndex = this.isShow;
-      this.getListDataFromNet(dataIndex, page.num, page.size, (curPageData) => {
-        //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
-        let totalPage = this.total
-        switch (dataIndex) {
-          case 0:
-            if (page.num == 1) this.list0 = [];
-            this.list0 = this.list0.concat(curPageData);
-            // this.mescroll.endByPage(curPageData.length, totalPage);
-            break;
-          case 1:
-            if (page.num == 1) this.list1 = [];
-            this.list1 = this.list1.concat(curPageData);
-            break;
-        }
-        this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
-        //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
-      }, function () {
-        this.mescrollArr[dataIndex].endErr();
-      });
-    },
-
-    getListDataFromNet(dataIndex, pageNum, pageSize, successCallback, errorCallback) {
-      let type = '';
-      if (dataIndex == 0) {
-        type = 63
-      }
-      if (dataIndex == 1) {
-        type = 64
-      }
-      setTimeout(() => {
-        this.$ajax({
-          method: 'get',
-          url: this.psta + '/getWxCharityYouAndMe?type=' + type + '&page=' + pageNum + '&size=' + pageSize,
-        })
-          .then(response => {
-            console.log(response)
-            let listData = [];
-            let listPage = response.data.data;
-            this.total = response.data.total;
-            if (dataIndex == 0) {
-              for (let i = 0; i < listPage.length; i++) {
-                listData.push(listPage[i])
-              }
-            }
-
-            if (dataIndex == 1) {
-              for (let i = 0; i < listPage.length; i++) {
-                listData.push(listPage[i])
-              }
-            }
-            successCallback && successCallback(listData);//成功回调
-          });
-      }, 500)
-    }
   },
 }
 </script>
 
 <style lang="less" scoped>
-.mescroll {
-  position: fixed;
-  top: 40px;
+.wrapper {
+  position: absolute;
+  left: 0;
+  top: 45px;
+  right: 0;
   bottom: 0;
-  height: auto;
+  overflow: hidden;
 }
-
 // 慈善企业
 .personnel {
   .personnel-box {
+    height: 14rem;
     background: #fff;
-    margin-top: 0.625rem;
+    margin-bottom: 0.3125rem;
     padding: 1.25rem 1.875rem;
     .user-text {
       display: flex;
@@ -258,7 +205,7 @@ export default {
   .volunteer-box {
     display: flex;
     height: 14rem;
-    margin-top: 0.625rem;
+    margin-bottom: 0.3125rem;
     padding: 1.25rem 1.875rem;
     background: #fff;
     img {

@@ -25,7 +25,7 @@
                             </div>
                         </div>
                         <div class="reply" v-show="index==num">
-                            <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
+                            <input type="text" :placeholder="'@'+placeholder" v-model.trim="replyMsg"><br/>
                             <div>
                                 <span @click="cancel(index)">取消</span>
                                 <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
@@ -36,7 +36,7 @@
             </div>
             <div class="msg-input-box" v-show="num==null">
                 <div class="msg-input" :class="{activeBtn:msg!=0}">
-                    <input type="text" placeholder="回复层主" v-model="msg">
+                    <input type="text" placeholder="回复层主" v-model.trim="msg">
                     <i class="iconfont icon-fasong" @click="msgBtn()"></i>
                 </div>
             </div>
@@ -47,7 +47,6 @@
 export default {
     data() {
         return {
-            isHave: false, //判断是否缓存
             loading: true,
             replyMsg: '',
             placeholder: '',
@@ -57,7 +56,6 @@ export default {
             num: null,
             mescroll: null,
             list: [],
-            page: 1,
             size: 10,
         }
     },
@@ -65,7 +63,6 @@ export default {
         this.uuid = Number(this.$route.params.id);
 
         if (this.list.length > 10) {
-            this.isHave = true;
             //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
             this.size = this.list.length;
         }
@@ -107,11 +104,9 @@ export default {
         goUser(item) {
             if (item.settingId == 62) {
                 this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
-                this.$store.state.replyPage = this.page; //记录当前页
                 this.$store.state.replyTop = this.mescroll.getScrollTop();
             } else {
                 this.$router.push({ name: 'user', params: { id: item.wxUserId } });
-                this.$store.state.replyPage = this.page; //记录当前页
                 this.$store.state.replyTop = this.mescroll.getScrollTop();
             }
         },
@@ -148,7 +143,7 @@ export default {
                     url: this.psta + '/submitAskQuestionsReply',
                 })
                     .then(response => {
-                        console.log(response)
+                        //console.log(response)
                         let user = [response.data.data];
                         this.list.push({
                             createDate: user[0].createDate,
@@ -208,14 +203,6 @@ export default {
                 //curPageData = [];
                 if (page.num == 1) this.list = [];
                 let totalPage = this.total;
-
-                if (this.isHave) {
-                    if (page.num > 1 && page.num <= this.$store.state.replyPage) {
-                        page.num = this.$store.state.replyPage + 1;
-                        this.size = 10;
-                        page.size = 10;
-                    }
-                }
                 if (this.list.length < this.total) this.list = this.list.concat(curPageData);  //更新列表数据
                 this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
                 //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
@@ -225,17 +212,6 @@ export default {
         },
 
         getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
-            this.page = pageNum;   //记录需要缓存的当前页
-            if (this.isHave) {
-                //页面缓存，Mescroll只会返回第一页，所以这里从下一页起加载到上次转跳的页数，并设置初始化pageSize
-                if (pageNum > 1 && pageNum <= this.$store.state.replyPage) {
-                    pageNum = this.$store.state.replyPage + 1; //这里的1相当于pageNum
-                    pageSize = 10;
-                    this.size = 10;
-                    //记录已缓存的当前页，-1是因为this.$store.state.replyPage触发上拉加载加了1，所以记录缓存的时候减回去，防止第二次上拉加载的时候pageNum继续增加
-                    this.page = pageNum - 1;
-                }
-            }
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',

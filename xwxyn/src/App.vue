@@ -14,8 +14,8 @@ export default {
   name: 'app',
   data() {
     return {
-      wxUserId: '6',
-      settingId: '62',
+      wxUserId: '4',
+      settingId: '61',
       isCert: '',
       isIn: '',
     }
@@ -25,12 +25,44 @@ export default {
     //   this.wxUserId = localStorage.getItem("wxUserId");
     //   this.settingId = localStorage.getItem("settingId");
     // } else {
-    //   this.wxUserId = this.$route.query.wxUserId;
-    //   localStorage.setItem('userId', this.wxUserId);
+    //   function UrlSearch() {
+    //     var name, value;
+    //     var str = location.href; //取得整个地址栏
+    //     var num = str.indexOf("?")
+    //     str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
 
-    //   this.settingId = this.$route.query.settingId;
-    //   localStorage.setItem('userId', this.settingId);
+    //     var arr = str.split("&"); //各个参数放到数组里
+    //     for (var i = 0; i < arr.length; i++) {
+    //       num = arr[i].indexOf("=");
+    //       if (num > 0) {
+    //         name = arr[i].substring(0, num);
+    //         value = arr[i].substr(num + 1);
+    //         this[name] = value;
+    //       }
+    //     }
+    //   }
+    //   var OpenId = new UrlSearch(); //实例化
+    //   //this.wxUserId = this.$route.query.wxUserId
+    //   this.wxUserId = OpenId.wxUserId;
+    //   this.settingId = OpenId.settingId;
+    //   localStorage.setItem("wxUserId", this.wxUserId);
+    //   localStorage.setItem("settingId", this.settingId);
     // }
+
+
+    // if (this.settingId == 61 || this.settingId == 63) {
+    //   this.$ajax({
+    //     method: 'get',
+    //     url: this.psta + '/findIsCert?wxUserId=' + this.wxUserId,
+    //   })
+    //     .then(response => {
+    //       //console.log(response)
+    //       this.isCert = response.data.data.isCert;
+    //       this.isIn = response.data.data.isIn;
+    //     })
+    // }
+  },
+  mounted() {
     if (this.settingId == 61 || this.settingId == 63) {
       this.$ajax({
         method: 'get',
@@ -42,8 +74,6 @@ export default {
           this.isIn = response.data.data.isIn;
         })
     }
-  },
-  mounted() {
     let htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
     let htmlDom = document.getElementsByTagName('html')[0];
     htmlDom.style.fontSize = htmlWidth / 40 + 'px';
@@ -51,19 +81,17 @@ export default {
     //console.log(htmlWidth)
   },
 
-
-  // activated() {
-  //   if (sessionStorage.getItem('scrollTop') != null) {
-  //     let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-  //     scrollTop = parseInt(sessionStorage.getItem('scrollTop'));
-  //     // setTimeout(() => {
-  //     //   scrollTop = parseInt(sessionStorage.getItem('scrollTop'));
-  //     // }, 500)
-  //     console.log(scrollTop)
-  //   }
-  // }
-
-
+  updated() {
+    // if (localStorage.getItem("wxUserId") != null) {
+    //   this.wxUserId = localStorage.getItem("wxUserId");
+    //   this.settingId = localStorage.getItem("settingId");
+    // } else {
+    //   this.wxUserId = this.$route.query.wxUserId;
+    //   this.settingId = this.$route.query.settingId;
+    //   localStorage.setItem("wxUserId", this.$route.query.wxUserId);
+    //   localStorage.setItem("settingId", this.$route.query.settingId);
+    // }
+  },
   watch: {
     '$route'(to, from) {
       //console.log(MeScroll.prototype.hideTopBtn()) //MeScroll返回顶部按钮)
@@ -115,13 +143,12 @@ body {
   background: #f3f3f3;
 }
 
-
 #app {
   margin: 0 auto;
   // max-width: 750px;
   letter-spacing: 1px;
   -webkit-overflow-scrolling: touch; //在ios上滑动不流畅样式设置处理
-  word-break:break-all;  //字母数字强制换行
+  word-break: break-all; //字母数字强制换行
   //mescroll
   -webkit-touch-callout: none;
   -webkit-user-select: none;

@@ -24,7 +24,7 @@
               </div>
             </div>
             <div class="reply" v-show="index==num">
-              <input type="text" :placeholder="'@'+placeholder" v-model="replyMsg"><br/>
+              <input type="text" :placeholder="'@'+placeholder" v-model.trim="replyMsg"><br/>
               <div>
                 <span @click="cancel(index)">取消</span>
                 <span :class="{btnActive:replyMsg!=0}" class="btn" @click="comment(item)">评论</span>
@@ -35,7 +35,7 @@
       </div>
       <div class="msg-input-box" v-show="num==null">
         <div class="msg-input" :class="{activeBtn:msg!=0}">
-          <input type="text" placeholder="回复层主" v-model="msg">
+          <input type="text" placeholder="回复层主" v-model.trim="msg">
           <i class="iconfont icon-fasong" @click="msgBtn()"></i>
         </div>
       </div>
@@ -55,17 +55,28 @@ export default {
       num: null,
       mescroll: null,
       list: [],
+      size: 10,
     }
   },
   activated() {
     this.uuid = Number(this.$route.params.id);
+    if (this.list.length > 10) {
+      //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
+      this.size = this.list.length;
+    }
     this.mescroll = new MeScroll("mescroll", {
+      down: {
+        use: false
+      },
       up: {
-        auto: false,//初始化完毕,是否自动触发上拉加载的回调
+        auto: true,//初始化完毕,是否自动触发上拉加载的回调
         isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
         callback: this.upCallback, //上拉加载的回调
-        offset: 500,
-        noMoreSize: 5,
+        page: {
+          size: this.size
+        },
+        offset: 300,
+        noMoreSize: 3,
         //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
         htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
         toTop: { //配置回到顶部按钮
@@ -74,6 +85,8 @@ export default {
         },
       }
     });
+    let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
+    dom.scrollTop = this.$store.state.replyTop;
   },
   deactivated() {
     this.mescroll.destroy();
@@ -87,10 +100,10 @@ export default {
     goUser(item) {
       if (item.settingId == 62) {
         this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
-        this.$store.state.scrollTop = this.mescroll.getScrollTop();
+        this.$store.state.replyTop = this.mescroll.getScrollTop();
       } else {
         this.$router.push({ name: 'user', params: { id: item.wxUserId } });
-        this.$store.state.scrollTop = this.mescroll.getScrollTop();
+        this.$store.state.replyTop = this.mescroll.getScrollTop();
       }
     },
     replyBtn(index, item) {
@@ -137,6 +150,7 @@ export default {
               image: user[0].image,
               nickName: user[0].nickName,
               reply: user[0].reply,
+              settingId: user[0].settingId,
               uuid: user[0].uuid,
               wxUserId: user[0].wxUserId,
               //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
@@ -171,6 +185,7 @@ export default {
               image: user[0].image,
               nickName: user[0].nickName,
               reply: user[0].reply,
+              settingId: user[0].settingId,
               uuid: user[0].uuid,
               wxUserId: user[0].wxUserId,
               //id: userID  //生成唯一id防止unshift评论的时候数据显示错误

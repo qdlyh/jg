@@ -4,10 +4,10 @@
             <div class="questions-box">
                 <div class="questions-title">填写问题</div>
                 <div class="input">
-                    <input type="text" v-model="title" placeholder="填写标题" maxlength="30">
+                    <input type="text" v-model.trim="title" placeholder="填写标题" maxlength="30">
                 </div>
                 <div class="textarea">
-                    <textarea v-model="describe" cols="30" rows="10" placeholder="填写内容" maxlength="200"></textarea>
+                    <textarea v-model.trim="describe" cols="30" rows="10" placeholder="填写内容" maxlength="200"></textarea>
                 </div>
                 <div class="btn-blue" @click="sumbit()">
                     提交
@@ -33,7 +33,7 @@ export default {
     },
     methods: {
         sumbit() {
-            if (this.title.length == 5 || this.describe == 10) {
+            if (this.title.length < 3) {
                 this.cancel = true;
                 this.cancelText = '填写的问题不够完整';
             } else {
@@ -50,7 +50,7 @@ export default {
                     .then(response => {
                         //console.log(response)
                         let uuid = response.data.data.uuid;
-                        this.$router.push({name:'forumArticle',params:{id:uuid}})
+                        this.$router.push({name:'forumMsg',params:{id:uuid}})
                     })
             }
         }

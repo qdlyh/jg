@@ -5,48 +5,23 @@
                 <tab-item @on-item-click="onItemClick(index)" :selected="index==isShow" v-for="(item,index) in tab" :key="index">{{item.tab}}</tab-item>
             </tab>
 
-            <div id="mescroll0" class="mescroll" v-show="isShow==0">
-                <div id="dataList0" class="data-list" v-cloak>
-                    <div class="user-list" v-for="(item,index) in list0" :key="item.uuid">
-                        <div class="user" @click="$router.push({ name: 'expertUser', params: { id: item.uuid } })">
-                            <img v-lazy="item.image" alt="">
-                            <span>
-                                <h1>{{item.nickName}}</h1>
-                                <i>{{item.label}}</i>
-                                <p>{{item.signature}}</p>
-                            </span>
-                        </div>
+            <scroll ref="scroll" :data="list0" :pullUpLoad="pullUpLoad" @pullingUp="onPullingUp" v-show="isShow==0">
+                <div class="user-list" v-for="(item,index) in list0" :key="item.uuid">
+                    <div class="user" @click="$router.push({ name: 'expertUser', params: { id: item.uuid } })">
+                        <img v-lazy="item.image" alt="">
+                        <span>
+                            <h1>{{item.nickName}}</h1>
+                            <i>{{item.label}}</i>
+                            <p>{{item.signature}}</p>
+                        </span>
                     </div>
                 </div>
-            </div>
+            </scroll>
 
             <div class="article-box" v-show="isShow==1">
-                <div id="mescroll1" class="mescroll">
-                    <div id="dataList1" class="data-list" v-cloak>
-                        <div class="article-list" v-for="(item,index) in list1" :key="item.uuid">
-                            <div @click="goMsg(item)">
-                                <h1>{{item.title}}</h1>
-                                <div class="article-box-bottom">
-                                    <div>
-                                        {{item.createDate}}
-                                    </div>
-                                    <div class="article-msg">
-                                        <span>{{item.replyCount}}回答</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="questions-btn" @click="go()">
-                    提问
-                </div>
-            </div>
-
-            <div id="mescroll2" class="mescroll" v-show="isShow==2">
-                <div id="dataList2" class="data-list" v-cloak>
-                    <div v-for="(item,index) in list2" :key="item.uuid">
-                        <div class="questions-history" @click="goMsg(item)">
+                <scroll ref="scroll" :data="list1" :pullDownRefresh="pullDownRefreshObj" :pullUpLoad="onPullingUp" @pullingDown="onPullingDown" @pullingUp="onPullingUp">
+                    <div class="article-list" v-for="(item,index) in list1" :key="item.uuid">
+                        <div @click="goMsg(item)">
                             <h1>{{item.title}}</h1>
                             <div class="article-box-bottom">
                                 <div>
@@ -58,177 +33,152 @@
                             </div>
                         </div>
                     </div>
+                </scroll>
+                <div class="questions-btn" @click="go()">
+                    提问
                 </div>
             </div>
-        </div>
 
-    </div>
+            <scroll ref="scroll" :data="list2" :pullUpLoad="pullUpLoad" @pullingUp="onPullingUp" v-show="isShow==2">
+                <div v-for="(item,index) in list2" :key="item.uuid">
+                    <div class="questions-history" @click="goMsg(item)">
+                        <h1>{{item.title}}</h1>
+                        <div class="article-box-bottom">
+                            <div>
+                                {{item.createDate}}
+                            </div>
+                            <div class="article-msg">
+                                <span>{{item.replyCount}}回答</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </scroll>
+
+        </div>
     </div>
 </template>
 <script>
+import Scroll from '../../components/common/Scroll.vue'
 import { Tab, TabItem } from 'vux'
 export default {
     components: {
         Tab,
         TabItem,
+        Scroll
     },
     data() {
         return {
             tab: [{ tab: '专家列表', top: 0, i: 0 }, { tab: '咨询专区', top: 10, i: 1 }, { tab: '我的提问', top: 0, i: 2 }],
-            mescroll: null,
-            isShow: 0,
-            mescrollArr: new Array(3),
+            pullUpLoad: {
+                threshold: 10,
+                txt: { more: '', noMore: '暂无更多数据' }
+            },
+            isShow: 1,
+            page0: 0,
+            page1: 0,
+            page2: 0,
+            size: 10,
+            pullDownRefreshObj: true,
+            pullUpLoadObj: true,
+            pullDownRefresh: true,
+            pullUpLoad: true,
             list0: [],
             list1: [],
             list2: [],
         }
     },
-    mounted() {
-        this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
-    },
-    activated() {
-        this.$nextTick(() => {
-            for (let i = 0; i < this.tab.length; i++) {
-                let dom = document.querySelector('#mescroll' + this.tab[i].i);
-                dom.scrollTop = this.tab[i].top;
-            }
-        })
-    },
-    // deactivated() {
-    //     this.mescroll.destroy();
+    // mounted() {
+    //         console.log('x')
+    //     this.onPullingUp();
     // },
+    activated() {
+        this.onPullingUp();
+    },
     methods: {
+        onPullingDown() {
+            if (this.isShow == 0) {
+                this.page0 = 0;
+                this.list0 = [];
+                this.onPullingUp()
+                this.$refs.scroll.forceUpdate();
+            }
+            if (this.isShow == 1) {
+                this.page1 = 0;
+                this.list1 = [];
+                this.onPullingUp();
+                this.$refs.scroll.forceUpdate();
+            }
+            if (this.isShow == 2) {
+                this.page2 = 0;
+                this.list2 = [];
+                this.onPullingUp()
+                this.$refs.scroll.forceUpdate();
+            }
+        },
+
         go() {
             this.$router.push({ name: 'questions', params: { id: 0 } });
         },
+
         goMsg(item) {
             this.$router.push({ name: 'forumMsg', params: { id: item.uuid } })
         },
 
         onItemClick(index) {
-            if (this.isShow != index) {
-                this.isShow = index;
-                if (this.mescrollArr[index] == null) {
-                    this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
-                }
-                this.$nextTick(() => {
-                    let dom = document.querySelector('#mescroll' + index);
-                    dom.scrollTop = this.tab[index].top;
-                });
-            }
-        },
-        initMescroll(mescrollId, clearEmptyId) {
-            this.mescroll = new MeScroll(mescrollId, {
-                up: {
-                    auto: true,//初始化完毕,是否自动触发上拉加载的回调
-                    isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
-                    callback: this.upCallback, //上拉加载的回调
-                    onScroll: this.upScroll,
-                    offset: 300,
-                    noMoreSize: 3,
-                    //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-                    htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-                    empty: { //配置列表无任何数据的提示
-                        warpId: clearEmptyId,
-                        icon: "../../static/mescroll-empty.png",
-                        tip: "亲,暂无相关数据哦~",
-                    },
-                }
-            });
-            return this.mescroll;
+            this.isShow = index;
+            this.onPullingUp();
         },
 
-        upScroll(mescroll, y, isUp) {
+        onPullingUp() {
             if (this.isShow == 0) {
-                this.tab[0].top = y;
-            }
-            if (this.isShow == 1) {
-                this.tab[1].top = y;
-            }
-            if (this.isShow == 2) {
-                this.tab[2].top = y;
-            }
-        },
-
-        upCallback(page) {
-            let dataIndex = this.isShow;
-            this.getListDataFromNet(dataIndex, page.num, page.size, (curPageData) => {
-                //curPageData=[]; //打开本行注释,可演示列表无任何数据empty的配置
-                let totalPage = this.total
-                switch (dataIndex) {
-                    case 0:
-                        if (page.num == 1) this.list0 = [];
-                        this.list0 = this.list0.concat(curPageData);
-                        // this.mescroll.endByPage(curPageData.length, totalPage);
-                        break;
-                    case 1:
-                        if (page.num == 1) this.list1 = [];
-                        this.list1 = this.list1.concat(curPageData);
-                        break;
-                    case 2:
-                        if (page.num == 1) this.list2 = [];
-                        this.list2 = this.list2.concat(curPageData);
-                        break;
-                }
-                this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
-                //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
-            }, function () {
-                this.mescrollArr[dataIndex].endErr();
-            });
-        },
-
-        getListDataFromNet(dataIndex, pageNum, pageSize, successCallback, errorCallback) {
-            let type = '';
-            if (dataIndex == 0) {
-                type = '/getWxExpertsList?'
-            }
-            if (dataIndex == 1) {
-                type = '/getWxConsultingList?'
-            }
-            if (dataIndex == 2) {
-                type = '/getWxConsultingList?wxUserId=' + this.$parent.wxUserId + '&'
-            }
-
-            setTimeout(() => {
                 this.$ajax({
                     method: 'get',
-                    url: this.psta + type + 'page=' + pageNum + '&size=' + pageSize,
+                    url: this.psta + '/getWxExpertsList?page=' + ++this.page0 + '&size=' + this.size,
                 })
                     .then(response => {
-                        //console.log(response)
-                        let listData = [];
-                        let listPage = response.data.data;
-                        this.total = response.data.total;
-                        if (dataIndex == 0) {
-                            for (let i = 0; i < listPage.length; i++) {
-                                listData.push(listPage[i])
-                            }
-                        }
-
-                        if (dataIndex == 1) {
-                            for (let i = 0; i < listPage.length; i++) {
-                                listData.push(listPage[i])
-                            }
-                        }
-
-                        if (dataIndex == 2) {
-                            for (let i = 0; i < listPage.length; i++) {
-                                listData.push(listPage[i])
-                            }
-                        }
-                        successCallback && successCallback(listData);//成功回调
+                        let data = response.data.data;
+                        let total = response.data.total;
+                        this.list0 = this.list0.concat(data)
                     });
-            }, 500)
-        }
+            }
+
+            if (this.isShow == 1) {
+                this.$ajax({
+                    method: 'get',
+                    url: this.psta + '/getWxConsultingList?page=' + ++this.page1 + '&size=' + this.size,
+                })
+                    .then(response => {
+                        let data = response.data.data;
+                        let total = response.data.total;
+                        this.list1 = this.list1.concat(data);
+                        //console.log(this.list1)
+                    });
+            }
+
+            if (this.isShow == 2) {
+                this.$ajax({
+                    method: 'get',
+                    url: this.psta + '/getWxConsultingList?wxUserId=' + this.$parent.wxUserId + '&page=' + ++this.page2 + '&size=' + this.size,
+                })
+                    .then(response => {
+                        let data = response.data.data;
+                        let total = response.data.total;
+                        this.list2 = this.list2.concat(data)
+                    });
+            }
+        },
     },
 }
 </script>
 <style lang="less" scoped>
-.mescroll {
-  position: fixed;
-  top: 40px;
+.wrapper {
+  position: absolute;
+  left: 0;
+  top: 45px;
+  right: 0;
   bottom: 0;
-  height: auto;
+  overflow: hidden;
 }
 
 .expertAll {
@@ -236,7 +186,7 @@ export default {
     .user {
       display: flex;
       height: 14rem;
-      margin-top: 0.625rem;
+      margin-top: 0.3125rem;
       padding: 1.25rem 1.875rem;
       background: #fff;
       img {

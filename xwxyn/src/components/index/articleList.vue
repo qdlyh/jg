@@ -163,25 +163,28 @@ export default {
             list6: [],
         }
     },
-    mounted() {
-        this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
-    },
     activated() {
+        // this.isShow = this.$store.state.articleListId;
+        // console.log(this.isShow)
+
+        if (this.isShow != 0) {
+            this.mescrollArr[this.isShow] = this.initMescroll("mescroll" + this.isShow, "dataList" + this.isShow);
+        } else {
+            this.mescrollArr[this.isShow] = this.initMescroll("mescroll" + this.isShow, "dataList" + this.isShow);
+        }
         this.$nextTick(() => {
             for (let i = 0; i < this.tab.length; i++) {
                 let dom = document.querySelector('#mescroll' + this.tab[i].i);
                 dom.scrollTop = this.tab[i].top;
             }
         })
-
     },
-    // deactivated() {
-    //     this.mescroll.destroy();
-    // },
+    deactivated() {
+        this.mescroll.destroy();
+    },
     methods: {
         go(item) {
             this.$router.push({ name: 'article', params: { id: item.uuid } });
-            //this.$store.state.scrollTop = this.mescroll.getScrollTop();
         },
         onItemClick(index, item) {
             if (this.isShow != index) {
@@ -193,7 +196,6 @@ export default {
                     let dom = document.querySelector('#mescroll' + index);
                     dom.scrollTop = this.tab[index].top;
                 });
-
             }
         },
         initMescroll(mescrollId, clearEmptyId) {
@@ -209,6 +211,7 @@ export default {
                     htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
                 }
             });
+            console.log(this.mescroll)
             return this.mescroll;
         },
         upScroll(mescroll, y, isUp) {

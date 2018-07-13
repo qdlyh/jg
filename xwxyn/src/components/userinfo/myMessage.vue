@@ -26,7 +26,7 @@
                 </div>
                 <div class="empty" v-show="!list.length">
                     <img src="../../../static/msg.png" alt="">
-                    <p>还没有任何消息</p>
+                    <p>暂时没有数据</p>
                 </div>
             </div>
         </div>
@@ -142,6 +142,9 @@ export default {
       /* autoprefixer: on */
       -webkit-line-clamp: 3;
       overflow: hidden;
+    }
+    p{
+        font-size: 1.3rem;
     }
     img {
       max-width: 750px;

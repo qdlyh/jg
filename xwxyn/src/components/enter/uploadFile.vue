@@ -98,6 +98,11 @@ export default {
             cancelText: '',
         }
     },
+    mounted() {
+        if (this.$parent.isIn == 1) {
+            this.$router.push('/')
+        }
+    },
     methods: {
         click(key) {
             let image = document.querySelector("#file-img");
@@ -180,7 +185,7 @@ export default {
                     return config;
                 }, function (error) {
                     //当出现请求错误是做一些事
-                    alert('网络发生异常')
+                    //alert('网络发生异常')
                     return Promise.reject(error);
                 });
                 this.$ajax({

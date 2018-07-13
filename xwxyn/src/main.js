@@ -8,12 +8,14 @@ import App from './App'
 import VueLazyload from 'vue-lazyload'
 import '../static/mescroll.min.css'
 import '../static/mescroll.m.js'
+import Scroll from './components/common/Scroll.vue'
 import loading from '@/components/common/loading'
 import axios from 'axios'
 Vue.prototype.$ajax = axios;
-Vue.prototype.psta = process.env.NODE_ENV == 'production' ? '' : '/proxyapi';
+Vue.prototype.psta = process.env.NODE_ENV == 'production' ? '/rest/wx' : '/proxyapi';
 FastClick.attach(document.body)
 Vue.component('loading', loading)
+Vue.component('Scroll', Scroll)
 Vue.use(VueLazyload)
 Vue.config.productionTip = false
 /* eslint-disable no-new */
@@ -23,10 +25,3 @@ new Vue({
   render: h => h(App)
 }).$mount('#app-box')
 // console.log(store.state.scrollTop)
-
-// router.beforeEach((to, from, next) => {
-//   if (to.meta.keepAlive) {
-//     let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
-//     dom.scrollTop = store.state.scrollTop;
-//   }
-// });
