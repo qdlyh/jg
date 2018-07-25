@@ -95,7 +95,7 @@ export default {
                     .then(response => {
                         //console.log(response)
                         if (response.data.status == 200) {
-                            this.$router.push('/safety')
+                            this.$router.replace('/safety')
                         } else {
                             this.cancel = true;
                             this.cancelText = response.data.message;

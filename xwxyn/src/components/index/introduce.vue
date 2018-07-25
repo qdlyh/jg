@@ -62,7 +62,7 @@ export default {
     }
   }
   .introduce-box {
-    margin-top: 0.625rem;
+    margin-bottom: 2px;
     background: #fff;
     padding: 1.875rem;
     h1 {

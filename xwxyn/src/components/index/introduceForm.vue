@@ -102,6 +102,7 @@ export default {
                 this.cancel = true;
                 this.cancelText = '已提交'
                 let formData = new FormData();
+                formData.append('wxUserId', this.$parent.wxUserId);
                 formData.append('settingId', this.values[0]);
                 formData.append('contactName', this.name);
                 formData.append('contactPhone', this.phone);
@@ -113,7 +114,7 @@ export default {
                     data: formData
                 })
                     .then(response => {
-                        console.log(response)
+                        //console.log(response)
                         this.show = 1;
                     })
             }

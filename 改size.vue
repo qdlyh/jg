@@ -7,7 +7,7 @@
                 <i></i>
             </div>
             <loading v-show="loading"></loading>
-            <div id="mescroll" class="mescroll" v-show="!loading">
+            <div id="mescroll" class="mescroll" :class="{'loading-none':flag==true}" v-show="!loading">
                 <div class="expertArticle" v-for="(item,index) in data" :key="index">
                     <div class="article-box">
                         <h1>{{item.title}}</h1>
@@ -24,6 +24,7 @@
                         <div class="message-top">
                             <img v-lazy="item.image" alt="" @click="goUser(item)">
                             <span>
+                                <i class="name">{{item.uuid}}</i>
                                 <i class="name">{{item.nickName}}</i>
                                 <i class="status" v-if="item.settingId==62">专家认证</i>
                                 <p>{{item.reply}}</p>
@@ -60,7 +61,7 @@
                     <img src="../../../static/msg.png" alt="">
                     <p>暂时没有数据</p>
                 </div>
-                <p class="isHave" v-show="flag">-- 没有更多内容 --</p>
+                <p class="isHave" v-show="flag">-- 没有跟多内容 --</p>
             </div>
             <div class="msg-input-box" v-show="num==null">
                 <div class="msg-input" :class="{activeBtn:msg!=0}">
@@ -76,7 +77,7 @@
 export default {
     data() {
         return {
-            isHave: true,   //判断组件是否缓存
+            isHave: false, //判断是否缓存
             flag: false,   //判断是否显示自定义没有更多内容
             loading: true,
             placeholder: '',
@@ -88,11 +89,11 @@ export default {
             mescroll: null,
             list: [],
             data: [],
+            page: 1,
             size: 10,
         }
     },
-    mounted() {
-        this.isHave = false;
+    activated() {
         this.uuid = Number(this.$route.params.id);
         this.$ajax({
             method: 'get',
@@ -102,98 +103,64 @@ export default {
                 // console.log(response)
                 this.data = [response.data.data];
             })
-        this.mescroll = new MeScroll("mescroll", {
-            down: {
-                use: false
-            },
-            up: {
-                auto: true,//初始化完毕,是否自动触发上拉加载的回调
-                isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
-                callback: this.upCallback, //上拉加载的回调
-                page: {
-                    size: this.size,
-                    time: 500,
-                },
-                offset: 300,
-                noMoreSize: 1,
-                htmlNodata: '<p class="upwarp-nodata">-- 没有更多内容 --</p>',
-                // toTop: { //配置回到顶部按钮
-                //     src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
-                //     //offset: 1000
-                // },
-            },
-        });
-    },
-    activated() {
-        if (this.isHave) {
-            this.uuid = Number(this.$route.params.id);
-            this.$ajax({
-                method: 'get',
-                url: this.psta + '/getWxProblemInFoByUuid?uuid=' + this.uuid,
-            })
-                .then(response => {
-                    // console.log(response)
-                    this.data = [response.data.data];
-                })
-            if (this.list.length == this.$store.state.msgData.length) {
-                this.list = this.$store.state.msgData; //返回缓存页不再获取mescroll数据，获取vuex缓存的数据，防止返回的时候其他用户添加数据，倒是重复加载数据
-                this.flag = true;      //显示自定义没有跟多数据提示
-                this.mescroll.lockUpScroll(true); //锁定下拉刷新
-            } else {
-                this.flag = false;   //自定义没有跟多数据先隐藏，防止和mescroll提示重复显示
-                if (this.list.length > 10) {
-                    //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
-                    this.size = this.list.length;
-                }
-                this.mescroll = new MeScroll("mescroll", {
-                    down: {
-                        use: false
-                    },
-                    up: {
-                        auto: true,//初始化完毕,是否自动触发上拉加载的回调
-                        isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
-                        callback: this.upCallback, //上拉加载的回调
-                        page: {
-                            size: this.size,
-                            time: 500,
-                        },
-                        offset: 300,
-                        noMoreSize: 1,
-                        htmlNodata: '<p class="upwarp-nodata">-- 没有更多内容 --</p>',
-                        // toTop: { //配置回到顶部按钮
-                        //     src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
-                        //     //offset: 1000
-                        // },
-                    },
-                });
+        if (this.list == this.$store.state.article) {
+            this.list = this.$store.state.article;
+        } else {
+            if (this.list.length > 10) {
+                this.isHave = true;
+                //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
+                this.size = this.list.length;
             }
-
-            let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
-            dom.scrollTop = this.$store.state.msgTop;
+            this.mescroll = new MeScroll("mescroll", {
+                down: {
+                    use: false
+                },
+                up: {
+                    auto: true,//初始化完毕,是否自动触发上拉加载的回调
+                    isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+                    callback: this.upCallback, //上拉加载的回调
+                    page: {
+                        size: this.size,
+                        time: 500,
+                    },
+                    offset: 300,
+                    noMoreSize: 3,
+                    htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+                    // toTop: { //配置回到顶部按钮
+                    //     src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
+                    //     //offset: 1000
+                    // },
+                },
+            });
         }
+
+        if (this.flag) {
+            this.mescroll.lockUpScroll(true);
+        }
+
+        let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
+        dom.scrollTop = this.$store.state.msgTop;
     },
     deactivated() {
         this.mescroll.destroy();
-        this.isHave = true;  //组件离开设置为true，用于下次进入该组件的时候触发缓存中的实例
     },
     watch: {
         uuid(id) {
             this.loading = true;
         },
-
-        // '$route': {
-        //     //页面发生改变初始化数据和页数，相当于刷新了页面
-        //     handler(to, from) {
-        //         const toDepth = to.path.split('/').length;
-        //         const fromDepth = from.path.split('/').length;
-        //         if (toDepth < fromDepth) {
-        //             this.list = [];
-        //             this.$store.state.msgData = {};
-        //             this.size = 10;
-        //             this.flag = false;
-        //         }
-        //     }, deep: true,
-        // }
+        '$route': {
+            //页面发生改变初始化数据和页数，相当于刷新了页面
+            handler(to, from) {
+                const toDepth = to.path.split('/').length;
+                const fromDepth = from.path.split('/').length;
+                if (toDepth < fromDepth) {
+                    this.list = [];
+                    this.$store.state.article = {};
+                    this.size = 10;
+                    this.flag = false;
+                }
+            }, deep: true,
+        }
 
     },
     methods: {
@@ -228,14 +195,17 @@ export default {
         go(item) {
             this.$router.push({ name: 'forumReply', params: { id: item.uuid, messageId: item.uuid } });
             this.$store.state.msgTop = this.mescroll.getScrollTop();
+            this.$store.state.page = this.page;
         },
         goUser(item) {
             if (item.settingId == 62) {
                 this.$router.push({ name: 'expertUser', params: { id: item.wxUserId } });
                 this.$store.state.msgTop = this.mescroll.getScrollTop();
+                this.$store.state.page = this.page;
             } else {
                 this.$router.push({ name: 'user', params: { id: item.wxUserId } });
                 this.$store.state.msgTop = this.mescroll.getScrollTop();
+                this.$store.state.page = this.page;
             }
         },
 
@@ -312,8 +282,6 @@ export default {
                             })
                             this.total++;
                         }
-                        //this.total++
-                        //console.log(this.list.length, this.total, this.flag)
                         this.msg = '';
                     })
             }
@@ -324,22 +292,45 @@ export default {
                 //curPageData = [];
                 let totalPage = this.total;
                 if (page.num == 1) this.list = [];
-                this.list = this.list.concat(curPageData);  //更新列表数据
-
-                if (this.list.length == this.total) {
-                    this.$store.state.msgData = this.list;
-                    //console.log(this.$store.state.msgData)
-                    this.mescroll.lockUpScroll(true);
+                if (this.isHave) {
+                    if (page.num > 1 && page.num <= this.$store.state.page) {
+                        page.num = this.$store.state.page + 1;
+                        this.size = 10;
+                        page.size = 10;
+                    }
                 }
-                this.mescroll.endBySize(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+                if (this.list.length < this.total) {
+                    this.list = this.list.concat(curPageData);  //更新列表数据
+                }
+                if (this.list.length == this.total) {
+                    this.$store.state.article = this.list;
+                    console.log(this.$store.state.article)
+                    this.mescroll.lockUpScroll(true);
+                    if (this.list.length >= 3) {
+                        this.flag = true;
+                    }
+                }
+                this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
                 //console.log(this.list.length, this.total, this.list.length < this.total, 'upCallback')
-                //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length + ", totalPage" + totalPage);
+               // console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length + ", totalPage" + totalPage);
             }, function () {
                 this.mescroll.endErr();
             });
         },
 
         getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
+            this.page = pageNum;   //记录需要缓存的当前页
+            if (this.isHave) {
+                //页面缓存，Mescroll只会返回第一页，所以这里从下一页起加载到上次转跳的页数，并设置初始化pageSize
+                if (pageNum > 1 && pageNum <= this.$store.state.page) {
+                    pageNum = this.$store.state.page + 1;
+                    //pageNum = (this.total < 20) ? this.$store.state.page : this.$store.state.page + 1; //这里的1相当于pageNum
+                    pageSize = 10;
+                    this.size = 10;
+                    //记录已缓存的当前页，-1是因为this.$store.state.page触发上拉加载加了1，所以记录缓存的时候减回去，防止第二次上拉加载的时候pageNum继续增加
+                    this.page = pageNum - 1;
+                }
+            }
             setTimeout(() => {
                 this.$ajax({
                     method: 'get',
@@ -349,7 +340,11 @@ export default {
                         //console.log(response)
                         let listData = [];
                         let listPage = response.data.data;
-                        this.total = response.data.total;
+                        if (!this.flag) {
+                            this.total = response.data.total;
+                        } else {
+                            this.total = this.list.length;
+                        }
                         this.loading = false;
                         for (let i = 0; i < listPage.length; i++) {
                             listData.push(listPage[i])
@@ -363,6 +358,12 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+#mescroll /deep/ .upwarp-nodata {
+  display: none;
+}
+.loading-none /deep/ .mescroll-upwarp {
+  display: none;
+}
 .mescroll {
   position: fixed;
   top: 5rem;

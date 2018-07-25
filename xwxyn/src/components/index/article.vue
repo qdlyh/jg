@@ -1,8 +1,7 @@
 <template>
     <div>
-        <!-- <h2>{{ $route.params.id }}</h2> -->
-        <loading v-show="!list.length"></loading>
-        <div class="article" v-for="(item,index) in list" :key="item.uuid">
+        <loading v-show="loading"></loading>
+        <div class="article" v-for="(item,index) in list" :key="item.uuid" v-show="!loading">
             <div class="article-box">
                 <h1>{{item.title}}</h1>
                 <div>
@@ -30,28 +29,29 @@
     </div>
 </template>
 <script>
-import { mapState } from 'vuex'
 export default {
     data() {
         return {
+            loading:true,
             uuid: '',
             list: [],
         }
     },
-    mounted() {
-        this.uuid = this.$route.params.id;
-        if (this.article.hasOwnProperty(this.uuid)) {
-            this.list = this.article[this.uuid];
-        } else {
-            this.$ajax({
-                method: 'get',
-                url: this.psta + '/getWxHealthLectureHallByUuid?wxUserId=' + this.$parent.wxUserId + '&uuid=' + this.uuid,
+    activated() {
+         this.uuid = Number(this.$route.params.id);
+        this.$ajax({
+            method: 'get',
+            url: this.psta + '/getWxHealthLectureHallByUuid?wxUserId=' + this.$parent.wxUserId + '&uuid=' + this.uuid,
+        })
+            .then(response => {
+                //console.log(response)
+                this.loading = false;
+                this.list = [response.data.data];
             })
-                .then(response => {
-                    //console.log(response)
-                    this.article[this.uuid] = [response.data.data];
-                    this.list = [response.data.data];
-                })
+    },
+    watch: {
+        uuid(id) {
+            this.loading = true;
         }
     },
     methods: {
@@ -85,19 +85,6 @@ export default {
             this.$router.push({ name: 'message', params: { id: item.uuid } });
         }
     },
-    computed: {
-        ...mapState(['article'])
-    },
-    // computed: {
-    // 	msgId() {
-    // 		return this.$store.state.msgId;
-    // 	}
-    // },
-    // watch: {
-    //     uuid(data) {
-    //         console.log(data)
-    //     }
-    // }
 }
 </script>
 <style lang="less" scoped>
@@ -158,6 +145,7 @@ export default {
       .message-box {
         i {
           font-size: 3.4375rem;
+          color: #454545;
         }
         .message {
           margin-right: 1.875rem;

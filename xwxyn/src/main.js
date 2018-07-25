@@ -6,17 +6,19 @@ import router from './router'
 import store from './store'
 import App from './App'
 import VueLazyload from 'vue-lazyload'
+import Navigation from 'vue-navigation'
 import '../static/mescroll.min.css'
 import '../static/mescroll.m.js'
-import Scroll from './components/common/Scroll.vue'
 import loading from '@/components/common/loading'
 import axios from 'axios'
 Vue.prototype.$ajax = axios;
 Vue.prototype.psta = process.env.NODE_ENV == 'production' ? '/rest/wx' : '/proxyapi';
 FastClick.attach(document.body)
 Vue.component('loading', loading)
-Vue.component('Scroll', Scroll)
 Vue.use(VueLazyload)
+Vue.use(Navigation, {
+  router
+})
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
@@ -24,4 +26,9 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app-box')
-// console.log(store.state.scrollTop)
+// router.afterEach((to, from) => {
+//   if (to.name == 'index') {
+//     router.push({ name: 'err' }); // 跳转login
+//     console.log(router.push({ name: 'err' }))
+//   }
+// });

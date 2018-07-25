@@ -33,7 +33,7 @@
             </div>
         </div>
         <div v-if="$parent.isIn==0">
-            <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
+            <msg :title="('资料审核中')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
             <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
         </div>
         <div v-if="$parent.isIn==2">
@@ -98,6 +98,8 @@ export default {
                     data: formData
                 })
                     .then(response => {
+                        //console.log(response)
+                        sessionStorage.setItem('sqId',response.data.data.uuid)
                         this.$router.push('/uploadFile');
                     })
             }

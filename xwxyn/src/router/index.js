@@ -17,13 +17,8 @@ const router = new Router({
     {
       //页面404返回首页
       path: '*',
-      name: 'index',
-      component: () =>
-        import ('@/components/index/index'),
-      meta: {
-        title: '',
-        keepAlive: true
-      }
+      name:'err',
+      redirect: '/'
     },
     {
       //产品介绍
@@ -254,7 +249,7 @@ const router = new Router({
         import ('@/components/index/article'),
       meta: {
         title: '',
-        keepAlive: false
+        keepAlive: true
       }
     },
     {
@@ -383,18 +378,5 @@ const router = new Router({
     }
   ]
 })
+
 export default router;
-// router.beforeEach((to, from, next) => {
-//   const toDepth = to.path.split('/').length
-//   const fromDepth = from.path.split('/').length
-//   //console.log(to.path.split('/'))
-//   if (toDepth < fromDepth||toDepth == fromDepth) {
-//     console.log(toDepth,'|',fromDepth)
-//     from.meta.keepAlive = false
-//     to.meta.keepAlive = true
-//   }
-//   if (to.meta.title) {
-//     document.title = to.meta.title;
-//   }
-//   next();
-// });

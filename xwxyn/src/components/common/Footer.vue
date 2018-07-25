@@ -10,11 +10,11 @@
                     <i class="iconfont icon-yiliaojiankang"></i>
                     <p>义诊</p>
                 </li>
-                <li @click="go2" class="tab-active">
+                <!-- <li @click="go2" class="tab-active">
                     <div></div>
                     <i class="iconfont icon-yimai"></i>
                     <p>爱心谷</p>
-                </li>
+                </li> -->
                 <li @click="go3">
                     <i class="iconfont icon-zhuanjia"></i>
                     <p>专家天地</p>
@@ -31,6 +31,11 @@
 
 <script>
 export default {
+    data() {
+        return {
+
+        }
+    },
     methods: {
         go0() {
             this.$router.push({ path: "/" });
@@ -49,7 +54,7 @@ export default {
             }
         },
         go4() {
-            this.$router.push({ path: "/userType"});
+            this.$router.push({ path: "/userType" });
         },
     }
 };
@@ -70,8 +75,8 @@ export default {
       margin: 0.625rem 0;
       display: inline-block;
       text-align: center;
-      width: 20%;
-      margin-left: -3.8px;
+      width: 24%;
+      //margin-left: -3.8px;
       i {
         font-size: 2.125rem;
         color: #454545;

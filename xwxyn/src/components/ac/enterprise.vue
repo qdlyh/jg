@@ -38,11 +38,7 @@
             <div class="btn-blue" style="margin-top:100px;" @click="submit">提交</div>
         </div>
         <div v-if="$parent.isCert==0">
-            <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
-            <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
-        </div>
-        <div v-if="$parent.isCert==2">
-            <msg :title="('申请认证失败')" icon="warn" :description="('请前往消息通知查看详情原因')"></msg>
+            <msg :title="('资料审核中')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
             <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
         </div>
         <loadings v-if="show"></loadings>
@@ -77,6 +73,15 @@ export default {
     mounted() {
         if (this.$parent.isCert == 1) {
             this.$router.push('/')
+        }
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.show1) {
+            this.show1 = false;
+            window.scrollTo(0, 0);
+            next(false)
+        } else {
+            next()
         }
     },
     methods: {
@@ -137,6 +142,7 @@ export default {
             if (have) {
                 let formData = new FormData();
                 formData.append('wxUserId', this.$parent.wxUserId);
+                formData.append('settingId', 63);
                 formData.append('image01', this.Image);
                 formData.append('image02', this.Images);
                 this.$ajax.interceptors.request.use((config) => {
@@ -151,7 +157,7 @@ export default {
                 });
                 this.$ajax({
                     method: 'post',
-                    url: this.psta + '/submitCertification03',
+                    url: this.psta + '/submitCertification',
                     data: formData
                 })
                     .then(response => {

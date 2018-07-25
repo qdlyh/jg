@@ -1,11 +1,8 @@
 <template>
   <div id="app">
-    <keep-alive>
-      <router-view v-if="$route.meta.keepAlive"></router-view>
-    </keep-alive>
-    <transition>
-      <router-view v-if="!$route.meta.keepAlive"></router-view>
-    </transition>
+      <navigation>
+        <router-view></router-view>
+      </navigation>
   </div>
 </template>
 
@@ -14,87 +11,55 @@ export default {
   name: 'app',
   data() {
     return {
-      wxUserId: '4',
-      settingId: '61',
-      isCert: '',
-      isIn: '',
+      wxUserId: 6,
+      settingId: 61,
+      isCert: 3,
+      isIn: 3,
     }
   },
   created() {
-    // if (localStorage.getItem("wxUserId") != null) {
-    //   this.wxUserId = localStorage.getItem("wxUserId");
-    //   this.settingId = localStorage.getItem("settingId");
-    // } else {
-    //   function UrlSearch() {
-    //     var name, value;
-    //     var str = location.href; //取得整个地址栏
-    //     var num = str.indexOf("?")
-    //     str = str.substr(num + 1); //取得所有参数   stringvar.substr(start [, length ]
-
-    //     var arr = str.split("&"); //各个参数放到数组里
-    //     for (var i = 0; i < arr.length; i++) {
-    //       num = arr[i].indexOf("=");
-    //       if (num > 0) {
-    //         name = arr[i].substring(0, num);
-    //         value = arr[i].substr(num + 1);
-    //         this[name] = value;
-    //       }
-    //     }
-    //   }
-    //   var OpenId = new UrlSearch(); //实例化
-    //   //this.wxUserId = this.$route.query.wxUserId
-    //   this.wxUserId = OpenId.wxUserId;
-    //   this.settingId = OpenId.settingId;
-    //   localStorage.setItem("wxUserId", this.wxUserId);
-    //   localStorage.setItem("settingId", this.settingId);
+    // function getUrlParam(key) {
+    // // 获取参数
+    // var url = window.location.search;
+    // // 正则筛选地址栏
+    // var reg = new RegExp("(^|&)" + key + "=([^&]*)(&|$)");
+    // // 匹配目标参数
+    // var result = url.substr(1).match(reg);
+    // //返回参数值
+    // return result ? decodeURIComponent(result[2]) : null;
     // }
-
-
-    // if (this.settingId == 61 || this.settingId == 63) {
-    //   this.$ajax({
-    //     method: 'get',
-    //     url: this.psta + '/findIsCert?wxUserId=' + this.wxUserId,
-    //   })
-    //     .then(response => {
-    //       //console.log(response)
-    //       this.isCert = response.data.data.isCert;
-    //       this.isIn = response.data.data.isIn;
-    //     })
-    // }
+    // var type=getUrlParam('type'); //实例化
+    // console.log(type);//type为马桶类型
   },
   mounted() {
-    if (this.settingId == 61 || this.settingId == 63) {
-      this.$ajax({
-        method: 'get',
-        url: this.psta + '/findIsCert?wxUserId=' + this.wxUserId,
-      })
-        .then(response => {
-          //console.log(response)
-          this.isCert = response.data.data.isCert;
-          this.isIn = response.data.data.isIn;
-        })
-    }
     let htmlWidth = document.documentElement.clientWidth || document.body.clientWidth;
     let htmlDom = document.getElementsByTagName('html')[0];
     htmlDom.style.fontSize = htmlWidth / 40 + 'px';
     if (htmlWidth > 750) { htmlWidth = 750; htmlDom.style.fontSize = htmlWidth / 40 + 'px'; }
-    //console.log(htmlWidth)
   },
 
-  updated() {
-    // if (localStorage.getItem("wxUserId") != null) {
-    //   this.wxUserId = localStorage.getItem("wxUserId");
-    //   this.settingId = localStorage.getItem("settingId");
-    // } else {
-    //   this.wxUserId = this.$route.query.wxUserId;
-    //   this.settingId = this.$route.query.settingId;
-    //   localStorage.setItem("wxUserId", this.$route.query.wxUserId);
-    //   localStorage.setItem("settingId", this.$route.query.settingId);
-    // }
-  },
+  // beforeUpdate() {
+  //   this.wxUserId = this.$route.query.wxUserId;
+  //   this.settingId = this.$route.query.settingId;
+  //   if (this.wxUserId != undefined) localStorage.setItem("wxUserId", this.wxUserId);
+  //   if (this.settingId != undefined) localStorage.setItem("settingId", this.settingId);
+  //   if (this.wxUserId == undefined) this.wxUserId = localStorage.getItem("wxUserId");
+  //   if (this.settingId == undefined) this.settingId = localStorage.getItem("settingId");
+  //   if (this.settingId == 61 || this.settingId == 63) {
+  //     this.$ajax({
+  //       method: 'get',
+  //       url: this.psta + '/findIsCert?wxUserId=' + this.wxUserId,
+  //     })
+  //       .then(response => {
+  //         //console.log(response)
+  //         this.isCert = response.data.data.isCert;
+  //         this.isIn = response.data.data.isIn;
+  //       })
+  //   }
+
+  // },
   watch: {
     '$route'(to, from) {
-      //console.log(MeScroll.prototype.hideTopBtn()) //MeScroll返回顶部按钮)
       if (to.name == 'expertList') {
         //大众论坛，专家论坛拦截
         if (this.settingId != 62) {
@@ -123,10 +88,6 @@ export default {
 
 <style lang="less">
 @import '~vux/src/styles/reset.less';
-// .vux-swiper-item{
-//   transition:none;
-//   transform:none;
-// }
 * {
   padding: 0;
   margin: 0;
@@ -141,6 +102,10 @@ i {
 }
 body {
   background: #f3f3f3;
+}
+input,
+textarea {
+  outline: none;
 }
 
 #app {
@@ -167,11 +132,6 @@ body {
   }
 }
 
-//mscroll，加载中
-.upwarp-tip,
-.downwarp-tip {
-  display: none !important;
-}
 /* 懒加载图片过渡效果 */
 // img[lazy='loaded'] {
 //   animation: fade 0.5s;
@@ -189,20 +149,21 @@ img[lazy='loading'] {
   /*width: 100px;*/
   background-position: center center !important;
   background: #ccc;
-  background-size: 100px 100px;
+  background-size: 100% 100%;
   background-repeat: no-repeat;
   background-size: cover;
+  position: relative;
 }
 
 //首页轮播
-.swiper-img {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+// .swiper-img {
+//   width: 100%;
+//   height: 100%;
+//   overflow: hidden;
+//   background-position: center center;
+//   background-repeat: no-repeat;
+//   background-size: cover;
+// }
 
 .header {
   display: flex;
@@ -403,5 +364,13 @@ img[lazy='loading'] {
   .vux-popup-picker-placeholder {
     color: #454545 !important;
   }
+}
+
+//自定义没有更多内容，不是mescroll的
+.isHave {
+  text-align: center;
+  margin: 1.25rem auto;
+  color: gray;
+  font-size: 12px;
 }
 </style>

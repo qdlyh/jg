@@ -93,6 +93,7 @@ export default {
     },
     data() {
         return {
+            isHave: true,   //判断组件是否缓存
             mescroll: null,
             tab: [{ tab: '正在进行', top: 0, i: 0 }, { tab: '即将开始', top: 0, i: 1 }, { tab: '已经结束', top: 0, i: 2 }],
             isShow: 0,
@@ -103,15 +104,29 @@ export default {
         }
     },
     mounted() {
-        this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
+        this.isHave = false;
+        this.isShow = (this.$store.state.listId == undefined) ? this.$store.state.listId = Number(sessionStorage.getItem('listId')) : this.$store.state.listId;
+        this.mescrollArr[this.isShow] = this.initMescroll("mescroll" + this.isShow, "dataList" + this.isShow);
     },
     activated() {
-        this.$nextTick(() => {
-            for (let i = 0; i < this.tab.length; i++) {
-                let dom = document.querySelector('#mescroll' + this.tab[i].i);
-                dom.scrollTop = this.tab[i].top;
+        if (this.isHave) {
+            if (this.$store.state.listSize > 10) {
+                //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
+                this.size = this.$store.state.listSize;
             }
-        })
+            this.isShow = (this.$store.state.listId == undefined) ? this.$store.state.listId = Number(sessionStorage.getItem('listId')) : this.$store.state.listId;
+            this.mescrollArr[this.isShow] = this.initMescroll("mescroll" + this.isShow, "dataList" + this.isShow);
+            this.$nextTick(() => {
+                for (let i = 0; i < this.tab.length; i++) {
+                    let dom = document.querySelector('#mescroll' + this.tab[i].i);
+                    dom.scrollTop = this.tab[i].top;
+                }
+            })
+        }
+    },
+    deactivated() {
+        this.mescrollArr[this.isShow].destroy();
+        this.isHave = true;  //组件离开设置为true，用于下次进入该组件的时候触发缓存中的实例
     },
     methods: {
         go(item) {
@@ -123,6 +138,7 @@ export default {
         onItemClick(index) {
             if (this.isShow != index) {
                 this.isShow = index;
+                this.$store.commit('listId', index);
                 if (this.mescrollArr[index] == null) {
                     this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
                 }
@@ -139,10 +155,14 @@ export default {
                     isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                     callback: this.upCallback, //上拉加载的回调
                     onScroll: this.upScroll,
+                    page: {
+                        size: this.size,
+                        time: 500,
+                    },
                     offset: 300,
-                    noMoreSize: 3,
+                    noMoreSize: 1,
                     //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-                    htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+                    htmlNodata: '<p class="upwarp-nodata">-- 没有更多内容 --</p>',
                 }
             });
             return this.mescroll;
@@ -168,18 +188,21 @@ export default {
                     case 0:
                         if (page.num == 1) this.list0 = [];
                         this.list0 = this.list0.concat(curPageData);
-                        // this.mescroll.endByPage(curPageData.length, totalPage);
+                        this.$store.state.listSize = this.list0.length;
+                        // this.mescroll.endBySize(curPageData.length, totalPage);
                         break;
                     case 1:
                         if (page.num == 1) this.list1 = [];
                         this.list1 = this.list1.concat(curPageData);
+                        this.$store.state.listSize = this.list1.length;
                         break;
                     case 2:
                         if (page.num == 1) this.list2 = [];
                         this.list2 = this.list2.concat(curPageData);
+                        this.$store.state.listSize = this.list2.length;
                         break;
                 }
-                this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
+                this.mescrollArr[dataIndex].endBySize(curPageData.length, totalPage);
                 //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
             }, function () {
                 this.mescrollArr[dataIndex].endErr();
@@ -286,6 +309,10 @@ export default {
         span {
           text-align: center;
           margin-right: 3.75rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
         }
         img {
           width: 6.25rem;
@@ -297,6 +324,7 @@ export default {
           display: inline-block;
           font-size: 1.25rem;
           color: #454545;
+          margin-top: .9375rem;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

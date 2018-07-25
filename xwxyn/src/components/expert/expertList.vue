@@ -42,8 +42,14 @@
           <div class="expert-article" v-for="(item,index) in list2" :key="item.uuid">
             <div @click="$router.push({ name: 'article', params: { id: item.uuid } })">
               <h1>{{item.title}}</h1>
-              <div class="article-img">
+              <div class="article-img3" v-if="item.images.length>2">
                 <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
+              </div>
+              <div class="article-img2" v-if="item.images.length==2">
+                <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
+              </div>
+              <div class="article-img1" v-if="item.images.length==1">
+                <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
               </div>
               <div class="article-box-bottom">
                 <div class="article-msg">
@@ -79,10 +85,13 @@ export default {
       list2: [],
     }
   },
-  mounted() {
-    this.mescrollArr[0] = this.initMescroll("mescroll0", "dataList0");
-  },
   activated() {
+    if (this.$store.state.listSize > 10) {
+      //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
+      this.size = this.$store.state.listSize;
+    }
+    this.isShow = (this.$store.state.listId == null) ? this.$store.state.listId = Number(sessionStorage.getItem('listId')) : this.$store.state.listId;
+    this.mescrollArr[this.isShow] = this.initMescroll("mescroll" + this.isShow, "dataList" + this.isShow);
     this.$nextTick(() => {
       for (let i = 0; i < this.tab.length; i++) {
         let dom = document.querySelector('#mescroll' + this.tab[i].i);
@@ -91,23 +100,25 @@ export default {
     })
   },
   deactivated() {
-    //this.mescroll.destroy();
+    this.mescrollArr[this.isShow].destroy();
   },
 
   methods: {
     go() {
       //console.log(item.uuid)
       this.$router.push({ name: 'questions', params: { id: 0 } });
-      //this.mescroll.destroy();
+      this.$store.state.itemTop = this.mescroll.getScrollTop();
     },
 
     goMsg(item) {
-      this.$router.push({ name: 'forumMsg', params: { id: item.uuid } })
+      this.$router.push({ name: 'forumMsg', params: { id: item.uuid } });
+      this.$store.state.itemTop = this.mescroll.getScrollTop();
     },
 
     onItemClick(index) {
       if (this.isShow != index) {
         this.isShow = index;
+        this.$store.commit('listId', index);
         if (this.mescrollArr[index] == null) {
           this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
         }
@@ -124,10 +135,14 @@ export default {
           isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
           callback: this.upCallback, //上拉加载的回调
           onScroll: this.upScroll,
+          page: {
+            size: this.size,
+            time: 500,
+          },
           offset: 300,
-          noMoreSize: 3,
+          noMoreSize: 1,
           //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-          htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+          htmlNodata: '<p class="upwarp-nodata">-- 没有更多内容 --</p>',
         }
       });
       return this.mescroll;
@@ -154,18 +169,21 @@ export default {
           case 0:
             if (page.num == 1) this.list0 = [];
             this.list0 = this.list0.concat(curPageData);
-            // this.mescroll.endByPage(curPageData.length, totalPage);
+            this.$store.state.listSize = this.list0.length;
+            // this.mescroll.endBySize(curPageData.length, totalPage);
             break;
           case 1:
             if (page.num == 1) this.list1 = [];
             this.list1 = this.list1.concat(curPageData);
+            this.$store.state.listSize = this.list1.length;
             break;
           case 2:
             if (page.num == 1) this.list2 = [];
             this.list2 = this.list2.concat(curPageData);
+            this.$store.state.listSize = this.list2.length;
             break;
         }
-        this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
+        this.mescrollArr[dataIndex].endBySize(curPageData.length, totalPage);
         //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
       }, function () {
         this.mescrollArr[dataIndex].endErr();
@@ -222,7 +240,7 @@ export default {
 <style lang="less" scoped>
 .mescroll {
   position: fixed;
-  top: 40px;
+  top: 45px;
   bottom: 0;
   height: auto;
 }
@@ -231,7 +249,7 @@ export default {
     .user {
       display: flex;
       height: 14rem;
-      margin-top: 0.625rem;
+      margin-bottom: 2px;
       padding: 1.25rem 1.875rem;
       background: #fff;
       img {
@@ -267,10 +285,9 @@ export default {
 
   .article-list,
   .article-hd {
-    margin-top: 0.625rem;
+    margin-bottom: 2px;
     padding: 1.25rem 1.875rem;
     background: #fff;
-    border-bottom: 1px solid #bdbdbd;
     h1 {
       font-size: 1.5rem;
       color: #3c3c3c;
@@ -301,10 +318,10 @@ export default {
     }
   }
   .expert-article {
-    margin-top: 0.625rem;
+    margin-bottom: 2px;
     padding: 1.25rem 1.875rem;
     background: #fff;
-    border-bottom: 1px solid #bdbdbd;
+
     h1 {
       font-size: 1.5rem;
       color: #3c3c3c;
@@ -317,14 +334,38 @@ export default {
       -webkit-line-clamp: 3;
       overflow: hidden;
     }
-    .article-img {
+    .article-img3 {
       display: flex;
       width: 100%;
       overflow: hidden;
       img {
-        width: 30%;
+        width: 33.333%;
         height: 8.75rem;
-        margin: 0 5px;
+        margin: 0 1px;
+      }
+    }
+    .article-img2 {
+      display: flex;
+      width: 100%;
+      overflow: hidden;
+      img {
+        width: 49.999%;
+        height: 35%;
+        margin: 0 1px;
+      }
+    }
+    .article-img1 {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 55%;
+      overflow: hidden;
+      img {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
       }
     }
     .article-box-bottom {

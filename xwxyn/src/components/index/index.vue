@@ -102,18 +102,17 @@ export default {
     },
     methods: {
         goItem(i) {
+            //this.$store.state.listId = i;
+            this.$store.commit('listId', i)
+            //sessionStorage.setItem('listId', i)
             if (i == 0) {
                 this.$router.push('/articleList');
-                //this.$router.push({ name: 'articleList', params: { id: 'index' } });
-                this.$store.state.articleListId = 0;
             }
             if (i == 1) {
                 this.$router.push('/articleList');
-                this.$store.state.articleListId = 1;
             }
             if (i == 2) {
                 this.$router.push('/articleList');
-                this.$store.state.articleListId = 2;
             }
             if (i == 3) {
                 this.$router.push('/articleList')
@@ -123,6 +122,7 @@ export default {
             }
         },
         goItem1(i) {
+            this.$store.state.listId = i;
             if (i == 0) {
                 this.$router.push('/userList')
             }
@@ -134,6 +134,15 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+//首页轮播
+.banner /deep/ .swiper-img {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
 .index {
   .banner {
     background: #fff;

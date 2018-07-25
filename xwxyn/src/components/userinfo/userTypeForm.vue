@@ -109,7 +109,6 @@ export default {
         }
     },
     mounted() {
-        //console.log(address)
         this.$ajax({
             method: 'get',
             url: this.psta + '/findWxUserByWxUserId?wxUserId=' + this.$parent.wxUserId,
@@ -160,6 +159,16 @@ export default {
                 self.croppable = true;
             }
         });
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.panel||this.showAddress) {
+            this.panel = false;
+            this.showAddress = false;
+            window.scrollTo(0, 0);
+            next(false);
+        } else {
+            next();
+        }
     },
     methods: {
         onChange(val) {
@@ -256,7 +265,6 @@ export default {
             return canvas;
         },
         onShadowChange(ids, names) {
-            //console.log(names)
             this.valueCity = names
         },
         submit(item) {
@@ -273,7 +281,7 @@ export default {
                 city = this.valueCity[1];
                 county = this.valueCity[2];
             }
-            if (item.settingId == 61 && item.settingId == 64) {
+            if (item.settingId == 61 || item.settingId == 64) {
                 if (item.nickName.length == 0) {
                     have = false;
                     this.cancel = true;
@@ -295,9 +303,9 @@ export default {
                         }
                     })
                         .then(response => {
-                            //console.log(response)
-                            this.cancel = true;
-                            this.cancelText = '已提交'
+                             this.$router.replace({
+                                path: '/userType',
+                            });
 
                         })
                 }
@@ -325,9 +333,9 @@ export default {
                         }
                     })
                         .then(response => {
-                            //console.log(response)
-                            this.cancel = true;
-                            this.cancelText = '已提交'
+                            this.$router.replace({
+                                path: '/userType',
+                            });
 
                         })
                 }
@@ -355,10 +363,9 @@ export default {
                         }
                     })
                         .then(response => {
-                            //console.log(response)
-                            this.cancel = true;
-                            this.cancelText = '已提交'
-
+                            this.$router.replace({
+                                path: '/userType',
+                            });
                         })
                 }
             }

@@ -10,10 +10,18 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/proxyapi': {
+        target: 'http://jange.tunnel.qydev.com/EIcon',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/proxyapi': '' //这里理解成用‘/api'代替target里面的地址，后面组件中我们掉接口时直接用api代替 
+        }
+      }
+    },
 
     // Various Dev Server settings
-    host: '192.168.2.106', // can be overwritten by process.env.HOST
+    host: '192.168.2.199', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
@@ -55,7 +63,7 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: './',
 
     /**
      * Source Maps

@@ -8,21 +8,21 @@ const vuex = new Vuex.Store({
   state: {
     //page:1,     //缓存页数
     //replyPage:1,  //缓存回复页数
-    articleListId:0,
-    itemTop:0,  //列表高度
-    replyTop:0, //记录回复列表高度
-    msgTop:0,   //留言列表高度
-    article: {}, //缓存文章详细信息
+    listId: null,  //标记选项卡
+    listSize:0,  //有tab功能的文章/或单页列表，缓存页请求数量
+    itemTop: 0, //文章，用户类列表高度
+    replyTop: 0, //记录回复列表高度
+    msgTop: 0, //留言列表高度
+    msgData: {}, //缓存留言信息
+    replyData:{},//缓存回复信息
   },
   //mutations改变全局状态方法
   mutations: {
-    scrollTop(state,scroll){
-      state.scrollTop = scroll;
-    },
-     message(state,id){
-        state.msgId = id;
-     }
+    listId(state, id) {
+      state.listId = id;
+      //console.log(state.listId)
+      state.listId = sessionStorage.setItem('listId', state.listId);
+    }
   }
 })
-
 export default vuex

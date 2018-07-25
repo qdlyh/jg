@@ -60,7 +60,7 @@
             <br/>
         </div>
         <div v-if="$parent.isIn==0">
-            <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
+            <msg :title="('资料审核中')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
             <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
         </div>
         <div v-if="$parent.isIn==2">
@@ -101,6 +101,15 @@ export default {
     mounted() {
         if (this.$parent.isIn == 1) {
             this.$router.push('/')
+        }
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.show1) {
+            this.show1 = false;
+            window.scrollTo(0, 0);
+            next(false)
+        } else {
+            next()
         }
     },
     methods: {
@@ -165,6 +174,7 @@ export default {
             }
         },
         submit() {
+            let sqId = sessionStorage.getItem('sqId'); //后台用作判断是否申请资料
             let have = true;
             if (this.Image0 == '' || this.Image1 == '' || this.Image2 == '' || this.Image3 == '') {
                 have = false;
@@ -174,6 +184,7 @@ export default {
             if (have) {
                 let formData = new FormData();
                 formData.append('wxUserId', this.$parent.wxUserId);
+                formData.append('uuid', sqId);
                 formData.append('attachment01', this.Image0);
                 formData.append('attachment02', this.Image1);
                 formData.append('attachment03', this.Image2);
@@ -195,6 +206,7 @@ export default {
                 })
                     .then(response => {
                         // console.log(response)
+                        sessionStorage.removeItem('sqId')
                         this.show = false;
                         this.$parent.isIn = 0;
                     })

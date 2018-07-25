@@ -8,8 +8,14 @@
                 <div id="dataList0" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list0" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
-                        <div class="article-img">
-                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
+                        <div class="article-img3" v-if="item.images.length>2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
+                        </div>
+                        <div class="article-img2" v-if="item.images.length==2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-img1" v-if="item.images.length==1">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -27,8 +33,14 @@
                 <div id="dataList1" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list1" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
-                        <div class="article-img">
-                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
+                        <div class="article-img3" v-if="item.images.length>2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
+                        </div>
+                        <div class="article-img2" v-if="item.images.length==2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-img1" v-if="item.images.length==1">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -46,8 +58,14 @@
                 <div id="dataList2" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list2" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
-                        <div class="article-img">
-                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
+                        <div class="article-img3" v-if="item.images.length>2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
+                        </div>
+                        <div class="article-img2" v-if="item.images.length==2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-img1" v-if="item.images.length==1">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -65,8 +83,14 @@
                 <div id="dataList3" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list3" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
-                        <div class="article-img">
-                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
+                        <div class="article-img3" v-if="item.images.length>2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
+                        </div>
+                        <div class="article-img2" v-if="item.images.length==2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-img1" v-if="item.images.length==1">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -84,8 +108,14 @@
                 <div id="dataList4" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list4" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
-                        <div class="article-img">
-                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
+                        <div class="article-img3" v-if="item.images.length>2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
+                        </div>
+                        <div class="article-img2" v-if="item.images.length==2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-img1" v-if="item.images.length==1">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -103,8 +133,14 @@
                 <div id="dataList5" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list5" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
-                        <div class="article-img">
-                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
+                        <div class="article-img3" v-if="item.images.length>2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
+                        </div>
+                        <div class="article-img2" v-if="item.images.length==2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-img1" v-if="item.images.length==1">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -122,8 +158,14 @@
                 <div id="dataList6" class="data-list" v-cloak>
                     <div class="article-box" v-for="(item,index) in list6" :key="item.uuid" @click="go(item)">
                         <h1>{{item.title}}</h1>
-                        <div class="article-img">
-                            <img v-for="(src,index) in item.images" :key="index" v-lazy="src.image" v-if="index<3">
+                        <div class="article-img3" v-if="item.images.length>2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
+                        </div>
+                        <div class="article-img2" v-if="item.images.length==2">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
+                        </div>
+                        <div class="article-img1" v-if="item.images.length==1">
+                            <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
                         </div>
                         <div class="article-box-bottom">
                             <div class="article-msg">
@@ -149,6 +191,7 @@ export default {
     },
     data() {
         return {
+            isHave: true,   //判断组件是否缓存
             tab: [{ name: '推荐', top: 0, i: 0 }, { name: '全部', top: 10, i: 1 }, { name: '文化', top: 0, i: 2 }, { name: '常识', top: 0, i: 3 }, { name: '医疗', top: 0, i: 4 }, { name: '保健', top: 0, i: 5 }, { name: '养生', top: 0, i: 6 }],
             total: '',
             isShow: 0,
@@ -163,24 +206,35 @@ export default {
             list6: [],
         }
     },
+    mounted() {
+        this.isHave = false;
+        this.isShow = (this.$store.state.listId == undefined) ? this.$store.state.listId = Number(sessionStorage.getItem('listId')) : this.$store.state.listId;
+        this.mescrollArr[this.isShow] = this.initMescroll("mescroll" + this.isShow, "dataList" + this.isShow);
+    },
     activated() {
-        // this.isShow = this.$store.state.articleListId;
-        // console.log(this.isShow)
-
-        if (this.isShow != 0) {
-            this.mescrollArr[this.isShow] = this.initMescroll("mescroll" + this.isShow, "dataList" + this.isShow);
-        } else {
-            this.mescrollArr[this.isShow] = this.initMescroll("mescroll" + this.isShow, "dataList" + this.isShow);
-        }
-        this.$nextTick(() => {
-            for (let i = 0; i < this.tab.length; i++) {
-                let dom = document.querySelector('#mescroll' + this.tab[i].i);
-                dom.scrollTop = this.tab[i].top;
+        if (this.isHave) {
+            if (this.$store.state.listSize > 10) {
+                //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
+                this.size = this.$store.state.listSize;
             }
-        })
+            this.isShow = (this.$store.state.listId == undefined) ? this.$store.state.listId = Number(sessionStorage.getItem('listId')) : this.$store.state.listId;
+            this.mescrollArr[this.isShow] = this.initMescroll("mescroll" + this.isShow, "dataList" + this.isShow);
+            this.$nextTick(() => {
+                for (let i = 0; i < this.tab.length; i++) {
+                    let dom = document.querySelector('#mescroll' + this.tab[i].i);
+                    dom.scrollTop = this.tab[i].top;
+                }
+            })
+        }
     },
     deactivated() {
-        this.mescroll.destroy();
+        this.mescrollArr[this.isShow].destroy();
+        this.isHave = true;  //组件离开设置为true，用于下次进入该组件的时候触发缓存中的实例
+    },
+    watch: {
+        uuid(id) {
+            this.loading = true;
+        },
     },
     methods: {
         go(item) {
@@ -189,6 +243,7 @@ export default {
         onItemClick(index, item) {
             if (this.isShow != index) {
                 this.isShow = index;
+                this.$store.commit('listId', index);
                 if (this.mescrollArr[index] == null) {
                     this.mescrollArr[index] = this.initMescroll("mescroll" + index, "dataList" + index);
                 }
@@ -198,6 +253,7 @@ export default {
                 });
             }
         },
+
         initMescroll(mescrollId, clearEmptyId) {
             this.mescroll = new MeScroll(mescrollId, {
                 up: {
@@ -205,15 +261,19 @@ export default {
                     isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                     callback: this.upCallback, //上拉加载的回调
                     onScroll: this.upScroll,
-                    offset: 500,
-                    noMoreSize: 3,
+                    page: {
+                        size: this.size,
+                        time: 500,
+                    },
+                    offset: 300,
+                    noMoreSize: 1,
                     //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-                    htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
+                    htmlNodata: '<p class="upwarp-nodata">-- 没有更多内容 --</p>',
                 }
             });
-            console.log(this.mescroll)
             return this.mescroll;
         },
+
         upScroll(mescroll, y, isUp) {
             if (this.isShow == 0) {
                 this.tab[0].top = y;
@@ -246,33 +306,41 @@ export default {
                     case 0:
                         if (page.num == 1) this.list0 = [];
                         this.list0 = this.list0.concat(curPageData);
+                        this.$store.state.listSize = this.list0.length;
+                        // this.mescroll.endBySize(curPageData.length, totalPage);
                         break;
                     case 1:
                         if (page.num == 1) this.list1 = [];
                         this.list1 = this.list1.concat(curPageData);
+                        this.$store.state.listSize = this.list1.length;
                         break;
                     case 2:
                         if (page.num == 1) this.list2 = [];
                         this.list2 = this.list2.concat(curPageData);
+                        this.$store.state.listSize = this.list2.length;
                         break;
                     case 3:
                         if (page.num == 1) this.list3 = [];
                         this.list3 = this.list3.concat(curPageData);
+                        this.$store.state.listSize = this.list3.length;
                         break;
                     case 4:
                         if (page.num == 1) this.list4 = [];
                         this.list4 = this.list4.concat(curPageData);
+                        this.$store.state.listSize = this.list4.length;
                         break;
                     case 5:
                         if (page.num == 1) this.list5 = [];
                         this.list5 = this.list5.concat(curPageData);
+                        this.$store.state.listSize = this.list5.length;
                         break;
                     case 6:
                         if (page.num == 1) this.list6 = [];
                         this.list6 = this.list6.concat(curPageData);
+                        this.$store.state.listSize = this.list6.length;
                         break;
                 }
-                this.mescrollArr[dataIndex].endByPage(curPageData.length, totalPage);
+                this.mescrollArr[dataIndex].endBySize(curPageData.length, totalPage);
                 //console.log("dataIndex=" + dataIndex, "page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length);
             }, function () {
                 this.mescrollArr[dataIndex].endErr();
@@ -354,24 +422,6 @@ export default {
             }, 500)
         }
     },
-    // getListDataFromNet(pageNum, pageSize, successCallback, errorCallback) {
-    //     setTimeout(() => {
-    //         this.$ajax({
-    //             method: 'get',
-    //             url: this.psta + '/getWxHealthLectureHall?type=' + this.type + '&page=' + pageNum + '&size=' + pageNum,
-    //         })
-    //             .then(response => {
-    //                 //console.log(response)
-    //                 let listData = [];
-    //                 let listPage = response.data.data;
-    //                 this.total = response.data.total;
-    //                 for (let i = 0; i < listPage.length; i++) {
-    //                     listData.push(listPage[i])
-    //                 }
-    //                 successCallback && successCallback(listData);//成功回调
-    //             });
-    //     }, 500)
-    // }
 
 }
 </script>
@@ -399,13 +449,38 @@ export default {
       -webkit-line-clamp: 3;
       overflow: hidden;
     }
-    .article-img {
+    .article-img3 {
       display: flex;
+      width: 100%;
+      overflow: hidden;
       img {
-        width: 30%;
+        width: 33.333%;
         height: 8.75rem;
-        font-size: 8.75rem;
-        margin: 0 5px;
+        margin: 0 1px;
+      }
+    }
+    .article-img2 {
+      display: flex;
+      width: 100%;
+      overflow: hidden;
+      img {
+        width: 49.999%;
+        height: 35%;
+        margin: 0 1px;
+      }
+    }
+    .article-img1 {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 55%;
+      overflow: hidden;
+      img {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
       }
     }
     .article-box-bottom {

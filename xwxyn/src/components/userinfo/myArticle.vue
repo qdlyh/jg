@@ -12,8 +12,14 @@
                     <div class="article-box" v-for="(item,index) in list" :key="item.uuid">
                         <div @click="go(item)">
                             <h1>{{item.title}}</h1>
-                            <div class="article-img">
+                            <div class="article-img3" v-if="item.images.length>2">
                                 <img v-for="(src,index) in item.images" v-lazy="src.image" v-if="index<3" alt="">
+                            </div>
+                            <div class="article-img2" v-if="item.images.length==2">
+                                <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
+                            </div>
+                            <div class="article-img1" v-if="item.images.length==1">
+                                <img v-for="(src,index) in item.images" v-lazy="src.image" alt="">
                             </div>
                             <div class="article-box-bottom">
                                 <div class="article-msg">
@@ -50,22 +56,21 @@ export default {
             this.size = this.list.length;
         }
         this.mescroll = new MeScroll("mescroll", {
+            down: {
+                use: false
+            },
             up: {
                 auto: true,//初始化完毕,是否自动触发上拉加载的回调
                 isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                 callback: this.upCallback, //上拉加载的回调
                 page: {
-                    // num: this.page,
                     size: this.size,
+                    time: 500,
                 },
                 offset: 300,
-                noMoreSize: 3,
+                noMoreSize: 1,
                 //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-                htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-                toTop: { //配置回到顶部按钮
-                    src: "../../static/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
-                    //offset: 1000
-                },
+                htmlNodata: '<p class="upwarp-nodata">-- 没有更多内容 --</p>',
             }
         });
         let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
@@ -75,7 +80,7 @@ export default {
         this.mescroll.destroy();
     },
     methods: {
-        go(item){
+        go(item) {
             this.$router.push({ name: 'article', params: { id: item.uuid } });
             this.$store.state.msgTop = this.mescroll.getScrollTop();
         },
@@ -86,7 +91,7 @@ export default {
                 let totalPage = this.total;
                 //更新列表数据
                 this.list = this.list.concat(curPageData);
-                this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+                this.mescroll.endBySize(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
             }, function () {
                 this.mescroll.endErr();
             });
@@ -158,15 +163,38 @@ export default {
       -webkit-line-clamp: 3;
       overflow: hidden;
     }
-    .article-img {
+    .article-img3 {
       display: flex;
       width: 100%;
-      height: 8.75rem;
       overflow: hidden;
       img {
-        width: 30%;
-        height: 100%;
-        margin: 0 5px;
+        width: 33.333%;
+        height: 8.75rem;
+        margin: 0 1px;
+      }
+    }
+    .article-img2 {
+      display: flex;
+      width: 100%;
+      overflow: hidden;
+      img {
+        width: 49.999%;
+        height: 35%;
+        margin: 0 1px;
+      }
+    }
+    .article-img1 {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 55%;
+      overflow: hidden;
+      img {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
       }
     }
     .article-box-bottom {

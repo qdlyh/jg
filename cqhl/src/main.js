@@ -2,56 +2,62 @@ import 'amfe-flexible'
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
-// By default we import all the components.
-// Only reserve the components on demand and remove the rest.
-// Style is always required.
+import VueLazyload from 'vue-lazyload'
+import '../static/mescroll.min.css'
+import '../static/mescroll.m.js'
+import loading from '@/components/common/loading'
+import axios from 'axios'
+Vue.prototype.$ajax = axios
+Vue.prototype.psta = process.env.NODE_ENV == 'production' ? 'http://hotel.birds-resort.com/EIcon' : '/proxyapi';
 import {
   Style,
-
+  Toast,
 } from 'cube-ui'
 
 import App from './App'
 import router from './router'
-  // // basic
-  // Button,
-  // Loading,
-  // Tip,
-  // Toolbar,
-  // TabBar,
-  // TabPanels,
-  // // form
-  // Checkbox,
-  // CheckboxGroup,
-  // Radio,
-  // RadioGroup,
-  // Input,
-  // Textarea,
-  // Select,
-  // Switch,
-  // Rate,
-  // Validator,
-  // Upload,
-  // Form,
-  // // popup
-  // Popup,
-  // Toast,
-  // Picker,
-  // CascadePicker,
-  // DatePicker,
-  // TimePicker,
-  // SegmentPicker,
-  // Dialog,
-  // ActionSheet,
-  // Drawer,
-  // ImagePreview,
-  // // scroll
-  // Scroll,
-  // Slide,
-  // IndexList,
-  // Swipe,
-  // Sticky,
-  // ScrollNav,
-  // ScrollNavBar
+Vue.use(VueLazyload)
+Vue.component('loading', loading)
+// // basic
+// Button,
+// Loading,
+// Tip,
+// Toolbar,
+// TabBar,
+// TabPanels,
+// // form
+// Checkbox,
+// CheckboxGroup,
+// Radio,
+// RadioGroup,
+// Input,
+// Textarea,
+// Select,
+// Switch,
+// Rate,
+// Validator,
+// Upload,
+// Form,
+// // popup
+// Popup,
+// Toast,
+// Picker,
+// CascadePicker,
+// DatePicker,
+// TimePicker,
+// SegmentPicker,
+// Dialog,
+// ActionSheet,
+// Drawer,
+// ImagePreview,
+// // scroll
+// Scroll,
+// Slide,
+// IndexList,
+// Swipe,
+// Sticky,
+// ScrollNav,
+// ScrollNavBar
 // Vue.use(Button)
 // Vue.use(Loading)
 // Vue.use(Tip)
@@ -71,7 +77,7 @@ import router from './router'
 // Vue.use(Upload)
 // Vue.use(Form)
 // Vue.use(Popup)
-// Vue.use(Toast)
+Vue.use(Toast)
 // Vue.use(Picker)
 // Vue.use(CascadePicker)
 // Vue.use(DatePicker)
@@ -96,5 +102,25 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: {
+    App
+  }
 })
+
+router.afterEach((to, from) => {
+  function onBridgeReady() {
+    WeixinJSBridge.call('hideOptionMenu');
+  }
+
+  if (typeof WeixinJSBridge == "undefined") {
+    if (document.addEventListener) {
+      document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+    } else if (document.attachEvent) {
+      document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+      document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+    }
+  } else {
+    onBridgeReady();
+  }
+})
+

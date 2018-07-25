@@ -42,11 +42,7 @@
             <div class="btn-blue" id="clickMe" style="margin-top:50px;" @click="submit">提交</div>
         </div>
         <div v-if="$parent.isCert==0">
-            <msg :title="('资料已提交')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
-            <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
-        </div>
-        <div v-if="$parent.isCert==2">
-            <msg :title="('申请认证失败')" icon="warn" :description="('请前往消息通知查看详情原因')"></msg>
+            <msg :title="('资料审核中')" :description="('审核结果将会以消息形式通知您，请勿重复申请')"></msg>
             <x-button type="primary" style="width:80%;" link="BACK">返回上一页</x-button>
         </div>
     </div>
@@ -74,12 +70,21 @@ export default {
             cancelText: '',
             isActive: false,
             istext: '上传',
-
+            files:'',//文件
         }
     },
     mounted() {
         if (this.$parent.isCert == 1) {
             this.$router.push('/')
+        }
+    },
+    beforeRouteLeave(to, from, next) {
+        if (this.show1) {
+            this.show1 = false;
+            window.scrollTo(0, 0);
+            next(false)
+        } else {
+            next()
         }
     },
     methods: {
@@ -108,17 +113,18 @@ export default {
                 if (this.Image == '') {
                     if (this.num == 0) {
                         this.Image = event.target.result;
-                        let formData = new FormData();
-                        formData.append('wxUserId', this.$parent.wxUserId);
-                        formData.append('image', this.Image);
-                        this.$ajax({
-                            method: 'post',
-                            url: this.psta + '/submitCertification01',
-                            data: formData
-                        })
-                            .then(response => {
-                                //console.log(response)
-                            })
+                        // let formData = new FormData();
+                        // formData.append('wxUserId', this.$parent.wxUserId);
+                        // formData.append('settingId', settingId);
+                        // formData.append('image', this.Image);
+                        // this.$ajax({
+                        //     method: 'post',
+                        //     url: this.psta + '/submitCertification01',
+                        //     data: formData
+                        // })
+                        //     .then(response => {
+                        //         //console.log(response)
+                        //     })
                     }
                 }
             };
@@ -142,46 +148,53 @@ export default {
                 this.cancelText = '请上传word、pdf、docx简历类型'
                 document.querySelector("#filejl").value = null;
                 return false;
+            } else {
+                this.files = e.target.files[0];
+                this.isActive = true;
+                this.istext = '上传成功';
             }
-            let formData = new FormData();
-            formData.append('wxUserId', this.$parent.wxUserId);
-            formData.append('files', e.target.files[0]);
-            this.$ajax({
-                method: 'post',
-                url: this.psta + '/submitCertification02',
-                data: formData
-            })
-                .then(response => {
-                    console.log(response)
-                    this.isActive = true;
-                    this.istext = '上传成功';
-                })
+            // let formData = new FormData();
+            // formData.append('wxUserId', this.$parent.wxUserId);
+            // formData.append('files', e.target.files[0]);
+            // this.$ajax({
+            //     method: 'post',
+            //     url: this.psta + '/submitCertification02',
+            //     data: formData
+            // })
+            //     .then(response => {
+            //         //console.log(response)
+            //         this.isActive = true;
+            //         this.istext = '上传成功';
+            //     })
         },
         submit() {
+            let settingId = null;
+            if (this.$route.params.id == 0) {
+                settingId = 62;
+            } else {
+                settingId = 64;
+            }
             if (this.Image == '' || this.isActive == false) {
                 this.cancel = true;
                 this.cancelText = '请上传完整信息'
             } else {
-                this.$parent.isCert = 0;
+                let formData = new FormData();
+                formData.append('wxUserId', this.$parent.wxUserId);
+                formData.append('settingId', settingId);
+                formData.append('image', this.Image);
+                formData.append('files', this.files);
+                this.$ajax({
+                    method: 'post',
+                    url: this.psta + '/submitCertification',
+                    data: formData
+                })
+                    .then(response => {
+                        console.log(response)
+                        this.$parent.isCert = 0;
+                    })
             }
         }
     },
-    watch: {
-        // show1: {
-        //     handler(obj) {
-        //         console.log(obj)
-        //         for (let i = 0; i < this.Image.length; i++) {
-        //             console.log(this.Image[i])
-        //             if (this.Image[i].isImg == false) {
-        //                 this.show1 = true;
-        //             } else {
-        //                 this.show1 = false;
-        //             }
-        //         }
-
-        //     }, deep: true
-        // }
-    }
 }
 </script>
 <style lang="less" scoped>

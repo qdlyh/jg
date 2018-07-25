@@ -32,6 +32,7 @@
             </div>
           </div>
         </div>
+        <p class="isHave" v-show="flag">-- 没有更多内容 --</p>
       </div>
       <div class="msg-input-box" v-show="num==null">
         <div class="msg-input" :class="{activeBtn:msg!=0}">
@@ -46,6 +47,8 @@
 export default {
   data() {
     return {
+      isHave: true,   //判断组件是否缓存
+      flag: false,   //判断是否显示自定义没有更多内容
       loading: true,
       replyMsg: '',
       placeholder: '',
@@ -58,12 +61,9 @@ export default {
       size: 10,
     }
   },
-  activated() {
+  mounted() {
+    this.isHave = false;
     this.uuid = Number(this.$route.params.id);
-    if (this.list.length > 10) {
-      //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
-      this.size = this.list.length;
-    }
     this.mescroll = new MeScroll("mescroll", {
       down: {
         use: false
@@ -73,28 +73,68 @@ export default {
         isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
         callback: this.upCallback, //上拉加载的回调
         page: {
-          size: this.size
+          size: this.size,
+          time: 500,
         },
         offset: 300,
-        noMoreSize: 3,
-        //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-        htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-        toTop: { //配置回到顶部按钮
-          src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
-          //offset: 1000
-        },
-      }
+        noMoreSize: 1,
+        htmlNodata: '<p class="upwarp-nodata">-- 没有更多内容 --</p>',
+        // toTop: { //配置回到顶部按钮
+        //     src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
+        //     //offset: 1000
+        // },
+      },
     });
-    let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
-    dom.scrollTop = this.$store.state.replyTop;
+  },
+  activated() {
+    if (this.isHave) {
+      this.uuid = Number(this.$route.params.id);
+
+      if (this.list.length, this.$store.state.replyData.length) {
+        this.list = this.$store.state.replyData; //返回缓存页不再获取mescroll数据，获取vuex缓存的数据，防止返回的时候其他用户添加数据，倒是重复加载数据
+        this.flag = true;      //显示自定义没有跟多数据提示
+        this.mescroll.lockUpScroll(true); //锁定下拉刷新
+      } else {
+        this.flag = false;   //自定义没有跟多数据先隐藏，防止和mescroll提示重复显示
+        if (this.list.length > 10) {
+          //Mescroll,就算你缓存了也只会返回第一页并且默认10条数据，所以这里设置下，第一页的数量，使它能够保持上次离开时候的数据
+          this.size = this.list.length;
+        }
+        this.mescroll = new MeScroll("mescroll", {
+          down: {
+            use: false
+          },
+          up: {
+            auto: true,//初始化完毕,是否自动触发上拉加载的回调
+            isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
+            callback: this.upCallback, //上拉加载的回调
+            page: {
+              size: this.size,
+              time: 500,
+            },
+            offset: 300,
+            noMoreSize: 1,
+            htmlNodata: '<p class="upwarp-nodata">-- 没有更多内容 --</p>',
+            // toTop: { //配置回到顶部按钮
+            //     src: '../../static/mescroll-totop.png', //默认滚动到1000px显示,可配置offset修改   ../../static/mescroll-totop.png
+            //     //offset: 1000
+            // },
+          },
+        });
+      }
+
+      let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
+      dom.scrollTop = this.$store.state.replyTop;
+    }
   },
   deactivated() {
     this.mescroll.destroy();
+    this.isHave = true;
   },
   watch: {
     uuid(id) {
       this.loading = true;
-    }
+    },
   },
   methods: {
     goUser(item) {
@@ -140,21 +180,24 @@ export default {
         })
           .then(response => {
             //console.log(response)
-            let user = [response.data.data];
-            this.list.push({
-              createDate: user[0].createDate,
-              generalId: user[0].generalId,    //这里是的文章id
-              isPraise: user[0].isPraise,
-              praiseCount: user[0].praiseCount,
-              replyCount: user[0].replyCount,
-              image: user[0].image,
-              nickName: user[0].nickName,
-              reply: user[0].reply,
-              settingId: user[0].settingId,
-              uuid: user[0].uuid,
-              wxUserId: user[0].wxUserId,
-              //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
-            })
+            if (this.list.length == this.total) {
+              let user = [response.data.data];
+              this.list.push({
+                createDate: user[0].createDate,
+                generalId: user[0].generalId,    //这里是的文章id
+                isPraise: user[0].isPraise,
+                praiseCount: user[0].praiseCount,
+                replyCount: user[0].replyCount,
+                image: user[0].image,
+                nickName: user[0].nickName,
+                reply: user[0].reply,
+                settingId: user[0].settingId,
+                uuid: user[0].uuid,
+                wxUserId: user[0].wxUserId,
+                //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+              })
+              this.total++;
+            }
           })
       }
     },
@@ -175,21 +218,24 @@ export default {
         })
           .then(response => {
             //console.log(response)
-            let user = [response.data.data];
-            this.list.push({
-              createDate: user[0].createDate,
-              generalId: user[0].generalId,    //这里是的文章id
-              isPraise: user[0].isPraise,
-              praiseCount: user[0].praiseCount,
-              replyCount: user[0].replyCount,
-              image: user[0].image,
-              nickName: user[0].nickName,
-              reply: user[0].reply,
-              settingId: user[0].settingId,
-              uuid: user[0].uuid,
-              wxUserId: user[0].wxUserId,
-              //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
-            })
+            if (this.list.length == this.total) {
+              let user = [response.data.data];
+              this.list.push({
+                createDate: user[0].createDate,
+                generalId: user[0].generalId,    //这里是的文章id
+                isPraise: user[0].isPraise,
+                praiseCount: user[0].praiseCount,
+                replyCount: user[0].replyCount,
+                image: user[0].image,
+                nickName: user[0].nickName,
+                reply: user[0].reply,
+                settingId: user[0].settingId,
+                uuid: user[0].uuid,
+                wxUserId: user[0].wxUserId,
+                //id: userID  //生成唯一id防止unshift评论的时候数据显示错误
+              })
+              this.total++;
+            }
             this.msg = '';
           })
       }
@@ -201,7 +247,12 @@ export default {
         if (page.num == 1) this.list = [];
         let totalPage = this.total;
         this.list = this.list.concat(curPageData);  //更新列表数据
-        this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+        if (this.list.length == this.total) {       //用vuex存储数据
+          this.$store.state.replyData = this.list;
+          //console.log(this.$store.state.replyData)
+          this.mescroll.lockUpScroll(true);
+        }
+        this.mescroll.endBySize(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
         //console.log("page.num=" + page.num + ", page.size=" + page.size + ", curPageData.length=" + curPageData.length + ", this.list.length==" + this.list.length);
       }, function () {
         this.mescroll.endErr();

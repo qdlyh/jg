@@ -43,8 +43,8 @@ export default {
                     url: this.psta + '/bindingWxEmail?wxUserId=' + this.$parent.wxUserId + '&email=' + this.email,
                 })
                     .then(response => {
-                        console.log(response)
-                        this.$router.push('/safety');
+                        //console.log(response)
+                        this.$router.replace('/safety');
                     })
             }
 

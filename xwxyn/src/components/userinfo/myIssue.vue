@@ -45,23 +45,25 @@ export default {
     },
     activated() {
         this.type = Number(this.$route.params.id);
+        if (this.list.length >= 10) {
+            this.size = this.list.length;
+        }
         this.mescroll = new MeScroll("mescroll", {
+            down: {
+                use: false
+            },
             up: {
                 auto: true,//初始化完毕,是否自动触发上拉加载的回调
                 isBounce: false, //此处禁止ios回弹,解析(务必认真阅读,特别是最后一点): http://www.mescroll.com/qa.html#q10
                 callback: this.upCallback, //上拉加载的回调
                 page: {
-                    // num: this.page,
                     size: this.size,
+                    time: 500,
                 },
                 offset: 300,
-                noMoreSize: 3,
+                noMoreSize: 1,
                 //htmlLoading: '<p class="upwarp-progress mescroll-rotate"></p>',
-                htmlNodata: '<p class="upwarp-nodata">-- 没有跟多内容 --</p>',
-                toTop: { //配置回到顶部按钮
-                    src: "../../static/mescroll-totop.png", //默认滚动到1000px显示,可配置offset修改
-                    //offset: 1000
-                },
+                htmlNodata: '<p class="upwarp-nodata">-- 没有更多内容 --</p>',
             }
         });
         let dom = document.querySelector('#mescroll'); //找到滚动条主体内容
@@ -87,7 +89,7 @@ export default {
                 let totalPage = this.total;
                 //更新列表数据
                 this.list = this.list.concat(curPageData);
-                this.mescroll.endByPage(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
+                this.mescroll.endBySize(curPageData.length, totalPage); //必传参数(当前页的数据个数, 总页数)
             }, function () {
                 this.mescroll.endErr();
             });

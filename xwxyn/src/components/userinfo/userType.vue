@@ -1,12 +1,12 @@
 <template>
     <div>
-        <div class="userType" v-for="(item,index) in list" :key="item.uuid">
+        <loading v-show="loading"></loading>
+        <div class="userType" v-for="(item,index) in list" :key="item.uuid" v-show="!loading">
             <div class="my-type">
                 <div class="type-color" :id="'active'+item.settingId">
-                    <!-- @click="$router.push('/userTypeForm')" -->
-                    <p class="redact">编辑</p>
+                    <p class="redact" @click="$router.push('/userTypeForm')">编辑</p>
                     <div class="user-msg">
-                        <div>
+                        <div @click="$router.push('/userTypeForm')">
                             <img v-lazy="item.image" alt="">
                         </div>
                         <p>{{item.nickName}}</p>
@@ -16,15 +16,21 @@
                         <i v-if="item.settingId==64">企业</i>
                     </div>
                 </div>
-                <div class="typeBtn-box" v-if="item.settingId==61">
-                    <div class="typeBtn" @click="$router.push({ name: 'resume', params: { id: 0 } })">
-                        <a href="javascript:;" style="background:#23C3FF">我是专家</a>
+                <div v-if="$parent.isCert!=1">
+                    <div class="typeBtn-box" v-if="item.settingId==61&&$parent.isCert!=0">
+                        <div class="typeBtn" @click="$router.push({ name: 'resume', params: { id: 0 } })">
+                            <a href="javascript:;" style="background:#23C3FF">我是专家</a>
+                        </div>
+                        <div class="typeBtn" @click="$router.push({ name: 'resume', params: { id: 1 } })">
+                            <a href="javascript:;" style="background:#FF6B6D">我是志愿者</a>
+                        </div>
+                        <div class="typeBtn" @click="$router.push('/enterprise')">
+                            <a href="javascript:;" style="background:#FFA34C">我是企业家</a>
+                        </div>
                     </div>
-                    <div class="typeBtn" @click="$router.push({ name: 'resume', params: { id: 1 } })">
-                        <a href="javascript:;" style="background:#FF6B6D">我是志愿者</a>
-                    </div>
-                    <div class="typeBtn" @click="$router.push('/enterprise')">
-                        <a href="javascript:;" style="background:#FFA34C">我是企业家</a>
+                    <div class="text-type" v-if="item.settingId==61&&$parent.isCert==0" style="color: #78D034;text-align: center;">
+                        <h1>资料审核中</h1>
+                        <h2>审核结果将会以消息形式通知您，请勿重复申请</h2>
                     </div>
                 </div>
                 <div class="text-type" v-if="item.settingId!=61">
@@ -119,7 +125,7 @@ export default {
     },
     data() {
         return {
-            isText: false,
+            loading: true,
             list: [],
         }
     },
@@ -130,6 +136,7 @@ export default {
         })
             .then(response => {
                 //console.log(response)
+                this.loading = false;
                 this.list = [response.data.data];
             })
     }
@@ -156,7 +163,7 @@ export default {
 .userType {
   .my-type {
     width: 100%;
-    height: 18.75rem;
+    height: 20rem;
     .type-color {
       height: 10rem;
       .redact {
@@ -227,7 +234,7 @@ export default {
       }
     }
     .text-type {
-      height: 8.75rem;
+      height: 9.75rem;
       background: #fff;
       padding: 3.6rem 1.25rem;
       display: -webkit-box;
