@@ -1,0 +1,24 @@
+初始化项目
+npm init
+
+项目里安装依赖包
+npm install --save-dev gulp
+
+安装热加载
+npm install --save-dev gulp-connect
+
+启动项目名字
+gulp serve   例子serve
+
+安装sass
+npm install gulp-sass --save-dev
+
+图片压缩
+npm install --save-dev gulp-imagemin
+
+
+
+使用sass先
+gulp sass编译成css文件，引入css文件
+watch
+gulp.watch('src/scss/**/*.scss', ['sass']);

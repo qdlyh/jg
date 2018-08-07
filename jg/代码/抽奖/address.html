@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=750, user-scalable=no, target-densitydpi=device-dpi">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no" />
+<title>地尔抽奖</title>
+<style>
+*{padding: 0;margin: 0;}
+body{
+    max-width: 750px;
+    margin: 0 auto;
+}
+.content{
+    position: relative;
+    background: url(addimage/back.png);
+    background-size: 100% 100%; 
+    height: 1350px;
+}
+.address{
+    position: relative;
+    top:48%;
+    width: 550px;
+    /*padding:0 15%;*/
+    margin: 0 auto;
+}
+.address p{
+    font-size: 20px;
+}
+.tip{margin-bottom: 30px;}
+.info{font-size: 20px;}
+.info input{line-height: 70px;width: 430px;font-size: 22px;border: 0;text-indent: 20px;}
+.info span{display: inline-block;background: #C9C9CA;line-height: 70px;width: 120px;text-align: center;}
+.info p{margin-bottom: 20px;}
+.info p select{display: inline-block;line-height: 70px;font-size: 20px;width: 430px;height: 70px;border: 0;margin-left: -6px;text-indent: 20px;}
+.info p select:active{background: #EBC9EA}
+.btn{text-align: center;margin-top: 35px;}
+.btn input{border-radius: 10px;height: 80px;line-height: 80px;width: 80%;font-size: 26px;background: #AC1201;color: #FFFFFF;text-indent: 0;}
+</style>
+</head>
+<body>
+<div class="content">
+    <div class="address">
+        <div class="tip">
+            <p>请务必按照您购买地尔产品时所留下的收货信息填写</p>
+            <p>奖品才能送到您手中</p>
+        </div>
+        <div class="info">
+        <!-- 防止回车键直接提交跳转 验证表单是否为空-->
+            <form action="" onkeydown="if(event.keyCode==13)return false;" onsubmit="return validate()">
+                <p><span>*收货人</span><input type="text" name="" maxlength="6" value=""></p>
+                <p><span>*联系方式</span><input type="text" name="" value="" maxlength="11"></p>
+                <p><span>*安装地址</span><input type="text" name="" value=""></p>
+                <p><span>*门店地址</span><input type="text" name="" value=""></p>
+                <p><span>*产品名称</span>
+                <select name="" id="">
+                    <option value="">头等舱</option>
+                    <option value="">商务舱</option>
+                    <option value="">经济舱</option>
+                    <option value="">手柄机</option>
+                    <option value="">定制款头等舱</option>
+                    <option value="">至尊款头等舱</option>
+                </select>
+                </p>
+                <p class="btn"><input type="submit" value="进入抽奖" id="ti"></p>
+            </form>            
+        </div>
+    </div>
+</div>
+<script src="js/jq.js"></script>
+<script>
+function validate()     
+     {    
+     var a;//检测输入框是否为空变量
+      $("input").each(function(){ 
+            if($(this).val()=="")
+            {
+                a=1;
+            }
+        })
+      if(a==1)
+        {
+            alert("填写信息不能为空");
+            return false;
+        }
+      }    
+</script>
+</body>
+</html>

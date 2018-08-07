@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+ <div  id="box">
+       <div class="bar">
+           <input type="text" v-model="searchStr" palceholder="搜索"/>
+       </div>
+       <div>
+            <div v-for="(items, keys ,index) in searchFor(articles,searchStr)" :key="index"> 
+               <div v-for="(itemx,index) in items" :key="index">
+                 <p>{{itemx.name}}</p>
+               </div>
+           </div>
+       </div>
+   </div>   
+  <script src="js/vue.js"></script>
+<script type="text/javascript">
+        var vm = new  Vue({
+            el:"#box",
+             data:{
+             searchStr:"",
+             // articles: [
+             //  {title: "What You Need To Know About CSS Variables"},
+             //  {title: "Freebie: 4 Great Looking Pricing Tables",}
+             //  ]
+              articles:  {
+                   A: [{name: '1'},],
+                   B: [{name: '2'},],
+                   C: [{name: '3'},],
+                   D: [{name: '4'},],
+                   E: [{name: '5'},],
+              } 
+            
+},
+methods:{
+searchFor(value, searchStr) {
+
+      var result = {};  //用result来存放查到的结果
+      if (!searchStr) { return value; }
+      searchStr = searchStr.trim().toLowerCase();   //把查询的内容转为小写的
+      for(var key in value){
+        for(var i=0;i<value[key].length;i++){
+          if (value[key][i].name.toLowerCase().indexOf(searchStr) != -1){
+            result[key] = value[key];
+          }
+        }
+      }
+      return result;
+  }
+}
+            
+        });
+</script>
+</body>
+</html>

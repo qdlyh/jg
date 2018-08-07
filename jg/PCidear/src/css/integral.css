@@ -1,0 +1,31 @@
+@charset "UTF-8";
+.integral-box {
+  width: 930px;
+  margin-top: 20px; }
+  .integral-box .integral-text ul {
+    background: #cccccc; }
+    .integral-box .integral-text ul li {
+      width: 300px;
+      height: 36px;
+      display: inline-block;
+      line-height: 36px;
+      text-align: center;
+      background: #cccccc; }
+  .integral-box .integral-content {
+    margin-top: 20px;
+    min-height: 480px; }
+    .integral-box .integral-content .integral-list ul li {
+      width: 300px;
+      height: 48px;
+      display: inline-block;
+      line-height: 48px;
+      font-size: 14px;
+      text-align: center;
+      color: #595759; }
+    .integral-box .integral-content .integral-list ul .integral-number {
+      color: #00a1b2; }
+
+.box {
+  right: 0; }
+
+/* 积分颜色 */

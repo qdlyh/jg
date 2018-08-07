@@ -1,0 +1,81 @@
+.footer {
+  position: relative;
+  height: 250px;
+  min-width: 1200px;
+  background: #DADCDB;
+  margin-top: 80px; }
+  .footer .footer-box {
+    position: absolute;
+    bottom: 0;
+    width: 100%; }
+  .footer .footer-text {
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden;
+    padding: 25px 0; }
+    .footer .footer-text h1 {
+      margin-top: 40px;
+      font-size: 18px;
+      color: #666666;
+      font-weight: bold;
+      }
+    .footer .footer-text ul {
+      float: left;
+      margin: 20px 0px;
+      }
+      .footer .footer-text ul li {
+        margin-right: 30px;
+        margin-top: 10px; }
+        .footer .footer-text ul li a {
+          color: #666;
+          font-size: 14px; }
+        .footer .footer-text ul li a:hover {
+          color: #009DB2;
+          transition: .3s; }
+    .footer .footer-text .footer-phone {
+      margin: -35px 30px !important; }
+      .footer .footer-text .footer-phone li a {
+        font-size: 18px;
+        color: #666666;
+        font-weight: 500; }
+    .footer .footer-text .footer-wx {
+      display: flex;
+      margin-top: -45px;
+      position: relative;
+      left: -25px;
+      }
+      .footer .footer-text .footer-wx li a {
+        display: inline-block;
+        width: 100px;
+        text-align: center; }
+        .footer .footer-text .footer-wx li a img {
+          width: 100px;
+          height: 100px; }
+      .footer .footer-text .footer-wx li i {
+        display: inline-block;
+        width: 120px;
+        position: relative;
+        left: -10px;
+        text-align: center;
+        font-size: 14px;
+        color: #595757;
+        padding: 5px;
+        margin: 0 auto; }
+  .footer .footer-complete {
+    background: #fff;
+    text-align: center;
+    padding: 20px 0;
+    margin: 30px 0 0 0; }
+    .footer .footer-complete a,
+    .footer .footer-complete span,
+    .footer .footer-complete div {
+      color: #595757;
+      font-size: 14px;
+      margin-top: 10px; }
+    .footer .footer-complete a:hover {
+      color: #009DB2;
+      transition: .3s; }
+    .footer .footer-complete i {
+      font-size: 24px;
+      vertical-align: sub;
+      margin-left: 20px; }

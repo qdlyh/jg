@@ -1,0 +1,290 @@
+$input-color:#b1b1b1;
+$text-color:#5c5c5c;
+.edit-form {
+  padding: 36px 24px;
+  background: #fff;
+  input {
+    text-overflow: ellipsis;
+    border: none;
+    outline: none;
+  }
+}
+
+
+/* x-input内边距 */
+
+.weui-cell {
+  padding: 10px 0;
+}
+
+.company {
+  text-align: center;
+  // border-bottom: 1px solid #b4b4b4;
+  font-size: 24px;
+  color: $text-color;
+  input {
+    &::-webkit-input-placeholder {
+      text-align: center;
+      font-size: 32px;
+      color: $input-color;
+    }
+  }
+}
+
+.file-box {
+  width: 120px;
+  height: 120px;
+  float: left;
+  margin-top: 28px;
+  img {
+    @extend .file-box;
+    position: absolute;
+  }
+  input {
+    @extend .file-box;
+    opacity: 0;
+  }
+}
+
+.user-name>div {
+  height: 72px;
+  line-height: 72px;
+  margin-left: 140px;
+  // border-bottom: 1px solid #b4b4b4;
+  font-size: 24px;
+  color: $text-color;
+  input {
+    &::-webkit-input-placeholder {
+      color: $input-color;
+    }
+  }
+  /*   span {
+    margin: 0 12px;
+    font-size: 24px;
+    float: right;
+    line-height: 72px;
+  } */
+}
+
+.user-sex {
+  margin-top: 24px;
+  padding-bottom: 24px;
+  img {
+    vertical-align: middle;
+  }
+  label {
+    padding-left: 24px;
+    color: $text-color;
+    font-size: 24px;
+  }
+}
+
+.user-sex input[type="radio"] {
+  display: none;
+}
+
+.user-sex input[type="radio"]+i {
+  font-size: 40px;
+  display: inline-block;
+  line-height: 40px;
+  padding: 10px;
+  vertical-align: middle;
+  margin-right: 12px;
+  border: #b4b4b4 1px solid;
+  border-radius: 20px;
+}
+
+.user-sex input[type="radio"]:checked+i {
+  font-size: 40px;
+  display: inline-block;
+  line-height: 40px;
+  padding: 10px;
+  vertical-align: middle;
+  border: #b4b4b4 1px solid;
+  border-radius: 20px;
+  background: #57cd33;
+  transition: .2s;
+  -webkit-transition: .2s;
+}
+.user-message>div {
+  height: 72px;
+  line-height: 72px;
+  width: 680px;
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  // border-bottom: 1px solid #b4b4b4;
+  i {
+    width: 48px;
+    height: 48px;
+    text-align: center;
+    margin-right: 24px;
+  }
+  input {
+    width: 100%;
+    height: 70px;
+    font-size: 24px;
+    color: $text-color;
+    border-bottom: 1px solid #b4b4b4;
+  }
+   ::-webkit-input-placeholder {
+    color: $input-color;
+  }
+  div {
+    /* x-input样式 */
+    width: 680px;
+    padding-left: 0px;
+    color: $text-color;
+  }
+  /* x-input上划线 */
+  .weui-cell:before {
+    height: 0px;
+    border-top: 0px solid #fff !important;
+  }
+}
+
+.edit-industry {
+  display: inline-block;
+  font-size: 24px;
+  color: $text-color;
+}
+
+#industry-page {
+  max-width: 750px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.industry-msg {
+  p {
+    font-size: 20px;
+  }
+}
+
+.industry-content {
+  text-align: center;
+  width: 100%;
+  height: 168px;
+  background: #fff;
+  position: relative;
+  .industry-box {
+    width: 570px;
+    margin: 0 12px;
+    .industry-active {
+      border-radius: 10px;
+      float: left;
+      display: inline-block;
+      padding: 5px 24px;
+      background: #18B4ED;
+      color: #fff;
+      line-height: 48px;
+      margin: 12px;
+      font-size: 24px;
+      .delete-industry {
+        float: right;
+        padding-left: 12px;
+        line-height: 48px;
+      }
+    }
+  }
+  .num-industr {
+    position: absolute;
+    display: inline-block;
+    font-size: 24px;
+    top: 24px;
+    right: 24px;
+    color: #5c5c5c;
+    font-weight: normal;
+  }
+}
+
+ ::-webkit-scrollbar {
+  display: none;
+}
+
+.tab-box {
+  font-size: 24px;
+  padding-top: 24px;
+  .tab-list {
+    width: 312px;
+    background: #EDEDED;
+    float: left;
+    position: fixed;
+    height: 700px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    li {
+      height: 84px;
+      padding-left: 24px;
+      line-height: 84px;
+      color: #383838;
+      border-bottom: 1px solid #d8d8d8;
+    }
+  }
+  .tab-item {
+    width: 420px;
+    display: inline-block;
+    float: right;
+    position: fixed;
+    height: 700px;
+    overflow: auto;
+    right: 0;
+    padding-left: 18px;
+    background: #fff;
+    -webkit-overflow-scrolling: touch;
+    li {
+      height: 84px;
+      line-height: 84px;
+      color: #5c5c5c;
+      border-bottom: 1px solid #e8e8e8;
+    }
+  }
+}
+
+
+/* 自定义职业警告图标 */
+
+.WarnIcon {
+  font: normal normal normal 14px/1 "weui";
+  color: #F43530;
+  &::before {
+    content: "\EA0B";
+    font-size: 28px;
+  }
+}
+
+
+/* .form-hint {
+  position: relative;
+  display: inline-block;
+  width: 200px;
+  height: 72px;
+  background: #1F1F1F;
+  font-size: 16px;
+  color: #fff;
+  border-radius: 10px;
+  &::before {
+    position: absolute;
+    content: '\25e4';
+    bottom: 0px;
+  }
+} */
+
+.switchClass {
+  background: #fff !important;
+  color: #fff;
+}
+
+.tabActive {
+  color: #459bdd !important;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .4s
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0
+}

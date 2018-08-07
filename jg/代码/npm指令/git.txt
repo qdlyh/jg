@@ -1,0 +1,24 @@
+初始化
+git init
+
+仓库地址
+git clone
+
+到项目文件重新打开git
+
+默认分支master
+
+需要切换分支的话 git checkout 和分支名字
+git checkout gh-pages
+
+上传
+git add .
+
+上传信息
+git commit -m "message"
+
+上传到master分支
+git push -u origin master
+
+上传到gh-pages分支
+git push -u origin gh-pages

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>H5触屏版tab组件</title>
+  <meta name="viewport" charset="utf-8" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=1.0">
+  <link rel="stylesheet" href="index.css">
+  <style>
+    h3 {
+      text-align: center;
+      font-family: Microsoft YaHei, Arial;
+      color: #fff;
+      font-size: 1.7em;
+      font-weight: normal;
+      padding: 1em 0;
+      margin: 0;
+    }
+
+    .prev {
+      position: absolute;
+      top: 50%;
+      z-index: 999;
+    }
+
+    .next {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      z-index: 999;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="carousel" ontouchstart="">
+    <div class="shade"></div>
+    <div class="item" style="background: #3b76c0">
+      <img src="images/1.jpg" alt="">
+      <h3>item-1</h3>
+    </div>
+    <div class="item" style="background: #58c03b;">
+      <img src="images/2.jpg" alt="">
+      <h3>item-2</h3>
+    </div>
+    <div class="item" style="background: #c03b25;">
+      <img src="images/3.jpg" alt="">
+      <h3>item-3</h3>
+    </div>
+    <div class="item" style="background: #e0a718;">
+      <img src="images/4.jpg" alt="">
+      <h3>item-4</h3>
+    </div>
+    <div class="item" style="background: #c03eac;">
+      <img src="images/5.jpg" alt="">
+      <h3>item-5</h3>
+    </div>
+  </div>
+
+
+  <div class="page-number">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <div class="option">
+    <div class="prev">
+      <button class="btn-prev">prev</button>
+    </div>
+    <div class="next">
+      <button class="btn-next">next</button>
+    </div>
+  </div>
+
+  <script src="lib/LinkList.js"></script>
+  <script src="lib/carousel.js"></script>
+  <script>
+    var timer = null;
+    var num = 0;
+    var divs = document.querySelectorAll(".page-number div").length;
+    var carousel = CreateCarousel("carousel", "item", true)
+      .bindTouchEvent()
+      .setItemChangedHandler(onPageChanged);
+
+    var btnPrev = document.querySelector(".btn-prev");
+    btnPrev.addEventListener("click", function () {
+      //console.log(num)
+      carousel.prev();
+      clearInterval(timer);
+      timer = setInterval(() => {
+        carousel.next();
+      }, 3000)
+    });
+
+    var btnPrev = document.querySelector(".btn-next");
+    btnPrev.addEventListener("click", function () {
+      //console.log(num)
+      carousel.next();
+      clearInterval(timer);
+      timer = setInterval(() => {
+        carousel.next();
+      }, 3000)
+    });
+
+    timer = setInterval(() => {
+      //console.log(divs)
+      //console.log(num)
+      if (num == divs) {
+        num = 0;
+      } else {
+        carousel.next();
+      }
+    }, 3000)
+
+
+    // timer = setInterval(() => {
+    //   carousel.next();
+    // }, 3000)
+
+    var dots = document.querySelectorAll(".page-number div");
+    var curDot = dots[0];
+    curDot.className = "active";
+
+    function onPageChanged(preIndex, curIndex) {
+      //console.log(curIndex)
+      num = curIndex;
+      curDot.className = "";
+      curDot = dots[curIndex];
+      curDot.className = "active";
+    }
+  </script>
+</body>
+
+</html>

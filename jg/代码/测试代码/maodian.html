@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+<div id="app">
+<div>
+    <div><a href="javascript:void(0)" @click="goAnchor('#anchor-'+index)" v-for="index in 100"> {{index}} </a></div>
+    <div :id="'anchor-'+index" class="item" v-for="index in 100">{{index}}</div>
+</div>
+</div>
+	<script src="js/vue.js"></script>
+	<script type="text/javascript">
+	/*要获取当前页面的滚动条纵坐标位置，用：
+document.documentElement.scrollTop;
+而不是：
+document.body.scrollTop;
+documentElement 对应的是 html 标签，而 body 对应的是 body 标签 */
+	new Vue({
+		el:'#app',
+		data:{
+
+		},
+		methods: {
+    goAnchor(selector) {
+        var anchor = this.$el.querySelector(selector)
+        document.documentElement.scrollTop = anchor.offsetTop;   //chrome
+        document.body.scrollTop = anchor.offsetTop;              //其他浏览器
+         }
+    }
+	})
+	</script>
+</body>
+</html>

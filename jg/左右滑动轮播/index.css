@@ -1,0 +1,70 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    font-family: Arial;
+}
+
+.carousel {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.item {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    transition: all .1s linear;
+    transform: scale(1);
+}
+
+.big {
+    position: fixed;
+    width: 100%;
+    height: 100vh;
+    transform: scale(2);
+    z-index: 9999;
+}
+
+.page-number {
+    position: absolute;
+    bottom: 5%;
+    left: 40%;
+    z-index: 999;
+}
+
+.page-number div {
+    width: 10px;
+    height: 16px;
+    display: inline-block;
+    position: relative;
+}
+
+.page-number .active:after {
+    background: rgba(0, 0, 0, 1) !important;
+}
+
+.page-number div:after {
+    content: "";
+    width: 0.4em;
+    height: 0.4em;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -0.2em;
+    margin-left: -0.2em;
+    background: #fff;
+}

@@ -1,0 +1,89 @@
+@charset "UTF-8";
+.content {
+  max-width: 1200px;
+  min-width: 1200px;
+  display: flex;
+  justify-content: space-between;
+  margin: 40px auto;
+  /* 轮播 */ }
+  .content .left {
+    padding: 10px;
+    width: 700px;
+    height: 570px;
+    display: inline-block;
+    border: 1px solid #ccc; }
+    .content .left ul {
+      margin: 10px; }
+      .content .left ul li {
+        display: inline-block; }
+    .content .left .bigpic {
+      height: 390px;
+      width: 680px;
+      display: block;
+      margin: 10px auto; }
+    .content .left .smallpic {
+      width: 600px;
+      display: inline-block;
+      white-space: nowrap;
+      overflow: auto; }
+      .content .left .smallpic::-webkit-scrollbar {
+        display: none; }
+      .content .left .smallpic img {
+        opacity: .7; }
+    .content .left .smallpic li {
+      width: 160px;
+      height: 117px;
+      background: #000; }
+    .content .left .smallpic-active img {
+      opacity: 1; }
+    .content .left .smallpic img {
+      width: 160px;
+      height: 117px;
+      display: inline-block;
+      cursor: pointer; }
+    .content .left .btn-box .left-btn,
+    .content .left .btn-box .right-btn {
+      margin-top: 10px;
+      width: 28px;
+      height: 117px;
+      float: left;
+      line-height: 117px;
+      cursor: pointer; }
+    .content .left .btn-box .right-btn {
+      float: right; }
+    .content .left .btn-box img {
+      vertical-align: middle; }
+  .content .content-text {
+    width: 500px;
+    border: 1px solid #ccc;
+    padding: 10px 0; }
+    .content .content-text .content-text-box {
+      padding: 0 30px; }
+      .content .content-text .content-text-box h1 {
+        color: #464646;
+        font-size: 24px;
+        margin: 20px 0; }
+      .content .content-text .content-text-box .map {
+        width: 440px;
+        height: 240px;
+        position: relative;
+        margin: 20px 0; }
+        .content .content-text .content-text-box .map #container {
+          width: 100%;
+          height: 100%;
+          position: absolute; }
+      .content .content-text .content-text-box .text {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden; }
+    .content .content-text .go-back {
+      text-align: center; }
+      .content .content-text .go-back a {
+        background: #c9c9c9;
+        width: 120px;
+        height: 36px;
+        display: inline-block;
+        color: #464646;
+        line-height: 36px;
+        text-align: center; }

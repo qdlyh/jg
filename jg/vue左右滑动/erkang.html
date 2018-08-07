@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html id="html">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>自己封装插件</title>
+<style>
+.box{
+	display: inline-block;
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	background-color: red;
+}
+.box p{
+	user-select: none;
+	margin:0;
+	color: #FFFFFF;
+	text-align: center;
+	font-size: 100px;
+	position: absolute;
+	width: 100%;
+	top:50%;
+	transform: translateY(-50%);
+}
+</style>
+<script src="js/vue.js"></script>
+<script type="text/javascript" src="js/erkang.js" ></script>
+</head>
+<body>
+<div id="app" class="box" 
+	v-tap="{fn:vuetap,name:'点击'}" 
+	v-longtap="{fn:vuetap,name:'长按'}" 
+	v-swipeleft="{fn:vuetap,name:'左滑'}"
+	v-swiperight="{fn:vuetap,name:'右滑'}"
+	v-swipeup="{fn:vuetap,name:'上滑'}"
+	v-swipedown="{fn:vuetap,name:'下滑'}"
+>
+<p>{{ name }}</p>
+</div>
+
+<script>
+kim=new Vue({
+	el:"#app",
+	data:{
+		name:"尔康"
+	},
+	methods:{
+	  	vuetap:function(s){
+	  		this.name=s.name;
+		},
+	}
+});
+</script>
+</body>
+</html>

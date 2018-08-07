@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<title>Document</title>
+</head>
+<body>
+
+
+   area() {
+      let obj = this.$refs.myArea; //定位id
+      let index = obj.selectedIndex; // 选中索引
+      let text = obj.options[index].text; // 选中文本
+      this.myarea = text;
+      //console.log(this.myarea);
+    }
+  },
+  computed: {
+    selection() {
+      for (let i = 0; i < this.cityData.length; i++) {
+        if (this.cityData[i].title == this.selected) {
+          return this.cityData[i].area;
+        }
+        this.$refs.myArea[0].selected = true;
+        this.myarea = this.$refs.myArea[0].text;
+      }
+    },
+    
+
+<div id="test">
+    <select v-model="selected">
+      <option v-for="(data,index) in cityData" :key="index">
+        {{data.text}}
+      </option>
+    </select>
+    <span>区:</span>
+    <select id="sel" @click="btn">
+      <option v-for="(data,index) in selection" :key="index">
+        {{data.text}}
+      </option>
+  </select>
+  <!-- <input type="button" @click="btn"> -->
+  <p>选择：{{selected}}{{texts}}</p>
+</div>
+<script type="text/javascript" src="js/vue.js"></script>
+<script>
+var vm = new Vue({
+
+el:'#test',
+data:{
+  selected: '城市',
+  myarea:'',
+  cityData: [
+    {
+      text: '城市',
+
+      area: [
+        {
+          text: '市区'
+        }
+      ]
+    },
+    {
+      text: '广州市',
+      area: [
+        {
+          text: '市区'
+        },
+        {
+          text: '天河区'
+        },
+        {
+          text: '白云区'
+        },
+        {
+          text: '海珠区'
+        }
+      ]
+    },
+    {
+      text: '广州市1',
+      area: [
+        {
+          text: '市区'
+        },
+        {
+          text: '天河区1'
+        },
+        {
+          text: '白云区1'
+        },
+        {
+          text: '海珠区1'
+        }
+      ]
+    },
+    {
+      text: '广州市2',
+      area: [
+        {
+          text: '市区'
+        },
+        {
+          text: '天河区2'
+        },
+        {
+          text: '白云区2'
+        },
+        {
+          text: '海珠区2'
+        }
+      ]
+
+    }
+  ],
+  texts:'市区',
+},
+methods:{
+    btn(){
+        var obj = document.getElementById("sel"); //定位id
+        var index = obj.selectedIndex; // 选中索引
+        var text = obj.options[index].text; // 选中文本
+        console.log(text)
+        this.texts = text;
+        console.log(this.texts)
+    }
+},
+computed:{
+selection() {
+ for (let i = 0; i < this.cityData.length; i++) {
+    if (this.cityData[i].text == this.selected) {
+      return this.cityData[i].area;
+    }
+    document.getElementById("sel")[0].selected=true;
+    var obj = document.getElementById("sel"); //定位id
+    var index = obj.selectedIndex; // 选中索引
+    var text = obj.options[index].text; // 选中文本
+    console.log(text)
+    this.texts = text;
+}
+},
+}   
+});
+</script>
+</body>
+</html>

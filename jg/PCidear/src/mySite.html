@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="shortcut icon" href="image/favicon.ico">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/shopping.css">
+    <link rel="stylesheet" href="css/site.css">
+    <title>我的收货地址</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="shopping">
+            <div class="shopping-msg">
+                <div class="message-left">
+                    <div class="msg-left-top">
+                        <h4>13030303030</h4>
+                        <p>会员等级:注册会员</p>
+                        <p>我的积分:30000</p>
+                        <a href="javascript:;" class="integral">积分规则</a>
+                        <div class="btn-blue shopping-btn">
+                            <a href="javascript:;">退出登录</a>
+                        </div>
+                    </div>
+                    <div class="msg-left-nav">
+                        <ul>
+                            <li class="nav-border">
+                                <a href="myCart.html">购物车
+                                    <span class="count">(0)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="myOrder.html">我的订单
+                                    <span class="count">(0)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="myIntegral.html">我的积分
+                                    <span class="count">(3000)</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="myDatum.html">个人资料</a>
+                            </li>
+                            <li>
+                                <a href="mySite.html">收货地址</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="message-right">
+                    <div class="add-Site">
+                        <p class="message-text">收货地址</p>
+                    </div>
+                    <div class="hr"></div>
+                    <div class="site-box">
+                        <!-- 编辑收货地址 -->
+                        <div class="compile-form">
+                            <form action="" id="form">
+                                <span>收货人：</span>
+                                <input type="text" class="myName" maxlength="5">
+                                <br/>
+                                <span>手机号：</span>
+                                <input type="number" class="phone" oninput='if(value.length>11)value=value.slice(0,11)'>
+                                <br/>
+                                <!-- <span>所在地区：</span><input type="text"><br/> -->
+                                <div class="province">
+                                    <span>所在地区：</span>
+                                    <select name="user.province" id="province"></select>
+                                    <select name="user.city" id="city"></select>
+                                    <select name="user.area" id="area"></select>
+                                </div>
+                                <div>
+                                    <span>详细地址：</span>
+                                    <input type="text" class="address" maxlength="100">
+                                </div>
+                                <div>
+                                    <span>邮政编码：</span>
+                                    <input type="text" class="city-number" maxlength="6">
+                                </div>
+                            </form>
+                            <label>
+                                <input type="checkbox" class="check"> 保存为默认地址
+                            </label>
+                            <div class="btn-blue site-btn">
+                                <a href="javascript:;">保存收货地址</a>
+                            </div>
+                        </div>
+                        <!-- 保存显示的收货地址 -->
+                        <div class="my-site">
+                            <div class="addSite">
+                                <img src="image/312312313.png" alt="">
+                            </div>
+                            <div class="my-site-content">
+                                <div class="my-site-box active">
+                                    <div class="my-site-white">
+                                        <ul class="my-site-text-top">
+                                            <li class="text-top">
+                                                <span>广东省广州市天河区广东省广州市天河区</span>
+                                                <i>(哦哦哦)</i>
+                                            </li>
+                                            <li>珠江新城猎德珠江新城猎德村珠江新城猎德村珠江新城猎德村村</li>
+                                            <li>1303030303</li>
+                                        </ul>
+                                        <ul class="my-site-text-right">
+                                            <li class="compile " onclick="compileSite(this)">修改</li>
+                                            <li class="delete-site" onclick="deleteSite(this)">删除</li>
+                                            <li class=" active-color right" onclick="defaultSite(this)">默认地址</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="my-site-box">
+                                    <div class="my-site-white">
+                                        <ul class="my-site-text-top">
+                                            <li class="text-top">
+                                                <span>广东省广州市天河区广东省广州市天河区</span>
+                                                <i>(哦哦哦)</i>
+                                            </li>
+                                            <li>珠江新城猎德珠江新城猎德村珠江新城猎德村珠江新城猎德村村</li>
+                                            <li>1303030303</li>
+                                        </ul>
+                                        <ul class="my-site-text-right">
+                                            <li class="compile " onclick="compileSite(this)">修改</li>
+                                            <li class="delete-site" onclick="deleteSite(this)">删除</li>
+                                            <li class=" active-color right" onclick="defaultSite(this)">默认地址</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="my-site-box">
+                                    <div class="my-site-white">
+                                        <ul class="my-site-text-top">
+                                            <li class="text-top">
+                                                <span>广东省广州市天河区广东省广州市天河区</span>
+                                                <i>(哦哦哦)</i>
+                                            </li>
+                                            <li>珠江新城猎德珠江新城猎德村珠江新城猎德村珠江新城猎德村村</li>
+                                            <li>1303030303</li>
+                                        </ul>
+                                        <ul class="my-site-text-right">
+                                            <li class="compile " onclick="compileSite(this)">修改</li>
+                                            <li class="delete-site" onclick="deleteSite(this)">删除</li>
+                                            <li class=" active-color right" onclick="defaultSite(this)">默认地址</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="my-site-box">
+                                    <div class="my-site-white">
+                                        <ul class="my-site-text-top">
+                                            <li class="text-top">
+                                                <span>广东省广州市天河区广东省广州市天河区</span>
+                                                <i>(哦哦哦)</i>
+                                            </li>
+                                            <li>珠江新城猎德珠江新城猎德村珠江新城猎德村珠江新城猎德村村</li>
+                                            <li>1303030303</li>
+                                        </ul>
+                                        <ul class="my-site-text-right">
+                                            <li class="compile " onclick="compileSite(this)">修改</li>
+                                            <li class="delete-site" onclick="deleteSite(this)">删除</li>
+                                            <li class=" active-color right" onclick="defaultSite(this)">默认地址</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="my-site-box">
+                                    <div class="my-site-white">
+                                        <ul class="my-site-text-top">
+                                            <li class="text-top">
+                                                <span>广东省广州市天河区广东省广州市天河区</span>
+                                                <i>(哦哦哦)</i>
+                                            </li>
+                                            <li>珠江新城猎德珠江新城猎德村珠江新城猎德村珠江新城猎德村村</li>
+                                            <li>1303030303</li>
+                                        </ul>
+                                        <ul class="my-site-text-right">
+                                            <li class="compile " onclick="compileSite(this)">修改</li>
+                                            <li class="delete-site" onclick="deleteSite(this)">删除</li>
+                                            <li class=" active-color right" onclick="defaultSite(this)">默认地址</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="link">
+            <!-- 底部html包含在这里面 -->
+        </div>
+
+    </div>
+    <script src="js/jquery.js"></script>
+    <script src="js/pcasunzip.js" charset="gb2312"></script>
+    <script src="js/shopping/site.js"></script>
+    <script src="js/nav.js"></script>
+</body>
+
+</html>

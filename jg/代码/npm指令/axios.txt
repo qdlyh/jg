@@ -1,0 +1,4 @@
+main.jsาýศ๋มหฃบ
+npm install axios
+import axios from 'axios'
+Vue.prototype.$http = axios

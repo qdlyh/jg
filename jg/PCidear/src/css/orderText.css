@@ -1,0 +1,42 @@
+.content {
+  width: 600px;
+  margin: 40px auto; }
+  .content .regret-text h1 {
+    text-align: center;
+    font-size: 22px;
+    color: #00a1b2; }
+    .content .regret-text h1 img {
+      margin-right: 10px;
+      vertical-align: middle; }
+  .content .regret-text p {
+    font-size: 14px;
+    color: #454545;
+    text-align: center;
+    margin-top: 40px; }
+    .content .regret-text p a {
+      font-size: 14px;
+      color: #868686;
+      margin-left: 10px; }
+  .content .regret-btn {
+    margin-top: 30px;
+    text-align: center; }
+    .content .regret-btn p {
+      color: #454545;
+      font-size: 14px; }
+      .content .regret-btn p a {
+        color: #00a1b2;
+        font-size: 14px; }
+  .content .btn-blue {
+    margin-top: 20px; }
+    .content .btn-blue a {
+      width: 120px;
+      height: 36px;
+      line-height: 36px;
+      font-size: 14px; }
+  .content .black a {
+    background: #7d7d7d; }
+  .content .btn-box {
+    width: 300px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between; }

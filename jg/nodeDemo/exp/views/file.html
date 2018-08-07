@@ -1,0 +1,99 @@
+<!-- <html>
+<head>
+<title>文件上传表单</title>
+</head>
+<body>
+<h3>文件上传：</h3>
+选择一个文件上传: <br />
+<form action="http://127.0.0.1:3000/upload" method="post" enctype="multipart/form-data">
+<input type="file" name="image" size="50" />
+<br />
+<input type="submit" value="上传文件" />
+</form>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <form id="form" method="post" enctype="multipart/form-data">
+        <input type="file" id="fileId" value="上传图片" onchange="getUrl(this.files);" />
+        <canvas id="myCanvas" style="display: none"></canvas>
+        <img src="" alt="" id="file-img" width="150px;">
+    </form>
+    <input type="button" value="上传文件" name="image" onclick="pressss()" />
+    <img src="" alt="" id="press" />
+
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        function getUrl(fil) {
+            var $fileImg = document.getElementById('file-img')
+
+            var Cnv = document.getElementById('myCanvas');
+            var Cntx = Cnv.getContext('2d'); //获取2d编辑容器
+            //var imgss =   new Image();//创建一个图片
+            var imagSize = document.getElementById("fileId").files[0].size
+            for (var intI = 0; intI < fil.length; intI++) { //图片回显
+                var tmpFile = fil[intI];
+                var reader = new FileReader();
+                reader.readAsDataURL(tmpFile);
+                reader.onload = function (e) {
+                    // if(imagSize>1024*1024*1){
+                    // alert("图片大小在1M以内，为："+imagSize/(1024*1024)+"M");
+                    // return true;
+                    // }
+                    //$fileImg.src = e.target.result;
+                    //console.log($fileImg.src)
+                    //url = e.target.result;
+                    //console.log(url)
+                    $fileImg.src = e.target.result;
+                    //agoimg.src=url;
+                    $fileImg.onload = function () {
+                        //等比缩放
+                        var m = $fileImg.width / $fileImg.height;
+                        Cnv.height = 300; //该值影响缩放后图片的大小
+                        Cnv.width = 300 * m;
+                        //img放入画布中
+                        //设置起始坐标，结束坐标
+                        Cntx.drawImage($fileImg, 0, 0, 300 * m, 300);
+                    }
+                }
+            }
+        }
+
+
+        function pressss() { //
+            //获取canvas压缩后的图片数据
+            var formData = new FormData($('#form')[0]);
+            var Pic = document.getElementById("myCanvas").toDataURL("image/png");
+            var imgs = document.getElementById("press");
+            imgs.src = Pic;
+            //上传
+            // 去除多余，得到base64编码的图片字节流
+            //Pic = Pic.replace(/^data:image\/(png|jpg);base64,/, "");
+            formData.append('image', Pic)
+            $.ajax({
+                url: 'http://127.0.0.1:3000/upload',
+                type: 'post',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    alert(res)
+                },
+                cancel: function (err) {
+                    alert(err)
+                }
+            })
+            //可以用ajax提交到后台，提交后可以直接存数据库，也可以保存成图片，此处略
+        }
+    </script>
+</body>
+
+</html>

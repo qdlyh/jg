@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Document</title>
+</head>
+<style type="text/css">
+*{padding: 0;margin: 0;  list-style: none;}
+.right{
+  position: fixed;;
+  width: 32px;
+  height: 100%;
+  background: #000;
+  opacity: 0.7;
+  right: 0;
+
+}
+.right-ul ul{
+  position: fixed;
+  top: 20%;
+}
+.right-ul li{
+  margin-top: 40px;
+}
+/*.right-ul li:active{
+  background: #000;
+}*/
+.right-ul2 ul{
+  position: fixed;
+  right: 32px;
+  background: #000;
+  opacity: 0.9;
+  padding: 10px;
+}
+.bottom ul{
+  top: 80%;
+}
+.bottom ul li{
+  width: 32px;
+  height: 42px;
+  display: inline-block;
+}
+.bottom ul li:active{
+  background: #000;
+}
+</style>
+<body>
+<div class="right">
+  <div class="right-ul">
+    <ul>
+      <li><a href="">123</a></li>
+      <li><a href="">123</a></li>
+      <li><a href="">123</a></li>
+      <li class="right-ul2">
+      <ul>
+        <li><a href="">12314</a></li>
+         <li><a href="">12341</a></li>
+          <li><a href="">12341</a></li>
+           <li><a href="">12431</a></li>
+            <li><a href="">12314</a></li>
+             <li><a href="">12431</a></li>
+             <li><a href="">12341</a></li>
+              <li><a href="">12431</a></li>
+      </ul>
+      </li>
+       <li class="bottom">
+         <ul>
+        <li><a href="javascipt:;"><img src="img/596296418.png" alt=""></a></li>
+      <li><a href="javascipt:;"><img src="img/596296418.png" alt=""></a></li>
+         </ul>
+       </li>
+    </ul>
+  </div>
+</div>
+  <input type='number' value='' oninput='if(value.length>11)value=value.slice(0,11)' />
+</body>
+</html>
+
+<!-- '1234567890'.replace(/\d{3}/g, function(val){
+  return val + '-'
+}); -->
+

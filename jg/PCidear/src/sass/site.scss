@@ -1,0 +1,156 @@
+    .add-Site {
+        display: flex;
+        justify-content: space-between;
+        a {
+            margin-top: 10px;
+            color: #00a1b2;
+        }
+    }
+
+    .site-box {
+        margin-top: 20px;
+        /* 编辑收货地址 */
+        .compile-form {
+            #form {
+                //让个别input右对齐
+                span {
+                    color: #595757;
+                    display: inline-block;
+                    width: 100px;
+                }
+                input {
+                    width: 550px; // height: 48px;
+                    margin-top: 20px;
+                    padding: 10px 0;
+                    font-size: 17px;
+                }
+                .province {
+                    margin-top: 20px;
+                    select {
+                        width: 173px;
+                        height: 30px;
+                        margin-right: 10px;
+                    }
+                }
+            }
+            .check {
+                margin: 20px 0 0 110px;
+            }
+            .site-btn {
+                margin-top: 80px;
+                a {
+                    width: 360px;
+                    height: 36px;
+                    line-height: 36px;
+                }
+            }
+        }
+        /* 保存后收货地址样式 */
+        .my-site {
+            /* 超出显示滚动条 */
+            width: 900px;
+            height: 470px;
+            overflow: hidden;
+            overflow: auto;
+            .addSite {
+                float: left;
+                margin: 0 10px;
+                cursor: pointer;
+                img {
+                    width: 270px;
+                    height: 150px;
+                }
+            }
+            .my-site-box {
+                float: left;
+                width: 280px;
+                height: 150px;
+                margin-left: 10px;
+                border: 1px solid #00A1B2;
+                background: linear-gradient(45deg,#C5C5C5 12.5%,#fbfaf5 12.5%,#fbfaf5 25%,#C5C5C5 25%,#C5C5C5 37.5%,#fbfaf5 37.5%,#fbfaf5 50%,#C5C5C5 50%,#C5C5C5 62.5%,#fbfaf5 62.5%,#fbfaf5 75%,#C5C5C5 75%,#C5C5C5 87.5%,#fbfaf5 87.5%,#fbfaf5 100%);
+                background-size: 70px 70px;
+                padding: 4px;
+                margin-bottom: 10px;
+                .my-site-white{
+                    background: #fff;
+                    padding: 10px;
+                }
+                .my-site-text-top {
+                    color: #666;
+                    font-size: 14px;
+                    .text-top {
+                        color: #2b2b2b;
+                        font-size: 14px;
+                        height: 40px;
+                        border-bottom: 1px dashed #ccc;
+                        line-height: 40px;
+                        margin-bottom: 15px;
+                        span {
+                            width: 190px;
+                            display: inline-block;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
+                        i {
+                            width: 60px;
+                            display: inline-block;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            float: right;
+                        }
+                    }
+                    li:nth-child(2) {
+                        margin-bottom: 5px;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                }
+                .my-site-text-right {
+                    display: flex;
+                    margin-top: 4px;
+                    li {
+                        font-size: 14px;
+                        color: #00439d;
+                        cursor: pointer;
+                        margin-right: 20px;
+                    }
+                    .right {
+                        margin-left: 40px;
+                    }
+                }
+                .delete-id {
+                    display: none;
+                }
+            }
+            /* 默认地址样式 */
+            .active {
+                position: relative;
+                background: linear-gradient(45deg,#f25953 12.5%,#fbfaf5 12.5%,#fbfaf5 25%,#5590d6 25%,#5590d6 37.5%,#fbfaf5 37.5%,#fbfaf5 50%,#f25953 50%,#f25953 62.5%,#fbfaf5 62.5%,#fbfaf5 75%,#5590d6 75%,#5590d6 87.5%,#fbfaf5 87.5%,#fbfaf5 100%);
+                background-size: 70px 70px;
+                &:before {
+                    content: "";
+                    width: 0;
+                    height: 0;
+                    position: absolute;
+                    right: -1px;
+                    bottom: 0;
+                    border-bottom: 40px solid #00A1B2;
+                    border-left: 40px solid transparent;
+                }
+                &:after {
+                    content: "\2713";
+                    font-size: 20px;
+                    color: #fff;
+                    position: absolute;
+                    right: 5px;
+                    bottom: 0;
+                }
+                .active-color {
+                    color: #00A1B2 !important;
+                }
+            }
+        }
+    }

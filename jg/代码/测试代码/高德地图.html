@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Echarts中国地图省份选择效果k(可自定义配色)</title>
+     <script src="http://echarts.baidu.com/build/dist/echarts.js"></script>
+    <style>
+    *{margin:0;padding:0;}
+
+    </style>
+</head>
+<body>
+    <!-- 代码部分begin -->
+    <div id="mapbox" style="height:500px"></div>
+    <div id="selectarea" style="text-align:center;">当前选择：广东</div>
+     
+    <script>
+        // 路径配置
+        require.config({
+            paths: {
+                echarts: 'http://echarts.baidu.com/build/dist'
+            }
+        });
+        // 使用
+        require(['echarts','echarts/chart/map'],function (ch) {
+            // 基于准备好的dom，初始化echarts图表
+        var myChart = ch.init(document.getElementById('mapbox'));  
+            option = {
+                tooltip : {
+                    trigger: 'item',
+                    formatter: '{b}'
+                },
+            
+                series : [{
+                    name: '中国',
+                    type: 'map',
+                    mapType: 'china',
+                    selectedMode : 'single',
+                    itemStyle:{
+                             normal: {label:{show:true},//是否显示字
+                             borderColor: '#3B5077',//省界限色
+                             areaStyle:{color:'#ccc'},//背景色
+                         },
+                        
+                          emphasis:{label:{show:true,
+                                           textStyle:{color: '#fff'}//鼠标覆盖文字颜色
+                                          },
+                                     areaStyle:{color:'#000'},//鼠标覆盖色
+                                    }
+                        },
+
+                    data:[
+                        {name:'广东',selected:true}//初始选择
+                    ]
+                }]
+            };
+            var ecConfig = require('echarts/config');
+            myChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
+                var selected = param.selected;
+                var str = '当前选择： ';
+                for (var p in selected) {
+                    if (selected[p]) {
+                        str += p + ' ';
+                    }
+                }
+                document.getElementById('selectarea').innerHTML = str;
+            })
+            // 为echarts对象加载数据 
+            myChart.setOption(option); 
+        });
+    </script>
+    <!-- 代码部分end -->
+</body>
+</body>
+</html>

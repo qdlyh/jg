@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=750, user-scalable=no, target-densitydpi=device-dpi">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no" />
+<title>地尔抽奖</title>
+<style>
+*{padding: 0;margin: 0;}
+body{
+    max-width: 750px;
+    margin: 0 auto;
+}
+.content{
+    position: relative;
+    background: url(images/156561.png);
+    background-size: 100% 100%; 
+    height: 1721px;
+}
+#lottery{
+    width:750px;
+    /*height:656px;*/
+    position: absolute;
+    top: 36%;
+    left: 0;
+}
+.text{
+    position: absolute;
+    bottom: 2%;
+}
+#lottery table{padding: 0px 3px;}
+#lottery table td{position:relative;width:240px;height:240px;text-align:center;background: rgba(250,247,239,0.5);}
+#lottery table td img{width:240px;height:240px;position:relative;z-index: 999;}
+/*#lottery table td{position:relative;width:235px;height:235px;text-align:center;color:#333;background: rgba(255,247,239,0.5);}
+#lottery table td img{display:block;width:235px;height:235px;background: #FDF5E7;margin: 4px 4px; }*/
+/*#lottery table td a{width:190px;height:170px;display:block;text-decoration:none;background:url(lottery1.jpg) no-repeat top center;}*/
+/*#lottery table td a:hover{background-image:url(lottery2.jpg);}*/
+#lottery table td.active .mask{display:block;}
+/*.mask{
+    width:100%;
+    height:100%;
+    position:absolute;
+    left:0;
+    top:0;
+    background-color: rgba(252,211,4,0.5);
+    display:none;
+    }*/
+    .mask{
+    width:100%;
+    height:100%;
+    position:absolute;
+    left:0;
+    top:0;
+    background: #faf680;
+    opacity: 0.6;
+    display:none;
+    }
+
+.backgroundColor{
+    background: #000;
+    opacity: 0.8;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 999;
+    left: 0;
+    top: 0;
+}
+.openBox{
+  position: fixed;
+  transition: opacity .5s;
+  z-index: 5000;
+  width: 546px;
+  height: 712px;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  text-align: center;
+  border-radius: 20px;
+  overflow: hidden;
+}
+.open-top-img{
+    width: 546px;
+    height: 484px;
+}
+.open-none img{
+  display: inline-block;
+  width: 80%; 
+  height: 80px;
+  text-align: center;
+  border-radius: 10px;
+  margin-top: 30px;
+}
+.open-text{
+    margin-top: 20px;
+}
+.open-text strong{
+    color: #676464;
+    font-size: 20px;
+}
+.open-text p{
+        color: #676464;
+     margin-top: 5px;
+     font-size: 18px;
+}
+
+</style>
+</head>
+<body class="keBody">
+<div class="content">
+<audio controls="controls" src="images/1.mp3" id="music" style="display: none;"></audio>
+<!-- <img src="images/156561.png" alt="" style="width: 100%;"> -->
+<div id="lottery">
+    <table border="0" cellpadding="0" cellspacing="6px">
+        <tr>
+            <td class="lottery-unit lottery-unit-0"><img src="images/0.png"><div class="mask"></div></td>
+            <td class="lottery-unit lottery-unit-1"><img src="images/1.png"><div class="mask"></div></td>
+            <td class="lottery-unit lottery-unit-2"><img src="images/2.png"><div class="mask"></div></td>
+        </tr>
+        <tr>
+            <td class="lottery-unit lottery-unit-7"><img src="images/3.png"><div class="mask"></div></td>
+            <td><a href="javascript:;" class="audio_btn"><img src="images/start.png" id="music_btn"></a> </td>
+            <td class="lottery-unit lottery-unit-3"><img src="images/4.png"><div class="mask"></div></td>
+        </tr>
+        <tr>
+            <td class="lottery-unit lottery-unit-6"><img src="images/5.png"><div class="mask"></div></td>
+            <td class="lottery-unit lottery-unit-5"><img src="images/6.png"><div class="mask"></div></td>
+            <td class="lottery-unit lottery-unit-4"><img src="images/7.png"><div class="mask"></div></td>
+        </tr>
+    </table>
+</div>
+    <div class="text" style="margin: 0 20px;font-size: 20px;">
+        <h4>活动规则：</h4>
+        <p >
+        1、活动时间：2017年10月1日至10月8日。<br>
+        2、一个微信账号只能抽奖1次。<br>
+        3、随机金额红包现场发放，金额有￥88元、￥138元、￥188元、￥218元、￥288元。<br>
+        4、一二三四等奖奖品，我们将会在活动结束后20个工作日内，由客服人员联系
+        您，直接发送到您的安装地址。
+        </p>
+        <h4>注意事项：</h4>
+        <p >
+        1、抽奖要求：活动时间内，在地尔各地门店单笔消费满￥10000元，可获取抽奖机会。<br>
+        2、所填资料信息请与门店登记信息一致，否则将无法兑奖。
+        <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -->
+        </p>
+    </div>
+    <div class="open" style="display: none;">
+        <div class="backgroundColor"></div>
+            <div class="openBox">
+                <img src="" class="open-top-img">
+                <div class="open-text">
+                <strong></strong>
+                <p>我们会通过您填写的信息尽快与您联系！</p>
+                </div>
+                <a href="javascript:;" class="open-none"><img src="images/1541561.png" alt=""></a>
+            </div>
+    </div>
+</div>
+<script src="js/jq.js"></script>
+<script type="text/javascript">
+if (localStorage.getItem('ider')) {
+    window.location.href=('address.html')
+}
+$('.open-none').click(function(){
+    $(this).parents('.open').hide();
+})
+$("#music_btn").one('click',function(){ 
+    var music = document.getElementById("music"); 
+    if(music.paused){ 
+        music.play(); 
+    }
+}); 
+var lottery={
+    place:0,    //请求后指定停留在某个位置
+    click:false, //默认值为false可抽奖，防止重复点击
+    index:-1,    //当前转动到哪个位置，起点位置
+    count:0,    //总共有多少个位置
+    timer:0,    //setTimeout的ID，用clearTimeout清除
+    speed:20,    //初始转动速度
+    times:0,    //转动次数
+    cycle:40,    //转动基本次数：即至少需要转动多少次再进入抽奖环节
+    prize:-1,    //中奖位置
+    init:function(id){
+        if ($("#"+id).find(".lottery-unit").length>0) {
+            $lottery = $("#"+id);
+            $units = $lottery.find(".lottery-unit");
+            this.obj = $lottery;
+            this.count = $units.length;
+            $lottery.find(".lottery-unit-"+this.index).addClass("active");
+        };
+    },
+    roll:function(){
+        var index = this.index,
+            count = this.count,
+            lottery = this.obj;
+        $(lottery).find(".lottery-unit-"+index).removeClass("active");
+        index += 1;
+        if (index>count-1) {
+            index = 0;
+        };
+        $(lottery).find(".lottery-unit-"+index).addClass("active");
+        this.index=index;
+        return false;
+    },
+    stop:function(){
+        lottery.times += 1;   //转动次数
+        lottery.roll();//转动过程调用的是lottery的roll方法，这里是第一次调用初始化
+        if (lottery.times > lottery.cycle+10 && lottery.prize==lottery.index) {
+            clearTimeout(lottery.timer);
+            lottery.prize=-1;
+            lottery.times=0;
+            lottery.click=false;
+            //可以在这个位置写上中奖弹框，这个是转盘停止时触发事件
+            //console.log(lottery.place)
+             window.setTimeout(function(){ 
+             $('.open-none').parents('.open').show();
+             $(".open-top-img").attr("src","images/x"+lottery.index+".png");
+              },500);
+            localStorage.setItem("ider",'132');
+            //console.log('您抽中了第'+lottery.place+'个奖品');
+        }else{
+            if (lottery.times<lottery.cycle) {
+                lottery.speed -= 10;
+            }else if(lottery.times==lottery.cycle) {
+                lottery.place = Math.random()*(lottery.count)|0;//案例中奖物品通过一个随机数生成
+                lottery.prize = lottery.place;
+                console.log(lottery.prize)
+                // lottery.prize = lottery.place;  //这个可以通过ajax请求回来的数据赋值给lottery.place    
+            }else{
+                if (lottery.times > lottery.cycle+10 && ((lottery.prize==0 && lottery.index==7) || lottery.prize==lottery.index+1)) {
+                    lottery.speed += 110;
+                }else{
+                    lottery.speed += 20;
+                }
+            }
+            if (lottery.speed<40) {
+                lottery.speed=40;
+            };
+            lottery.timer = setTimeout(lottery.stop,lottery.speed);//循环调用
+        }
+        return false;
+    },
+    getLottery:function(){
+        // $.ajax({
+        //     url: '/activity/lottery',//中奖接口
+        //     type: 'POST',
+        //     dataType: 'json',
+        //     data: {
+        //         'activityCategory': 'POINT_SHOP'//提交字段
+        //     }
+        // })
+        // .done(function(data) {
+        //     if (data.returnCode == 0) {//登录后的操作
+
+        //         switch (data.prize) {//请求返回的抽中奖品字段
+        //             case 'POINT_SHOP_INTEREST_COUPON_2': //0.2加息券
+        //                 lottery.place = 7;//当前奖品所在九宫格位置
+        //                 break;
+        //             case 'POINT_SHOP_RED_ENVELOPE_10': //10元投资红包
+        //                 lottery.place = 0;//当前奖品所在九宫格位置
+        //                 break;
+        //             case 'POINT_SHOP_POINT_500': //500积分
+        //                 lottery.place = 1;//当前奖品所在九宫格位置
+        //                 break;
+        //             case 'POINT_SHOP_PHONE_CHARGE_10': //10元话费
+        //                 lottery.place = 5;//当前奖品所在九宫格位置
+        //                 break;
+        //             case 'OINT_SHOP_JD_100': //100元京东卡
+        //                 lottery.place = 2;//当前奖品所在九宫格位置
+        //                 break;
+        //             case 'POINT_SHOP_POINT_3000': //3000积分
+        //                 lottery.place = 6;//当前奖品所在九宫格位置
+        //                 break;
+        //             case 'POINT_SHOP_INTEREST_COUPON_5': //0.5加息券
+        //                 lottery.place = 4;//当前奖品所在九宫格位置
+        //                 break;
+        //             case 'POINT_SHOP_RED_ENVELOPE_50': //50元投资红包
+        //                 lottery.place = 3;//当前奖品所在九宫格位置
+        //                 break;
+        //         }
+                lottery.speed=100;
+                lottery.stop();
+                lottery.click=true;
+        //     } else if (data.returnCode == 1) {//没有抽奖机会
+        //         alert('没有抽奖机会');
+        //     } else if (data.returnCode == 2) {//未登录
+        //         location.href='/login';
+        //     } else if (data.returnCode == 3) {//不在活动时间范围内！
+        //         alert('不在活动时间内');
+        //     } else if (data.returnCode == 4) {//实名认证
+        //         alert('未实名认证');
+        //     }
+        // })
+        // .fail(function() {
+        //     alert('请求失败，请重试！');
+        // });
+    }
+};
+
+
+
+window.onload=function(){
+    
+    $("#lottery a").one("click",function(){
+        lottery.init('lottery');
+        if (lottery.click) {//click控制一次抽奖过程中不能重复点击抽奖按钮，后面的点击不响应
+            return false;
+        }else{
+            lottery.speed=100;
+            lottery.stop();    //转圈过程不响应click事件，会将click置为false
+            lottery.click=true; //一次抽奖完成后，设置click为true，可继续抽奖
+            return false;
+        }
+    });
+};
+</script>
+
+</body>
+</html>

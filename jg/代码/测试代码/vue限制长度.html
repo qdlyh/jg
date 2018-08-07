@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<style>
+.none{
+  margin-left: 50px;
+  color: #f00;
+}
+</style>
+ <div id="app">
+        <input type="number" v-model.trim="value" @input="wuha">
+        <p v-show="as">number11</p>
+        <input type="number" v-model="change" @change="btn()">
+        <p v-show="numbers">123</p><br/>
+
+        <!--名片-->
+        <button @click="btnFalse()">X</button>
+        <button @click="btnDelete()">√</button><br/>
+        <button v-for="(item,index) in tab" @click="add()">{{item.name}}</button>
+        <p v-for="(item,index) in list" v-show="item.flag==false">{{item.tab}}<span @click="none(item)" class="none">X<span></p>
+</div>  
+<script src="js/vue.js"></script>
+<script type="text/javascript">
+new Vue({
+        el: '#app',
+        data: {
+            value: '',
+            change:'',
+            as:false,
+            numbers:false,
+            count:0,
+            list:[],
+            tab:[{name:'按钮'},{name:'按钮'},{name:'按钮'}]
+        },
+        methods: {
+            wuha: function() {
+                if (this.value.length>=11) {
+                  this.value = this.value.slice(0,11);
+                  this.as = false;
+                  console.log(this.value)
+                  //alert('1')
+                  return
+                }
+                 console.log(this.value)
+                 this.as = !false;
+                 //alert('1')
+            },
+            btn(){
+               if (this.change.length>=11) {
+                  this.change = this.change.slice(0,11);
+                  this.numbers = false;
+                  //alert('1')
+                  console.log(this.change)
+                  return
+                }
+                 this.numbers = !false;
+                 console.log(this.change)
+                 //alert('2')
+            },
+
+
+
+            //名片先把需要删除的职业隐藏，如果点勾就真正的删除，点叉的话就把它们显示
+
+            //添加状态数组到list
+            add(){
+              this.count++
+              this.list.push({flag:false,tab:this.count})
+              //console.log(this.list)
+            },
+
+            //把待删除的flag设置为true
+            none(item){
+              console.log(item)
+              item.flag = true;
+            },
+
+            //过滤掉flag状态值不是false的数组  
+            btnDelete(){
+              this.list = this.list.filter(item => item.flag == false);            
+            },
+
+            //list数组如果有flag状态值为true的话，就改为false
+            btnFalse(){
+              this.list.forEach(item => {item.flag = false});
+              console.log(this.list)
+            }
+        }
+    });
+</script>
+</body>
+</html>

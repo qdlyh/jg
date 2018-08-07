@@ -1,0 +1,138 @@
+@charset "UTF-8";
+.cart-box {
+  margin-top: 20px; }
+  .cart-box .cart-text {
+    width: 900px;
+    text-align: center; }
+    .cart-box .cart-text p {
+      margin: 47px 0 75px 0;
+      font-size: 24px;
+      color: #595757; }
+    .cart-box .cart-text a {
+      color: #00a1b2;
+      font-size: 18px; }
+      .cart-box .cart-text a span {
+        font-size: 14px; }
+
+.go-tab {
+  margin-bottom: 20px; }
+  .go-tab ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between; }
+    .go-tab ul li a {
+      color: #2b2b2b;
+      font-size: 14px; }
+      .go-tab ul li a i {
+        color: #ec6941; }
+    .go-tab ul li:nth-child(1) {
+      margin-left: 25px; }
+    .go-tab ul li:nth-child(2) {
+      margin: 0 85px; }
+
+.goods-text {
+  margin-bottom: 20px; }
+  .goods-text ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+    color: #454545;
+    padding-left: 18px; }
+    .goods-text ul .goods-top-text {
+      width: 450px;
+      text-align: left; }
+    .goods-text ul .exchange {
+      width: 120px; }
+    .goods-text ul .count-text {
+      width: 180px; }
+    .goods-text ul li {
+      width: 120px;
+      text-align: center; }
+
+.cart-box {
+  height: 600px;
+  overflow: hidden;
+  overflow: auto; }
+  .cart-box .cart-container {
+    width: 900px;
+    height: 148px;
+    margin-top: 10px;
+    background: #fff;
+    border: 0.5px solid #ccc; }
+    .cart-box .cart-container .obligation-text {
+      height: 36px;
+      background: #ccc;
+      line-height: 36px; }
+      .cart-box .cart-container .obligation-text ul {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: space-between; }
+        .cart-box .cart-container .obligation-text ul li {
+          font-size: 14px;
+          color: #454545; }
+        .cart-box .cart-container .obligation-text ul .deta {
+          margin: 0 25px; }
+        .cart-box .cart-container .obligation-text ul .total {
+          margin-left: 320px; }
+    .cart-box .cart-container .cart-content {
+      padding: 20px;
+      /* 订单内容布局 */ }
+      .cart-box .cart-container .cart-content ul {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: space-between;
+        /* 订单左边商品详细 */ }
+        .cart-box .cart-container .cart-content ul .cart-img img {
+          width: 76px;
+          height: 76px; }
+        .cart-box .cart-container .cart-content ul .goods-name {
+          color: #2b2b2b;
+          font-size: 14px;
+          width: 200px;
+          text-align: center;
+          margin-top: 10px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          padding: 10px; }
+        .cart-box .cart-container .cart-content ul .cart-goods {
+          width: 180px;
+          display: inline-block;
+          line-height: 25px !important;
+          /* 订单左边商品详细布局 */ }
+          .cart-box .cart-container .cart-content ul .cart-goods ul {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; }
+            .cart-box .cart-container .cart-content ul .cart-goods ul li {
+              color: #666;
+              font-size: 14px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap; }
+        .cart-box .cart-container .cart-content ul .integral-number {
+          margin-left: 40px;
+          color: #666;
+          font-size: 14px; }
+        .cart-box .cart-container .cart-content ul .payment-text {
+          color: #666;
+          font-size: 14px;
+          margin-left: 110px; }
+        .cart-box .cart-container .cart-content ul .order-right-text {
+          margin-left: 100px; }
+          .cart-box .cart-container .cart-content ul .order-right-text a {
+            color: #666;
+            font-size: 14px; }
+          .cart-box .cart-container .cart-content ul .order-right-text .delete-goods {
+            margin: 10px 0;
+            text-align: center; }
+            .cart-box .cart-container .cart-content ul .order-right-text .delete-goods a:hover {
+              color: #fd0000; }
+          .cart-box .cart-container .cart-content ul .order-right-text .btn-blue a {
+            width: 64px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 24px; }
+
+.active {
+  border-bottom: 2px solid #00a1b2; }

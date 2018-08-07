@@ -1,0 +1,59 @@
+删除插件
+npm uninstall xxx
+
+全局安装                         //安装过就不用重复安装了
+npm install vue-cli -g
+
+检查是否安装vue-cli            //安装过就不用重复安装了
+vue -V    //大写V
+
+安装webpack
+vue init webpack vuedemo     //这里例子是vuedemo目录
+
+cd进入vue项目目录
+cd vuedemo                   //这里例子是vuedemo目录
+
+进入目录安装依赖包
+npm install
+
+启动项目
+npm run dev
+
+页面打包
+npm run build
+
+安装插件
+
+进入项目安装vuex
+
+npm install vuex --save    //一定要加上 --save，因为你这个包我们在生产环境中是要使用的。
+
+进入项目安装axios
+
+npm install axios --save
+
+进入项目安装element-ui
+	
+npm install element-ui --save
+
+安装sass
+
+npm install --save-dev sass-loader
+
+lang="scss"
+
+npm install --save-dev node-sass  (注：sass-loader依赖于node-sass)
+
+安装less
+
+npm install less --save-dev
+
+编译CSS预选器
+
+npm install less-loader --save-dev    less为例子
+
+安装插件
+npm install 插件名字
+
+安装裁剪图片
+npm install cropperjs -S

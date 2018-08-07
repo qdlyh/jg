@@ -1,0 +1,110 @@
+.datum-box {
+    margin-top: 56px;
+    color: #595757;
+    .phone-box {
+        margin-bottom: 36px;
+    }
+    #form {
+        margin: 20px 0 0 100px;
+        span {
+            width: 100px;
+            display: inline-block;
+        }
+        a {
+            color: #00a1b2;
+            font-size: 14px;
+            margin-right: 20px;
+        }
+        input {
+            width: 520px;
+            height: 48px;
+            font-size: 16px;
+            padding-left: 10px;
+        }
+        .phone {
+            color: #666;
+        }
+    }
+    .datum-btn {
+        margin-top: 60px;
+        a {
+            width: 360px;
+            height: 36px;
+            line-height: 36px;
+        }
+    }
+    .open-div {
+        position: relative;
+        display: none;
+        .shade {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: #000;
+            opacity: 0.7;
+            z-index: 6000;
+        }
+        .open-box {
+            position: fixed;
+            width: 578px;
+            border-radius: 10px;
+            padding: 10px;
+            top: 10%;
+            background: #fff;
+            border: 1px solid #cccccc;
+            text-align: center;
+            color: #676367;
+            z-index: 6001;
+            /* 验证码Input宽度 */
+            .test-input,
+            .test-input2 {
+                width: 190px;
+            }
+            .test-input2{
+                margin-left: 85px;
+            }
+            h1 {
+                font-size: 18px;
+                color: #00a1b2;
+                margin:20px 0;
+            }
+            p {
+                margin: 30px 0 20px 120px;
+                font-size: 16px;
+                text-align: left;
+            }
+            input {
+                width: 330px;
+                height: 36px;
+                font-size: 17px;
+                margin-top: 10px;
+            }
+            .open-box-btn1,
+            .open-box-btn2,
+            .open-box-btn3 {
+                margin: 40px 0;
+                a {
+                    width: 280px;
+                }
+            }
+        }
+        .close-btn {
+            width: 21px;
+            height: 21px;
+            background: url(../image/1231234.png) no-repeat;
+            position: absolute;
+            right: 30px;
+            top: 20px;
+            cursor: pointer;
+        }
+        .test-btn {
+            display: inline-block;
+            margin-left: 10px;
+            a {
+                width: 120px;
+            }
+        }
+    }
+}

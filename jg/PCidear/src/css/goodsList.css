@@ -1,0 +1,100 @@
+.mySwiper {
+  max-width: 1200px;
+  min-width: 1200px;
+  height: 435px; }
+  .mySwiper .swiper-pagination-bullet-active {
+    background: #fff !important; }
+  .mySwiper .swiper-pagination-bullet {
+    width: 15px;
+    height: 15px;
+    opacity: 10;
+    border: 2px solid #fff;
+    background: transparent; }
+
+.my-msg {
+  background: #d6d6d6;
+  width: 100%;
+  height: 100px;
+  margin-top: 20px; }
+  .my-msg .left-img {
+    float: left;
+    line-height: 100px;
+    margin: 0 30px; }
+    .my-msg .left-img img {
+      width: 70px;
+      height: 70px;
+      border-radius: 100%;
+      vertical-align: middle; }
+    .my-msg .left-img i {
+      color: #ec6941;
+      font-size: 22px; }
+  .my-msg .left-text {
+    float: left; }
+    .my-msg .left-text i {
+      color: #ec6941;
+      font-size: 20px; }
+    .my-msg .left-text p {
+      margin-top: 20px;
+      color: #666666; }
+  .my-msg .right {
+    float: right;
+    line-height: 100px;
+    margin-right: 20px; }
+    .my-msg .right a {
+      color: #666666;
+      font-size: 20px; }
+
+.goods-list {
+  margin-top: 10px; }
+  .goods-list .goods {
+    width: 285px;
+    height: 380px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    float: left;
+    margin: 7px; }
+    .goods-list .goods img {
+      width: 265px;
+      height: 265px;
+      margin-bottom: 20px; }
+    .goods-list .goods p {
+      font-size: 18px;
+      color: #2b2b2b; }
+    .goods-list .goods .text-active {
+      font-size: 14px;
+      color: #666;
+      margin-top: 5px; }
+      .goods-list .goods .text-active i {
+        color: #ec6941;
+        font-size: 18px; }
+
+.footer-text {
+  width: 100%;
+  margin-top: 20px;
+  border-bottom: 1px solid #ccc; }
+  .footer-text h1 {
+    font-size: 22px;
+    color: #00A1B2;
+    margin-bottom: 10px; }
+  .footer-text hr {
+    height: 1px;
+    border: 0;
+    background: #ccc;
+    width: 100%; }
+  .footer-text ul {
+    float: left;
+    margin: 20px 30px;
+    border-right: 1px solid #ccc; }
+    .footer-text ul li {
+      margin-right: 60px;
+      margin-top: 5px; }
+      .footer-text ul li a {
+        color: #666;
+        font-size: 14px; }
+
+.page {
+  max-width: 1200px;
+  min-width: 1200px; }
+
+.goods-page {
+  right: 0; }

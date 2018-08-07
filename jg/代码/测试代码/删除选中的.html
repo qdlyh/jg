@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>        
+        <style type="text/css">
+
+        </style>
+    </head>
+    <body>
+        <div id="box">        
+            <div v-for="(item,index) in items">        
+                <input type="checkbox" ref="checkeds" v-model="item[0].val"/>
+                 <span>{{item[0].name}}</span>
+            </div>
+            <button @click="removeAll">提交</button>
+        </div>
+        <script src="js/vue.js"></script>
+        <script>
+            var vm = new  Vue({
+                el:"#box",
+                data:{                
+                    items: {
+                        A: [{ name: '伊a', occupation: '广告摄影师', company: '公司'} ,{ name: '伊aa', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        B: [{ name: '伊b', occupation: '广告摄影师', company: '公司' ,val:false},{ name: '伊b', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        C: [{ name: '伊c', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        D: [{ name: '丹d', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        E: [{ name: '伊e', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        F: [{ name: '伊f', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        G: [{ name: '伊G', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        H: [{ name: '丹h', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        I: [{ name: '丹i', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        J: [{ name: '丹j', occupation: '广告摄影师', company: '公司' ,val:false}],
+                        K: [{ name: '丹k', occupation: '广告摄影师', company: '公司' ,val:false}],
+                   },
+                
+                },
+                methods:{
+                    removeAll:function(){
+                        let keys = Object.keys(this.items);                        
+                        let values = Object.values(this.items);                
+                           for(var i=0;i<values.length;i++){                                   
+                               if(values[i][0].val){                               
+                                   Vue.delete(this.items,keys[i]);                                            
+                               }
+                           }
+                           console.log(this.items);
+                    }
+                    }
+                
+            });
+        </script>
+    </body>
+</html>
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<div>
+<div id="cc" style="height:1050px;width:200px;overflow-y:scroll;overflow-x:hidden;"> 
+<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li> 
+<li>09</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li><li>16</li> 
+<li>17</li><li>18</li><li>19</li><li>20</li><li>21</li><li>22</li><li>23</li><li>24</li> 
+<li>25</li><li>26</li><li>27</li><li>28</li><li>29</li><li>30</li><li>31</li><li>32</li> 
+<li>33</li><li>34</li><li>35</li><li>36</li><li>37</li><li>38</li><li>39</li><li>40</li> 
+<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li> 
+<li>09</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li><li>16</li> 
+<li>17</li><li>18</li><li>19</li><li>20</li><li>21</li><li>22</li><li>23</li><li>24</li> 
+<li>25</li><li>26</li><li>27</li><li>28</li><li>29</li><li>30</li><li>31</li><li>32</li> 
+<li>33</li><li>34</li><li>35</li><li>36</li><li>37</li><li>38</li><li>39</li><li>40</li> 
+<li>41</li><li>42</li><li>43</li><li>44</li><li>45</li><li>46</li><li>47</li><li>48</li> 
+<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li> 
+<li>09</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li><li>16</li> 
+<li>17</li><li>18</li><li>19</li><li>20</li><li>21</li><li>22</li><li>23</li><li>24</li> 
+<li>25</li><li>26</li><li>27</li><li>28</li><li>29</li><li>30</li><li>31</li><li>32</li> 
+<li>33</li><li>34</li><li>35</li><li>36</li><li>37</li><li>38</li><li>39</li><li>40</li> 
+<li>41</li><li>42</li><li>43</li><li>44</li><li>45</li><li>46</li><li>47</li><li>48</li> 
+<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li> 
+<li>09</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li><li>16</li> 
+<li>17</li><li>18</li><li>19</li><li>20</li><li>21</li><li>22</li><li>23</li><li>24</li> 
+<li>25</li><li>26</li><li>27</li><li>28</li><li>29</li><li>30</li><li>31</li><li>32</li> 
+<li>33</li><li>34</li><li>35</li><li>36</li><li>37</li><li>38</li><li>39</li><li>40</li> 
+<li>41</li><li>42</li><li>43</li><li>44</li><li>45</li><li>46</li><li>47</li><li>48</li> 
+<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li> 
+<li>09</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li><li>16</li> 
+<li>17</li><li>18</li><li>19</li><li>20</li><li>21</li><li>22</li><li>23</li><li>24</li> 
+<li>25</li><li>26</li><li>27</li><li>28</li><li>29</li><li>30</li><li>31</li><li>32</li> 
+<li>33</li><li>34</li><li>35</li><li>36</li><li>37</li><li>38</li><li>39</li><li>40</li> 
+<li>41</li><li>42</li><li>43</li><li>44</li><li>45</li><li>46</li><li>47</li><li>48</li> 
+<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li> 
+<li>09</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li><li>16</li> 
+<li>17</li><li>18</li><li>19</li><li>20</li><li>21</li><li>22</li><li>23</li><li>24</li> 
+<li>25</li><li>26</li><li>27</li><li>28</li><li>29</li><li>30</li><li>31</li><li>32</li> 
+<li>33</li><li>34</li><li>35</li><li>36</li><li>37</li><li>38</li><li>39</li><li>40</li> 
+<li>41</li><li>42</li><li>43</li><li>44</li><li>45</li><li>46</li><li>47</li><li>48</li> 
+<li>01</li><li>02</li><li>03</li><li>04</li><li>05</li><li>06</li><li>07</li><li>08</li> 
+<li>09</li><li>10</li><li>11</li><li>12</li><li>13</li><li>14</li><li>15</li><li>16</li> 
+<li>17</li><li>18</li><li>19</li><li>20</li><li>21</li><li>22</li><li>23</li><li>24</li> 
+<li>25</li><li>26</li><li>27</li><li>28</li><li>29</li><li>30</li><li>31</li><li>32</li> 
+<li>33</li><li>34</li><li>35</li><li>36</li><li>37</li><li>38</li><li>39</li><li>40</li> 
+<li>41</li><li>42</li><li>43</li><li>44</li><li>45</li><li>46</li><li>47</li><li>48</li> 
+<li>41</li><li>42</li><li>43</li><li>44</li><li>45</li><li>46</li><li>47</li><li>48</li> 
+</div> 
+</div>
+<script> 
+var obj = document.getElementById("cc"); 
+obj.scrollTop= 800;  
+</script>
+</body>
+</html> -->
+

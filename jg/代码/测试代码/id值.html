@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+       <div id="box">
+            <div v-for="(items, keys ,index) in carditem" :key="index"> 
+                <div v-for="(item,index) in items" :key="index">
+                  <input type="text" name="ids" v-model="item.id">
+                  <p>{{item.name}}</p>
+                   <input type="checkbox" v-model="item.flag">
+                </div>
+            </div>
+            <button @click="removeAll">delete</button>
+       </div>   
+<script src="js/vue.js"></script>
+<script type="text/javascript">
+        var vm = new  Vue({
+            el:"#box",
+             data:{
+            carditem: {
+                     A: [{id: 82,name:'123',flag: false,}],
+                     B: [{id: 83,name:'123',flag: false,}],
+                     C: [{id: 84,name:'123',flag: false,}],
+                     D: [{id: 85,name:'123',flag: false,}],
+                     E: [{id: 86,name:'123',flag: false,}],
+                   },
+            
+},
+methods:{
+        removeAll() {
+            let arr = [];
+            let arrDelete
+            // for (let keys in this.carditem) {
+            //     this.carditem[keys] = this.carditem[keys].filter((all) => {
+            //         return all.flag === false;
+            //     })
+            // }
+            for (let keys in this.carditem) {
+                for (let i = 0; i < this.carditem[keys].length; i++) {
+                    if (this.carditem[keys][i].flag) {
+                        //console.log(this.carditem[keys][i].id)
+                        arr.push(this.carditem[keys][i].id)
+                        this.carditem[keys].splice(i,1)
+                    }
+                }
+            } 
+            arrDelete = arr.join(",")
+            console.log(arrDelete)
+    }
+ }
+            
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	 <link rel="stylesheet" href="css/swiper.min.css">
+	<style type="text/css">
+		* {
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+		.swiper-container {
+		    width: 600px;
+		    height: 300px;
+        } 
+
+		.slide {
+			width: 500px;
+			height: 350px;
+			margin: 0 auto;
+			overflow: hidden;
+			text-align: center;
+			position: relative;
+		}
+
+		.slide ul {
+			width: 500px;
+			height: 350px;
+			overflow: hidden;
+			border: 1px solid #ccc;
+			transition: all .5s ease;
+		}
+
+		.slide ul li {
+			float: left;
+			/* float: right; ÓÃrightÂÖ²¥Ë³Ðò»á´íÎó*/
+		}
+
+		.slide ul li img {
+			width: 500px;
+			height: 350px;
+		}
+
+		.right-btn,
+		.left-btn {
+			color: #fff;
+			width: 50px;
+			height: 50px;
+			background: #000;
+			opacity: 0.7;
+			line-height: 50px;
+			font-size: 36px;
+			top: 50%;
+			right: 0;
+			display: inline-block;
+			cursor: pointer;
+			position: absolute;
+		}
+
+		.left-btn {
+			left: 0;
+			display: inline-block;
+		}
+
+		.slide-option {
+			position: absolute;
+			bottom: 10px;
+			width: 100%;
+			left: 0;
+			text-align: center;
+		}
+
+		.slide-option span {
+			display: inline-block;
+			width: 14px;
+			height: 14px;
+			border-radius: 100%;
+			background: #ccc;
+			margin: 0 10px;
+			cursor: pointer;
+		}
+
+		.slide-option .active {
+			background: #09f;
+		}
+
+	</style>
+</head>
+
+<body>
+	<div id="app">
+		<div class="slide" @mouseenter="enter" @mouseleave="leave">
+			<ul :style="{'width':(this.imgWidht*this.list.length)+'px','transform':'translate3d(-'+(this.imgWidht*nowIndex)+'px,0,0)'}">
+				<li v-for="(item,index) in list" :style="{'width':this.imgWidht+'px'}">
+					<img :src="item.src" alt="" id="imgbox">
+				</li>
+			</ul>
+			<div class="slide-option">
+				<span v-for="(li,index) in list" @click.stop="option(index)" :class="{'active':index===nowIndex}">
+			    </span>
+			</div>
+			<span class="left-btn" @click.stop="slideBtn('reduce')"><</span>
+			<span class="right-btn" @click.stop="slideBtn()">></span>
+		</div>
+	</div>
+
+
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">Slide 1</div>
+        <div class="swiper-slide">Slide 2</div>
+        <div class="swiper-slide">Slide 3</div>
+    </div>
+    <!-- Èç¹ûÐèÒª·ÖÒ³Æ÷ -->
+    <div class="swiper-pagination"></div>
+    
+    <!-- Èç¹ûÐèÒªµ¼º½°´Å¥ -->
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+    
+    <!-- Èç¹ûÐèÒª¹ö¶¯Ìõ -->
+    <div class="swiper-scrollbar"></div>
+</div>
+<script src="js/swiper.min.js"></script>
+<script src="js/vue.js"></script>
+<script type="text/javascript">
+	new Vue({
+		el: '#app',
+		data: {
+			list: [{
+				'src': 'img/1561561.png'
+			}, {
+				'src': 'img/244613.png'
+			}, {
+				'src': 'img/211156165.png'
+			}],
+			nowIndex: 0,
+			imgWidth: '',
+			indexs: '',
+			timer: null
+		},
+		mounted() {
+			this.imgWidht = document.getElementById('imgbox').width;
+			this.timer = setInterval(() => {
+				//_this.slideBtn();
+				this.slideBtn();
+			}, 3000)
+		},
+		methods: {
+			slideBtn(reduce) {
+				//this.imgWidht = document.getElementById('imgbox').width
+				//*this.list.length
+				//console.log(this.imgWidht)
+				clearInterval(this.timer);
+				if (reduce === 'reduce') {
+					if (this.nowIndex === 0) {
+						//console.log(this.list.length-1)
+						this.nowIndex = this.list.length - 1;
+					} else {
+						this.nowIndex--;
+					}
+				} else {
+					if (this.nowIndex === this.list.length - 1) {
+						//console.log(this.list.length-1)
+						this.nowIndex = 0;
+					} else {
+						this.nowIndex++;
+					}
+				}
+				//ÓÃº¯Êý¼ýÍ·µÄ»°ÄÜÕÒµ½this.slideBtn()µÄÖ¸Ïò
+				//var _this = this
+				this.timer = setInterval(() => {
+					//_this.slideBtn();
+					this.slideBtn();
+				}, 3000)
+			},
+			option(index) {
+				this.indexs = index;
+				console.log(this.indexs)
+			},
+			enter() {
+				clearInterval(this.timer);
+			},
+			leave() {
+				this.timer = setInterval(() => {
+					this.slideBtn();
+				}, 3000)
+			}
+		}
+	})
+
+	var mySwiper = new Swiper ('.swiper-container', {
+    // // direction: 'vertical',
+    loop: true,
+    autoplay: {
+    stopOnLastSlide: true,
+   },
+    // Èç¹ûÐèÒª·ÖÒ³Æ÷
+    pagination: {
+      el: '.swiper-pagination',
+    },
+    // Èç¹ûÐèÒªÇ°½øºóÍË°´Å¥
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    
+  })        
+</script>
+</body>
+</html>

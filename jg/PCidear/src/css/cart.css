@@ -1,0 +1,214 @@
+@charset "UTF-8";
+.cart-box {
+  margin-top: 20px; }
+  .cart-box .cart-text {
+    width: 900px;
+    text-align: center; }
+    .cart-box .cart-text p {
+      margin: 47px 0 75px 0;
+      font-size: 24px;
+      color: #595757; }
+    .cart-box .cart-text a {
+      color: #00a1b2;
+      font-size: 18px; }
+      .cart-box .cart-text a span {
+        font-size: 14px; }
+
+.goods-text ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+  color: #454545;
+  padding-left: 18px;
+  margin: 10px 0; }
+  .goods-text ul .check-li {
+    margin-right: 30px;
+    width: 0px; }
+  .goods-text ul .goods-top-text {
+    width: 360px;
+    text-align: center; }
+  .goods-text ul .exchange {
+    width: 120px; }
+  .goods-text ul .count-text {
+    width: 130px; }
+  .goods-text ul li {
+    width: 120px;
+    text-align: center; }
+
+.cart-box {
+  height: 350px;
+  overflow: hidden;
+  overflow: auto; }
+  .cart-box .cart-container {
+    width: 900px;
+    height: 70px;
+    margin-top: 20px;
+    background: #fff;
+    padding: 10px; }
+    .cart-box .cart-container .cart-content {
+      /* 订单内容布局 */ }
+      .cart-box .cart-container .cart-content ul {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: space-between;
+        /* 订单左边商品详细 */
+        /* 订单价格数量 */ }
+        .cart-box .cart-container .cart-content ul .cart-img img {
+          width: 76px;
+          height: 76px; }
+        .cart-box .cart-container .cart-content ul .goods-name {
+          color: #2b2b2b;
+          font-size: 14px;
+          width: 120px;
+          text-align: center;
+          margin-top: 10px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          padding: 10px; }
+        .cart-box .cart-container .cart-content ul .cart-goods {
+          width: 120px;
+          display: inline-block;
+          line-height: 25px !important;
+          /* 订单左边商品详细布局 */ }
+          .cart-box .cart-container .cart-content ul .cart-goods ul {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; }
+            .cart-box .cart-container .cart-content ul .cart-goods ul li {
+              color: #666;
+              font-size: 14px;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap; }
+        .cart-box .cart-container .cart-content ul .cart-money {
+          /* 加减数量 */ }
+          .cart-box .cart-container .cart-content ul .cart-money ul li {
+            width: 135px;
+            height: 76px;
+            line-height: 76px;
+            text-align: center;
+            color: #666;
+            font-size: 14px; }
+          .cart-box .cart-container .cart-content ul .cart-money .goods-count {
+            width: 120px; }
+            .cart-box .cart-container .cart-content ul .cart-money .goods-count ul {
+              display: flex;
+              flex-wrap: wrap;
+              align-content: space-between; }
+              .cart-box .cart-container .cart-content ul .cart-money .goods-count ul li {
+                width: 25px;
+                text-align: center;
+                margin: 0 auto; }
+                .cart-box .cart-container .cart-content ul .cart-money .goods-count ul li input {
+                  width: 30px !important;
+                  height: 30px;
+                  text-align: center;
+                  border-radius: 5px;
+                  outline: none;
+                  border: none;
+                  border: 1px solid #ccc;
+                  font-size: 17px;
+                  color: #454545; }
+                .cart-box .cart-container .cart-content ul .cart-money .goods-count ul li span {
+                  font-size: 25px;
+                  color: #454545;
+                  cursor: pointer; }
+
+.total-box {
+  width: 100%;
+  margin-top: 50px; }
+  .total-box .goods-check {
+    float: left;
+    line-height: 50px;
+    margin: 4px 0 0 10px;
+    color: #A0A0A0; }
+    .total-box .goods-check .goods-check-text {
+      vertical-align: 10%; }
+  .total-box .goods-delete-box {
+    float: left;
+    line-height: 50px;
+    margin: 4px 0 0 10px;
+    cursor: pointer;
+    color: #666666;
+    font-size: 14px; }
+    .total-box .goods-delete-box span {
+      margin: 0 10px; }
+      .total-box .goods-delete-box span:hover {
+        color: #fd0000;
+        border-bottom: 1px solid #fd0000; }
+  .total-box .total-content {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; }
+    .total-box .total-content .total-text {
+      margin: 0 30px; }
+    .total-box .total-content span {
+      font-size: 14px;
+      color: #666; }
+    .total-box .total-content i {
+      color: #FF4400;
+      font-weight: 700;
+      font-size: 16px;
+      font-family: arial; }
+    .total-box .total-content .total-btn-false a {
+      width: 120px;
+      font-size: 14px;
+      height: 36px;
+      line-height: 36px;
+      border-radius: 0px;
+      background: #B0B0B0;
+      border-radius: 10px; }
+    .total-box .total-content .total-btn-true a {
+      background: #00A1B3; }
+
+.delete-goods {
+  width: 100px;
+  line-height: 76px;
+  text-align: center;
+  margin-left: 5px; }
+  .delete-goods a {
+    width: 70px;
+    font-size: 14px;
+    height: 32px;
+    line-height: 32px;
+    color: #464646; }
+    .delete-goods a:hover {
+      color: #fd0000;
+      border-bottom: 1px solid #fd0000; }
+
+.goods-checkbox {
+  line-height: 80px; }
+
+.goods-checkbox input[type="checkbox"] {
+  display: none; }
+
+.goods-checkbox input[type="checkbox"] + i {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: #b4b4b4 1px solid;
+  margin: 0 10px;
+  line-height: 40px; }
+  .goods-checkbox input[type="checkbox"] + i::after {
+    border: 2px solid transparent;
+    border-left: 0;
+    border-top: 0;
+    content: " ";
+    bottom: 3px;
+    left: 6px;
+    position: absolute;
+    width: 6px;
+    height: 17px;
+    transform: rotate(45deg) scale(0);
+    transition: transform .2s; }
+
+.goods-checkbox input[type="checkbox"]:checked + i {
+  transition: .2s;
+  -webkit-transition: .2s;
+  border: 1px solid #A0A0A0; }
+  .goods-checkbox input[type="checkbox"]:checked + i::after {
+    content: " ";
+    border-color: #ec6941;
+    transform: rotate(45deg) scale(1); }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="app2">
+    <p v-for="item in items" :key="item.id">
+        {{item.message}}
+    </p>
+    <button class="btn" @click="btn2Click()">��̬��ֵ</button><br/><br/>
+    <button class="btn" @click="btn3Click()">Ϊdata��������</button>
+</div>
+
+<script src="js/vue.js"></script>
+<script>
+    var vm2=new Vue({
+        el:"#app2",
+        data:{
+            items:[
+                {message:"Test one",id:"1"},
+                {message:"Test two",id:"2"},
+                {message:"Test three",id:"3"}
+            ]
+        },
+        methods:{
+            btn2Click:function(){
+                //Vue methods�е�this ָ�����Vue��ʵ�����������ֱ����this���ҵ�items
+                Vue.set(this.items,0,{message:"Change Test",id:'10'})
+            },
+            btn3Click:function(){
+                var itemLen=this.items.length;
+                Vue.set(this.items,itemLen,{message:"Test add attr",id:itemLen});
+                console.log(itemLen)
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

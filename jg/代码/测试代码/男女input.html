@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>        
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+    <div id="box">        
+            <div v-for="(item, index) in items" :key="index">
+                    <div class="user-sex">
+                        <label><input  ref="man" type="radio" name="sex" :checked="item.sex" 
+                        @change="change">
+                            <i></i>男</label>
+                        <label><input  ref="woman" type="radio" name="sex" :checked="!item.sex"  @change="change">
+                            <i></i>女</label>
+                    </div>
+       </div>
+        <button @click="sub">提交</button>
+    </div>
+    <script src="js/vue.js"></script>
+    <script>
+        var vm = new  Vue({
+            el:"#box",
+            data:{                
+                items:[{sex:1,sex:0}]                  
+            },
+            methods:{
+                sub:function(){
+                    console.log(this.items[0].sex);  
+                },
+                change:function(){
+                    this.items[0].sex = (!this.items[0].sex==true)?1:0;
+                    
+                }
+             }
+            
+        });
+    </script>
+</body>
+</html>
